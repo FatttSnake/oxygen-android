@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">OxygenToolbox</string>
+    <string name="no_connect">⚠️ Unable to connect to the internet</string>
+    <string name="feature_tools_title">Tools</string>
+    <string name="feature_star_title">Star</string>
+    <string name="feature_settings_title">Settings</string>
+    <string name="feature_settings_loading">Loading…</string>
+    <string name="feature_settings_language">Language</string>
+    <string name="feature_settings_language_system_default">System Default</string>
+    <string name="feature_settings_language_chinese" translatable="false">中文</string>
+    <string name="feature_settings_language_english" translatable="false">English</string>
+    <string name="feature_settings_launch_page">Launch Page</string>
+    <string name="feature_settings_launch_page_tools">Tools</string>
+    <string name="feature_settings_launch_page_star">Star</string>
+    <string name="feature_settings_theme_brand">Theme Brand</string>
+    <string name="feature_settings_theme_brand_default">Default</string>
+    <string name="feature_settings_theme_brand_android">Android</string>
+    <string name="feature_settings_dark_mode">Dark Mode</string>
+    <string name="feature_settings_dark_mode_system_default">System Default</string>
+    <string name="feature_settings_dark_mode_light">Light</string>
+    <string name="feature_settings_dark_mode_dark">Dark</string>
+    <string name="feature_settings_dynamic_color">Dynamic Color</string>
+    <string name="feature_settings_dynamic_color_enable">Enable</string>
+    <string name="feature_settings_dynamic_color_disable">Disable</string>
+    <string name="feature_settings_top_app_bar_action_icon_description">More</string>
+    <string name="feature_settings_top_app_bar_navigation_icon_description">Search</string>
+    <string name="feature_settings_dismiss_dialog_button_text">OK</string>
+</resources>

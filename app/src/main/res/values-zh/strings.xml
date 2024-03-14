@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OxygenToolbox</string>
+    <string name="no_connect">⚠️ 无法连接至互联网</string>
+    <string name="feature_tools_title">工具</string>
+    <string name="feature_star_title">收藏</string>
+    <string name="feature_settings_title">设置</string>
+    <string name="feature_settings_loading">加载中…</string>
+    <string name="feature_settings_language">语言</string>
+    <string name="feature_settings_language_system_default">系统默认</string>
+    <string name="feature_settings_launch_page">启动页</string>
+    <string name="feature_settings_launch_page_tools">工具</string>
+    <string name="feature_settings_launch_page_star">收藏</string>
+    <string name="feature_settings_theme_brand">主题类型</string>
+    <string name="feature_settings_theme_brand_default">默认</string>
+    <string name="feature_settings_theme_brand_android">Android</string>
+    <string name="feature_settings_dark_mode">深色模式</string>
+    <string name="feature_settings_dark_mode_system_default">系统默认</string>
+    <string name="feature_settings_dark_mode_light">明亮</string>
+    <string name="feature_settings_dark_mode_dark">深色</string>
+    <string name="feature_settings_dynamic_color">动态颜色</string>
+    <string name="feature_settings_dynamic_color_enable">启用</string>
+    <string name="feature_settings_dynamic_color_disable">禁用</string>
+    <string name="feature_settings_top_app_bar_action_icon_description">更多</string>
+    <string name="feature_settings_top_app_bar_navigation_icon_description">搜索</string>
+    <string name="feature_settings_dismiss_dialog_button_text">完成</string>
+</resources>

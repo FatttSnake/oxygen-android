@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="NightAdjusted.Theme.Oxygen" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.Oxygen" parent="NightAdjusted.Theme.Oxygen" />
+
+    <style name="NightAdjusted.Theme.Splash" parent="Theme.SplashScreen">
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+    </style>
+
+    <style name="Theme.Oxygen.Splash" parent="NightAdjusted.Theme.Splash">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_oxygen</item>
+        <item name="postSplashScreenTheme">@style/Theme.Oxygen</item>
+    </style>
+</resources>
