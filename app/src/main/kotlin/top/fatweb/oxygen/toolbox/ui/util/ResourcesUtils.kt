@@ -13,6 +13,7 @@ object ResourcesUtils {
 
     fun getDisplayMetrics(context: Context) = context.resources.displayMetrics
 
+    @Suppress("DEPRECATION")
     fun getAppLocale(context: Context): Locale =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) getConfiguration(context).locales.get(0)
         else getConfiguration(context).locale
@@ -27,6 +28,7 @@ object ResourcesUtils {
             "Unknown"
         }
 
+    @Suppress("DEPRECATION")
     fun getAppVersionCode(context: Context): Long =
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)

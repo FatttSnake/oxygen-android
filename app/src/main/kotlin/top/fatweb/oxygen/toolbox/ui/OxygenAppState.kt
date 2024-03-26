@@ -63,6 +63,8 @@ class OxygenAppState(
     val navController: NavHostController,
     val launchPageConfig: LaunchPageConfig
 ) {
+    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.entries
+
     val currentDestination: NavDestination?
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
@@ -87,8 +89,6 @@ class OxygenAppState(
             initialValue = false,
             started = SharingStarted.WhileSubscribed(5.seconds.inWholeMilliseconds)
         )
-
-    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.entries
 
     val currentTimeZone = timeZoneMonitor.currentTimeZone
         .stateIn(

@@ -2,7 +2,6 @@ package top.fatweb.oxygen.toolbox
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -96,9 +95,7 @@ class MainActivity : ComponentActivity() {
                         android.graphics.Color.TRANSPARENT,
                         android.graphics.Color.TRANSPARENT
                     ) { darkTheme },
-                    navigationBarStyle = SystemBarStyle.auto(
-                        lightScrim, darkScrim
-                    ) { darkTheme }
+                    navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
                 )
             }
 
@@ -122,10 +119,7 @@ class MainActivity : ComponentActivity() {
                     OxygenApp(appState)
                 }
             }
-            Log.d(TAG, "onCreate: C")
         }
-
-        Log.d(TAG, "onCreate: D")
     }
 
     @EntryPoint
@@ -189,15 +183,3 @@ private fun whatLaunchPage(
     MainActivityUiState.Loading -> LaunchPageConfig.TOOLS
     is MainActivityUiState.Success -> uiState.userData.launchPageConfig
 }
-
-/**
- * The default light scrim, as defined by androidx and the platform:
- * https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:activity/activity/src/main/java/androidx/activity/EdgeToEdge.kt;l=35-38;drc=27e7d52e8604a080133e8b842db10c89b4482598
- */
-private val lightScrim = android.graphics.Color.argb(0xe6, 0xFF, 0xFF, 0xFF)
-
-/**
- * The default dark scrim, as defined by androidx and the platform:
- * https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:activity/activity/src/main/java/androidx/activity/EdgeToEdge.kt;l=40-44;drc=27e7d52e8604a080133e8b842db10c89b4482598
- */
-private val darkScrim = android.graphics.Color.argb(0x80, 0x1b, 0x1b, 0x1b)
