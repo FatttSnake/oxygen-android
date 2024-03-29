@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.datetime.TimeZone
-import top.fatweb.oxygen.toolbox.model.LaunchPageConfig
+import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
 import top.fatweb.oxygen.toolbox.monitor.NetworkMonitor
 import top.fatweb.oxygen.toolbox.monitor.TimeZoneMonitor
 import top.fatweb.oxygen.toolbox.navigation.STAR_ROUTE

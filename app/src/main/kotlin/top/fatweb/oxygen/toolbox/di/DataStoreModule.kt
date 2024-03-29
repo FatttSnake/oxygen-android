@@ -11,9 +11,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import top.fatweb.oxygen.toolbox.datastore.IntToStringIdsMigration
 import top.fatweb.oxygen.toolbox.datastore.UserPreferences
-import top.fatweb.oxygen.toolbox.datastore.UserPreferencesSerializer
+import top.fatweb.oxygen.toolbox.datastore.userdata.IntToStringIdsMigration
+import top.fatweb.oxygen.toolbox.datastore.userdata.UserPreferencesSerializer
 import top.fatweb.oxygen.toolbox.network.Dispatcher
 import top.fatweb.oxygen.toolbox.network.OxygenDispatchers
 import javax.inject.Singleton

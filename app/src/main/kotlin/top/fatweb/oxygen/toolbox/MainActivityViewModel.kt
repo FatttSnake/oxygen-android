@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import top.fatweb.oxygen.toolbox.model.UserData
-import top.fatweb.oxygen.toolbox.repository.UserDataRepository
+import top.fatweb.oxygen.toolbox.model.userdata.UserData
+import top.fatweb.oxygen.toolbox.repository.userdata.UserDataRepository
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 

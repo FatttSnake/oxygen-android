@@ -36,7 +36,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
-import top.fatweb.oxygen.toolbox.model.LaunchPageConfig
+import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
 import top.fatweb.oxygen.toolbox.navigation.OxygenNavHost
 import top.fatweb.oxygen.toolbox.navigation.STAR_ROUTE
 import top.fatweb.oxygen.toolbox.navigation.TOOLS_ROUTE
@@ -181,13 +181,13 @@ private fun OxygenBottomBar(
                 icon = {
                     Icon(
                         imageVector = destination.unselectedIcon,
-                        contentDescription = null
+                        contentDescription = stringResource(destination.iconTextId)
                     )
                 },
                 selectedIcon = {
                     Icon(
                         imageVector = destination.selectedIcon,
-                        contentDescription = null
+                        contentDescription = stringResource(destination.iconTextId)
                     )
                 },
                 onClick = { onNavigateToDestination(destination) }
@@ -215,13 +215,13 @@ private fun OxygenNavRail(
                 icon = {
                     Icon(
                         imageVector = destination.unselectedIcon,
-                        contentDescription = null
+                        contentDescription = stringResource(destination.iconTextId)
                     )
                 },
                 selectedIcon = {
                     Icon(
                         imageVector = destination.selectedIcon,
-                        contentDescription = null
+                        contentDescription = stringResource(destination.iconTextId)
                     )
                 },
                 onClick = { onNavigateToDestination(destination) }

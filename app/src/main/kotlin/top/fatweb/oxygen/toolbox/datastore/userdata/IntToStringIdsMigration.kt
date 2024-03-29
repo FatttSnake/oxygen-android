@@ -1,6 +1,8 @@
-package top.fatweb.oxygen.toolbox.datastore
+package top.fatweb.oxygen.toolbox.datastore.userdata
 
 import androidx.datastore.core.DataMigration
+import top.fatweb.oxygen.toolbox.datastore.UserPreferences
+import top.fatweb.oxygen.toolbox.datastore.copy
 
 internal object IntToStringIdsMigration : DataMigration<UserPreferences> {
     override suspend fun cleanUp() = Unit

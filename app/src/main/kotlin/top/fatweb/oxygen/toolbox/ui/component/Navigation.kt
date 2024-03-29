@@ -130,13 +130,13 @@ fun OxygenNavigationBarPreview() {
                     icon = {
                         Icon(
                             imageVector = item.unselectedIcon,
-                            contentDescription = stringResource(item.titleTextId)
+                            contentDescription = stringResource(item.iconTextId)
                         )
                     },
                     selectedIcon = {
                         Icon(
                             imageVector = item.selectedIcon, contentDescription = stringResource(
-                                item.titleTextId
+                                item.iconTextId
                             )
                         )
                     },
@@ -161,13 +161,13 @@ fun OxygenNavigationRailPreview() {
                     icon = {
                         Icon(
                             imageVector = item.unselectedIcon,
-                            contentDescription = stringResource(item.titleTextId)
+                            contentDescription = stringResource(item.iconTextId)
                         )
                     },
                     selectedIcon = {
                         Icon(
                             imageVector = item.selectedIcon, contentDescription = stringResource(
-                                item.titleTextId
+                                item.iconTextId
                             )
                         )
                     },

@@ -1,5 +1,6 @@
 package top.fatweb.oxygen.toolbox.navigation
 
+import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
@@ -7,8 +8,8 @@ import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 enum class TopLevelDestination(
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
-    val iconTextId: Int,
-    val titleTextId: Int
+    @StringRes val iconTextId: Int,
+    @StringRes val titleTextId: Int
 ) {
     TOOLS(
         selectedIcon = OxygenIcons.Home,

@@ -1,11 +1,11 @@
-package top.fatweb.oxygen.toolbox.repository
+package top.fatweb.oxygen.toolbox.repository.userdata
 
 import kotlinx.coroutines.flow.Flow
-import top.fatweb.oxygen.toolbox.model.DarkThemeConfig
-import top.fatweb.oxygen.toolbox.model.LanguageConfig
-import top.fatweb.oxygen.toolbox.model.LaunchPageConfig
-import top.fatweb.oxygen.toolbox.model.ThemeBrandConfig
-import top.fatweb.oxygen.toolbox.model.UserData
+import top.fatweb.oxygen.toolbox.model.userdata.DarkThemeConfig
+import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
+import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
+import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
+import top.fatweb.oxygen.toolbox.model.userdata.UserData
 
 interface UserDataRepository {
     val userData: Flow<UserData>

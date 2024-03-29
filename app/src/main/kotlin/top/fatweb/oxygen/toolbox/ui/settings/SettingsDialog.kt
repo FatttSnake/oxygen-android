@@ -28,14 +28,14 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import top.fatweb.oxygen.toolbox.R
-import top.fatweb.oxygen.toolbox.model.DarkThemeConfig
-import top.fatweb.oxygen.toolbox.model.LanguageConfig
-import top.fatweb.oxygen.toolbox.model.LaunchPageConfig
-import top.fatweb.oxygen.toolbox.model.ThemeBrandConfig
+import top.fatweb.oxygen.toolbox.model.userdata.DarkThemeConfig
+import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
+import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
+import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
+import top.fatweb.oxygen.toolbox.model.userdata.UserData
 import top.fatweb.oxygen.toolbox.ui.component.ThemePreviews
 import top.fatweb.oxygen.toolbox.ui.theme.OxygenTheme
 import top.fatweb.oxygen.toolbox.ui.theme.supportsDynamicTheming
@@ -77,7 +77,6 @@ fun SettingsDialog(
         modifier = modifier
             .widthIn(max = configuration.screenWidthDp.dp - 80.dp)
             .heightIn(max = configuration.screenHeightDp.dp - 40.dp),
-        properties = DialogProperties(usePlatformDefaultWidth = false),
         onDismissRequest = onDismiss,
         title = {
             Text(
@@ -128,7 +127,7 @@ fun SettingsDialog(
 
 @Composable
 private fun ColumnScope.SettingsPanel(
-    settings: UserEditableSettings,
+    settings: UserData,
     supportDynamicColor: Boolean,
     onChangeLanguageConfig: (languageConfig: LanguageConfig) -> Unit,
     onChangeLaunchPageConfig: (launchPageConfig: LaunchPageConfig) -> Unit,
@@ -283,7 +282,7 @@ private fun SettingDialogPreview() {
         SettingsDialog(
             onDismiss = {},
             settingsUiState = SettingsUiState.Success(
-                UserEditableSettings(
+                UserData(
                     languageConfig = LanguageConfig.FOLLOW_SYSTEM,
                     launchPageConfig = LaunchPageConfig.TOOLS,
                     themeBrandConfig = ThemeBrandConfig.DEFAULT,

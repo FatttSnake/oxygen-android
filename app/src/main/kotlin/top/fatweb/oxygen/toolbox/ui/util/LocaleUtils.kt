@@ -5,7 +5,7 @@ import android.content.Context
 import android.os.Build
 import android.os.LocaleList
 import androidx.annotation.RequiresApi
-import top.fatweb.oxygen.toolbox.model.LanguageConfig
+import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
 import java.util.Locale
 
 object LocaleUtils {

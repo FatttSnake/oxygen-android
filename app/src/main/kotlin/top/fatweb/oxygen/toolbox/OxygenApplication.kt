@@ -2,7 +2,7 @@ package top.fatweb.oxygen.toolbox
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
-import top.fatweb.oxygen.toolbox.repository.UserDataRepository
+import top.fatweb.oxygen.toolbox.repository.userdata.UserDataRepository
 import javax.inject.Inject
 
 @HiltAndroidApp

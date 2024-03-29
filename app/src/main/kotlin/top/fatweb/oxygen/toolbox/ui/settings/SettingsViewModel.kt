@@ -8,11 +8,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import top.fatweb.oxygen.toolbox.model.DarkThemeConfig
-import top.fatweb.oxygen.toolbox.model.LanguageConfig
-import top.fatweb.oxygen.toolbox.model.LaunchPageConfig
-import top.fatweb.oxygen.toolbox.model.ThemeBrandConfig
-import top.fatweb.oxygen.toolbox.repository.UserDataRepository
+import top.fatweb.oxygen.toolbox.model.userdata.DarkThemeConfig
+import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
+import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
+import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
+import top.fatweb.oxygen.toolbox.model.userdata.UserData
+import top.fatweb.oxygen.toolbox.repository.userdata.UserDataRepository
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
@@ -22,16 +23,8 @@ class SettingsViewModel @Inject constructor(
 ) : ViewModel() {
     val settingsUiState: StateFlow<SettingsUiState> =
         userDataRepository.userData
-            .map { userData ->
-                SettingsUiState.Success(
-                    settings = UserEditableSettings(
-                        languageConfig = userData.languageConfig,
-                        launchPageConfig = userData.launchPageConfig,
-                        themeBrandConfig = userData.themeBrandConfig,
-                        darkThemeConfig = userData.darkThemeConfig,
-                        useDynamicColor = userData.useDynamicColor
-                    )
-                )
+            .map {
+                SettingsUiState.Success(it)
             }
             .stateIn(
                 scope = viewModelScope,
@@ -70,15 +63,7 @@ class SettingsViewModel @Inject constructor(
     }
 }
 
-data class UserEditableSettings(
-    val languageConfig: LanguageConfig,
-    val launchPageConfig: LaunchPageConfig,
-    val themeBrandConfig: ThemeBrandConfig,
-    val darkThemeConfig: DarkThemeConfig,
-    val useDynamicColor: Boolean
-)
-
 sealed interface SettingsUiState {
     data object Loading : SettingsUiState
-    data class Success(val settings: UserEditableSettings) : SettingsUiState
+    data class Success(val settings: UserData) : SettingsUiState
 }
