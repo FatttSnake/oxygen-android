@@ -25,15 +25,12 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-
-        // Required when setting minSdkVersion to 20 or lower
-        multiDexEnabled = true
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
+            isShrinkResources = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -116,6 +113,7 @@ task("exportLibrariesToJson", AboutLibrariesTask::class) {
 afterEvaluate {
     tasks.findByName("preBuild")?.dependsOn(tasks.findByName("exportLibrariesToJson"))
     tasks.findByName("kspDebugKotlin")?.dependsOn(tasks.findByName("generateDebugProto"))
+    tasks.findByName("kspReleaseKotlin")?.dependsOn(tasks.findByName("generateReleaseProto"))
 }
 
 dependencies {

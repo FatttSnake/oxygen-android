@@ -45,7 +45,7 @@ fun ToolGroupCard(
     modifier: Modifier = Modifier,
     toolGroup: ToolGroup,
     isExpanded: Boolean = true,
-    onExpandSwitch: ((newStatus: Boolean) -> Unit)? = null
+    onExpandSwitch: (() -> Unit)? = null
 ) {
     val (_, icon, title, tools) = toolGroup
 
@@ -55,11 +55,13 @@ fun ToolGroupCard(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Column {
-            ToolGroupTitle(modifier = Modifier.padding(16.dp),
+            ToolGroupTitle(
+                modifier = Modifier.padding(16.dp),
                 icon = icon,
                 title = title,
                 isExpanded = isExpanded,
-                onClick = { onExpandSwitch?.let { it(!isExpanded) } })
+                onClick = onExpandSwitch
+            )
             AnimatedVisibility(visible = isExpanded) {
                 ToolGroupContent(modifier = Modifier.padding(16.dp), toolList = tools)
             }
@@ -75,7 +77,7 @@ fun ToolGroupTitle(
     isExpanded: Boolean,
     onClick: (() -> Unit)? = null
 ) {
-    Surface(onClick = { onClick?.let { it() } }) {
+    Surface(onClick = onClick ?: {}) {
         Row(
             modifier = modifier,
             verticalAlignment = Alignment.CenterVertically,
@@ -99,7 +101,7 @@ fun ToolGroupContent(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        toolList.mapIndexed { index, it ->
+        toolList.map {
             ToolGroupItem(icon = it.icon, title = it.name)
         }
     }
@@ -115,7 +117,7 @@ fun ToolGroupItem(
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(100),
-        onClick = { onClick?.let { it() } }
+        onClick = onClick ?: { }
     ) {
         Box(
             modifier = Modifier.padding(8.dp)
@@ -167,7 +169,7 @@ private fun ToolGroupCardPreview() {
                 ToolGroupCard(
                     toolGroup = item,
                     isExpanded = isExpanded,
-                    onExpandSwitch = { isExpanded = it })
+                    onExpandSwitch = { isExpanded = !isExpanded })
             }
         }
     }
