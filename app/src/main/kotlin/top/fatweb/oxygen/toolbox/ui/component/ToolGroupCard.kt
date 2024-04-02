@@ -43,11 +43,11 @@ import top.fatweb.oxygen.toolbox.ui.theme.OxygenTheme
 @Composable
 fun ToolGroupCard(
     modifier: Modifier = Modifier,
-    toolGroup: ToolGroup,
-    isExpanded: Boolean = true,
-    onExpandSwitch: (() -> Unit)? = null
+    toolGroup: ToolGroup
 ) {
     val (_, icon, title, tools) = toolGroup
+
+    var isExpanded by remember { mutableStateOf(true) }
 
     Card(
         modifier = modifier,
@@ -60,7 +60,7 @@ fun ToolGroupCard(
                 icon = icon,
                 title = title,
                 isExpanded = isExpanded,
-                onClick = onExpandSwitch
+                onClick = { isExpanded = !isExpanded }
             )
             AnimatedVisibility(visible = isExpanded) {
                 ToolGroupContent(modifier = Modifier.padding(16.dp), toolList = tools)
@@ -163,13 +163,9 @@ private fun ToolGroupCardPreview() {
                 if (index != 0) {
                     Spacer(modifier = Modifier.height(10.dp))
                 }
-                var isExpanded by remember {
-                    mutableStateOf(true)
-                }
                 ToolGroupCard(
-                    toolGroup = item,
-                    isExpanded = isExpanded,
-                    onExpandSwitch = { isExpanded = !isExpanded })
+                    toolGroup = item
+                )
             }
         }
     }
