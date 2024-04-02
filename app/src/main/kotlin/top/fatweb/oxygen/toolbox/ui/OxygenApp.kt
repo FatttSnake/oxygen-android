@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +32,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
@@ -73,6 +76,9 @@ fun OxygenApp(appState: OxygenAppState) {
 
             val noConnectMessage = stringResource(R.string.no_connect)
 
+            val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+            val bottomAppBarScrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
+
             LaunchedEffect(isOffline) {
                 if (isOffline) {
                     snackbarHostState.showSnackbar(
@@ -89,17 +95,24 @@ fun OxygenApp(appState: OxygenAppState) {
             }
 
             Scaffold(
+                modifier = Modifier
+                    .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
+                    .nestedScroll(bottomAppBarScrollBehavior.nestedScrollConnection),
                 containerColor = Color.Transparent,
                 contentColor = MaterialTheme.colorScheme.onBackground,
                 contentWindowInsets = WindowInsets(0, 0, 0, 0),
                 snackbarHost = { SnackbarHost(snackbarHostState) },
                 bottomBar = {
                     if (appState.shouldShowBottomBar && destination != null) {
-                        OxygenBottomBar(
-                            destinations = appState.topLevelDestinations,
-                            onNavigateToDestination = appState::navigateToTopLevelDestination,
-                            currentDestination = appState.currentDestination
-                        )
+                        BottomAppBar(
+                            scrollBehavior = bottomAppBarScrollBehavior
+                        ) {
+                            OxygenBottomBar(
+                                destinations = appState.topLevelDestinations,
+                                onNavigateToDestination = appState::navigateToTopLevelDestination,
+                                currentDestination = appState.currentDestination
+                            )
+                        }
                     }
                 }
             ) { padding ->
@@ -128,6 +141,7 @@ fun OxygenApp(appState: OxygenAppState) {
                     ) {
                         if (destination != null) {
                             OxygenTopAppBar(
+                                scrollBehavior = topAppBarScrollBehavior,
                                 titleRes = destination.titleTextId,
                                 navigationIcon = OxygenIcons.Search,
                                 navigationIconContentDescription = stringResource(R.string.feature_settings_top_app_bar_navigation_icon_description),
