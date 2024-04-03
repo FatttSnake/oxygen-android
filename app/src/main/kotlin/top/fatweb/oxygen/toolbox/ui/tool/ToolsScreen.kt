@@ -22,9 +22,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridS
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -41,7 +38,7 @@ import top.fatweb.oxygen.toolbox.ui.component.scrollbar.rememberDraggableScrolle
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.scrollbarState
 
 @Composable
-fun ToolsRoute(
+internal fun ToolsRoute(
     modifier: Modifier = Modifier,
     viewModel: ToolsScreenViewModel = hiltViewModel()
 ) {
@@ -54,7 +51,7 @@ fun ToolsRoute(
 }
 
 @Composable
-fun ToolsScreen(
+internal fun ToolsScreen(
     modifier: Modifier = Modifier,
     toolsScreenUiState: ToolsScreenUiState
 ) {
@@ -66,8 +63,6 @@ fun ToolsScreen(
 
     val state = rememberLazyStaggeredGridState()
     val scrollbarState = state.scrollbarState(itemsAvailable = itemsAvailable)
-
-    var isExpanded by remember { mutableStateOf(mapOf<String, Boolean>()) }
 
     Box(
         modifier.fillMaxSize()

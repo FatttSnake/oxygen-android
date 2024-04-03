@@ -1,0 +1,40 @@
+package top.fatweb.oxygen.toolbox.navigation
+
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.slideOutVertically
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
+import androidx.navigation.compose.composable
+import top.fatweb.oxygen.toolbox.ui.about.AboutRoute
+
+const val ABOUT_ROUTE = "about_route"
+
+fun NavController.navigateToAbout(navOptions: NavOptions? = null) =
+    navigate(ABOUT_ROUTE, navOptions)
+
+fun NavGraphBuilder.aboutScreen(
+    onBackClick: () -> Unit,
+    onNavigateToLibraries: () -> Unit
+) {
+    composable(
+        route = ABOUT_ROUTE,
+        enterTransition = {
+            scaleIn()
+        },
+        exitTransition = {
+            slideOutVertically { it }
+        },
+        popEnterTransition = {
+            scaleIn()
+        },
+        popExitTransition = {
+            slideOutVertically { it }
+        }
+    ) {
+        AboutRoute(
+            onBackClick = onBackClick,
+            onNavigateToLibraries = onNavigateToLibraries
+        )
+    }
+}

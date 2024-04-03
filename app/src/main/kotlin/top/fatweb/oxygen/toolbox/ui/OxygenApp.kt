@@ -1,5 +1,7 @@
 package top.fatweb.oxygen.toolbox.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -74,7 +76,7 @@ fun OxygenApp(appState: OxygenAppState) {
 
             val isOffline by appState.isOffline.collectAsStateWithLifecycle()
 
-            val noConnectMessage = stringResource(R.string.no_connect)
+            val noConnectMessage = stringResource(R.string.core_no_connect)
 
             val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
             val bottomAppBarScrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
@@ -90,7 +92,9 @@ fun OxygenApp(appState: OxygenAppState) {
 
             if (showSettingsDialog) {
                 SettingsDialog(
-                    onDismiss = { showSettingsDialog = false }
+                    onDismiss = { showSettingsDialog = false },
+                    onNavigateToLibraries = appState::navigateToLibraries,
+                    onNavigateToAbout = appState::navigateToAbout
                 )
             }
 
@@ -103,7 +107,9 @@ fun OxygenApp(appState: OxygenAppState) {
                 contentWindowInsets = WindowInsets(0, 0, 0, 0),
                 snackbarHost = { SnackbarHost(snackbarHostState) },
                 bottomBar = {
-                    if (appState.shouldShowBottomBar && destination != null) {
+                    AnimatedVisibility(
+                        visible = appState.shouldShowBottomBar && destination != null,
+                        enter = slideInVertically { it }) {
                         BottomAppBar(
                             scrollBehavior = bottomAppBarScrollBehavior
                         ) {
@@ -127,7 +133,7 @@ fun OxygenApp(appState: OxygenAppState) {
                             )
                         )
                 ) {
-                    if (appState.shouldShowNavRail && destination != null) {
+                    AnimatedVisibility(appState.shouldShowNavRail && destination != null) {
                         OxygenNavRail(
                             modifier = Modifier.safeDrawingPadding(),
                             destinations = appState.topLevelDestinations,

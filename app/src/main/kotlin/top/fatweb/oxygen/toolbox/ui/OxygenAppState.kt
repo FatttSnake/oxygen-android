@@ -23,6 +23,8 @@ import top.fatweb.oxygen.toolbox.monitor.TimeZoneMonitor
 import top.fatweb.oxygen.toolbox.navigation.STAR_ROUTE
 import top.fatweb.oxygen.toolbox.navigation.TOOLS_ROUTE
 import top.fatweb.oxygen.toolbox.navigation.TopLevelDestination
+import top.fatweb.oxygen.toolbox.navigation.navigateToAbout
+import top.fatweb.oxygen.toolbox.navigation.navigateToLibraries
 import top.fatweb.oxygen.toolbox.navigation.navigateToSearch
 import top.fatweb.oxygen.toolbox.navigation.navigateToStar
 import top.fatweb.oxygen.toolbox.navigation.navigateToTools
@@ -56,7 +58,7 @@ fun rememberOxygenAppState(
 
 @Stable
 class OxygenAppState(
-    val windowSizeClass: WindowSizeClass,
+    private val windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
     timeZoneMonitor: TimeZoneMonitor,
     coroutineScope: CoroutineScope,
@@ -114,4 +116,8 @@ class OxygenAppState(
     }
 
     fun navigateToSearch() = navController.navigateToSearch()
+
+    fun navigateToLibraries() = navController.navigateToLibraries()
+
+    fun navigateToAbout() = navController.navigateToAbout()
 }

@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import top.fatweb.oxygen.toolbox.ui.star.StarRoute
 
 const val STAR_ROUTE = "star_route"
 
@@ -13,6 +14,6 @@ fun NavGraphBuilder.starScreen() {
     composable(
         route = STAR_ROUTE
     ) {
-
+        StarRoute()
     }
 }

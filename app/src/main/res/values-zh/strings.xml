@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">OxygenToolbox</string>
-    <string name="no_connect">⚠️ 无法连接至互联网</string>
+    <string name="app_name">氧工具</string>
+    <string name="app_full_name">氧工具</string>
+    <string name="app_description">All in One</string>
+    <string name="core_ok">完成</string>
+    <string name="core_back">返回</string>
+    <string name="core_no_connect">⚠️ 无法连接至互联网</string>
     <string name="feature_tools_title">工具</string>
     <string name="feature_star_title">收藏</string>
     <string name="feature_settings_title">设置</string>
@@ -21,7 +25,9 @@
     <string name="feature_settings_dynamic_color">动态颜色</string>
     <string name="feature_settings_dynamic_color_enable">启用</string>
     <string name="feature_settings_dynamic_color_disable">禁用</string>
+    <string name="feature_settings_more">更多</string>
+    <string name="feature_settings_open_source_license">开源许可</string>
+    <string name="feature_settings_more_about">关于</string>
     <string name="feature_settings_top_app_bar_action_icon_description">更多</string>
     <string name="feature_settings_top_app_bar_navigation_icon_description">搜索</string>
-    <string name="feature_settings_dismiss_dialog_button_text">完成</string>
 </resources>

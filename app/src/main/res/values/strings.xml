@@ -1,6 +1,10 @@
 <resources>
-    <string name="app_name">OxygenToolbox</string>
-    <string name="no_connect">⚠️ Unable to connect to the internet</string>
+    <string name="app_name">Oxygen</string>
+    <string name="app_full_name">Oxygen Toolbox</string>
+    <string name="app_description">All in One</string>
+    <string name="core_ok">OK</string>
+    <string name="core_back">Back</string>
+    <string name="core_no_connect">⚠️ Unable to connect to the internet</string>
     <string name="feature_tools_title">Tools</string>
     <string name="feature_star_title">Star</string>
     <string name="feature_settings_title">Settings</string>
@@ -22,7 +26,9 @@
     <string name="feature_settings_dynamic_color">Dynamic Color</string>
     <string name="feature_settings_dynamic_color_enable">Enable</string>
     <string name="feature_settings_dynamic_color_disable">Disable</string>
+    <string name="feature_settings_more">More</string>
+    <string name="feature_settings_open_source_license">Open Source License</string>
+    <string name="feature_settings_more_about">About</string>
     <string name="feature_settings_top_app_bar_action_icon_description">More</string>
     <string name="feature_settings_top_app_bar_navigation_icon_description">Search</string>
-    <string name="feature_settings_dismiss_dialog_button_text">OK</string>
 </resources>

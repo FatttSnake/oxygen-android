@@ -92,9 +92,19 @@ fun OxygenGradientBackground(
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "Light theme")
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark theme")
+
+@Preview(name = "Light theme", group = "ThemePreviews", uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(name = "Dark theme", group = "ThemePreviews", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Api 21", group = "ApiLevelPreviews", apiLevel = 21)
+annotation class OxygenPreviews
+
+@Preview(name = "Light theme", group = "ThemePreviews", uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(name = "Dark theme", group = "ThemePreviews", uiMode = Configuration.UI_MODE_NIGHT_YES)
 annotation class ThemePreviews
+
+@Preview(name = "Api 21", group = "ApiLevelPreviews", apiLevel = 21)
+@Preview(name = "Api Default", group = "ApiLevelPreviews")
+annotation class ApiLevelPreviews
 
 @ThemePreviews
 @Composable

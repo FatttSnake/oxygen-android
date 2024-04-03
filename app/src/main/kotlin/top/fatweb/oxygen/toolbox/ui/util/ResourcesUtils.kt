@@ -23,7 +23,7 @@ object ResourcesUtils {
 
     fun getAppVersionName(context: Context): String =
         try {
-            context.packageManager.getPackageInfo(context.packageName, 0).versionName
+            context.packageManager.getPackageInfo(context.packageName, 0)?.versionName ?: "Unknown"
         } catch (e: PackageManager.NameNotFoundException) {
             "Unknown"
         }
@@ -32,8 +32,8 @@ object ResourcesUtils {
     fun getAppVersionCode(context: Context): Long =
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-                context.packageManager.getPackageInfo(context.packageName, 0).longVersionCode
-            else context.packageManager.getPackageInfo(context.packageName, 0).versionCode.toLong()
+                context.packageManager.getPackageInfo(context.packageName, 0)?.longVersionCode ?: -1
+            else context.packageManager.getPackageInfo(context.packageName, 0)?.versionCode?.toLong() ?: -1
         } catch (e: PackageManager.NameNotFoundException) {
             -1
         }

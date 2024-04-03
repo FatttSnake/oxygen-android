@@ -17,6 +17,7 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -24,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -31,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import top.fatweb.oxygen.toolbox.R
+import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 import top.fatweb.oxygen.toolbox.model.userdata.DarkThemeConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
@@ -43,8 +46,10 @@ import top.fatweb.oxygen.toolbox.ui.theme.supportsDynamicTheming
 @Composable
 fun SettingsDialog(
     modifier: Modifier = Modifier,
+    viewModel: SettingsViewModel = hiltViewModel(),
     onDismiss: () -> Unit,
-    viewModel: SettingsViewModel = hiltViewModel()
+    onNavigateToLibraries: () -> Unit,
+    onNavigateToAbout: () -> Unit
 ) {
     val settingsUiState by viewModel.settingsUiState.collectAsStateWithLifecycle()
     SettingsDialog(
@@ -55,7 +60,9 @@ fun SettingsDialog(
         onChangeLaunchPageConfig = viewModel::updateLaunchPageConfig,
         onchangeThemeBrandConfig = viewModel::updateThemeBrandConfig,
         onChangeDarkThemeConfig = viewModel::updateDarkThemeConfig,
-        onchangeUseDynamicColor = viewModel::updateUseDynamicColor
+        onchangeUseDynamicColor = viewModel::updateUseDynamicColor,
+        onNavigateToLibraries = onNavigateToLibraries,
+        onNavigateToAbout = onNavigateToAbout
     )
 }
 
@@ -69,7 +76,9 @@ fun SettingsDialog(
     onChangeLaunchPageConfig: (launchPageConfig: LaunchPageConfig) -> Unit,
     onchangeThemeBrandConfig: (themeBrandConfig: ThemeBrandConfig) -> Unit,
     onChangeDarkThemeConfig: (darkThemeConfig: DarkThemeConfig) -> Unit,
-    onchangeUseDynamicColor: (useDynamicColor: Boolean) -> Unit
+    onchangeUseDynamicColor: (useDynamicColor: Boolean) -> Unit,
+    onNavigateToLibraries: () -> Unit,
+    onNavigateToAbout: () -> Unit
 ) {
     val configuration = LocalConfiguration.current
 
@@ -101,11 +110,14 @@ fun SettingsDialog(
                         SettingsPanel(
                             settings = settingsUiState.settings,
                             supportDynamicColor = supportDynamicColor,
+                            onDismiss = onDismiss,
                             onChangeLanguageConfig = onChangeLanguageConfig,
                             onChangeLaunchPageConfig = onChangeLaunchPageConfig,
                             onchangeThemeBrandConfig = onchangeThemeBrandConfig,
                             onChangeDarkThemeConfig = onChangeDarkThemeConfig,
-                            onchangeUseDynamicColor = onchangeUseDynamicColor
+                            onchangeUseDynamicColor = onchangeUseDynamicColor,
+                            onNavigateToLibraries = onNavigateToLibraries,
+                            onNavigateToAbout = onNavigateToAbout
                         )
                     }
                 }
@@ -117,7 +129,7 @@ fun SettingsDialog(
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
                     .clickable { onDismiss() },
-                text = stringResource(R.string.feature_settings_dismiss_dialog_button_text),
+                text = stringResource(R.string.core_ok),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary
             )
@@ -129,27 +141,30 @@ fun SettingsDialog(
 private fun ColumnScope.SettingsPanel(
     settings: UserData,
     supportDynamicColor: Boolean,
+    onDismiss: () -> Unit,
     onChangeLanguageConfig: (languageConfig: LanguageConfig) -> Unit,
     onChangeLaunchPageConfig: (launchPageConfig: LaunchPageConfig) -> Unit,
     onchangeThemeBrandConfig: (themeBrandConfig: ThemeBrandConfig) -> Unit,
     onChangeDarkThemeConfig: (darkThemeConfig: DarkThemeConfig) -> Unit,
-    onchangeUseDynamicColor: (useDynamicColor: Boolean) -> Unit
+    onchangeUseDynamicColor: (useDynamicColor: Boolean) -> Unit,
+    onNavigateToLibraries: () -> Unit,
+    onNavigateToAbout: () -> Unit
 ) {
     SettingsDialogSectionTitle(text = stringResource(R.string.feature_settings_language))
     Column(
         modifier = Modifier.selectableGroup()
     ) {
-        SettingsDialogThemeChooserRow(
+        SettingsDialogChooserRow(
             text = stringResource(R.string.feature_settings_language_system_default),
             selected = settings.languageConfig == LanguageConfig.FOLLOW_SYSTEM,
             onClick = { onChangeLanguageConfig(LanguageConfig.FOLLOW_SYSTEM) }
         )
-        SettingsDialogThemeChooserRow(
+        SettingsDialogChooserRow(
             text = stringResource(R.string.feature_settings_language_chinese),
             selected = settings.languageConfig == LanguageConfig.CHINESE,
             onClick = { onChangeLanguageConfig(LanguageConfig.CHINESE) }
         )
-        SettingsDialogThemeChooserRow(
+        SettingsDialogChooserRow(
             text = stringResource(R.string.feature_settings_language_english),
             selected = settings.languageConfig == LanguageConfig.ENGLISH,
             onClick = { onChangeLanguageConfig(LanguageConfig.ENGLISH) }
@@ -159,12 +174,12 @@ private fun ColumnScope.SettingsPanel(
     Column(
         modifier = Modifier.selectableGroup()
     ) {
-        SettingsDialogThemeChooserRow(
+        SettingsDialogChooserRow(
             text = stringResource(R.string.feature_settings_launch_page_tools),
             selected = settings.launchPageConfig == LaunchPageConfig.TOOLS,
             onClick = { onChangeLaunchPageConfig(LaunchPageConfig.TOOLS) }
         )
-        SettingsDialogThemeChooserRow(
+        SettingsDialogChooserRow(
             text = stringResource(R.string.feature_settings_launch_page_star),
             selected = settings.launchPageConfig == LaunchPageConfig.STAR,
             onClick = { onChangeLaunchPageConfig(LaunchPageConfig.STAR) }
@@ -174,12 +189,12 @@ private fun ColumnScope.SettingsPanel(
     Column(
         modifier = Modifier.selectableGroup()
     ) {
-        SettingsDialogThemeChooserRow(
+        SettingsDialogChooserRow(
             text = stringResource(R.string.feature_settings_theme_brand_default),
             selected = settings.themeBrandConfig == ThemeBrandConfig.DEFAULT,
             onClick = { onchangeThemeBrandConfig(ThemeBrandConfig.DEFAULT) }
         )
-        SettingsDialogThemeChooserRow(
+        SettingsDialogChooserRow(
             text = stringResource(R.string.feature_settings_theme_brand_android),
             selected = settings.themeBrandConfig == ThemeBrandConfig.ANDROID,
             onClick = { onchangeThemeBrandConfig(ThemeBrandConfig.ANDROID) }
@@ -190,12 +205,12 @@ private fun ColumnScope.SettingsPanel(
             modifier = Modifier.selectableGroup()
         ) {
             SettingsDialogSectionTitle(text = stringResource(R.string.feature_settings_dynamic_color))
-            SettingsDialogThemeChooserRow(
+            SettingsDialogChooserRow(
                 text = stringResource(R.string.feature_settings_dynamic_color_enable),
                 selected = settings.useDynamicColor,
                 onClick = { onchangeUseDynamicColor(true) }
             )
-            SettingsDialogThemeChooserRow(
+            SettingsDialogChooserRow(
                 text = stringResource(R.string.feature_settings_dynamic_color_disable),
                 selected = !settings.useDynamicColor,
                 onClick = { onchangeUseDynamicColor(false) }
@@ -206,20 +221,41 @@ private fun ColumnScope.SettingsPanel(
     Column(
         modifier = Modifier.selectableGroup()
     ) {
-        SettingsDialogThemeChooserRow(
+        SettingsDialogChooserRow(
             text = stringResource(R.string.feature_settings_dark_mode_system_default),
             selected = settings.darkThemeConfig == DarkThemeConfig.FOLLOW_SYSTEM,
             onClick = { onChangeDarkThemeConfig(DarkThemeConfig.FOLLOW_SYSTEM) }
         )
-        SettingsDialogThemeChooserRow(
+        SettingsDialogChooserRow(
             text = stringResource(R.string.feature_settings_dark_mode_light),
             selected = settings.darkThemeConfig == DarkThemeConfig.LIGHT,
             onClick = { onChangeDarkThemeConfig(DarkThemeConfig.LIGHT) }
         )
-        SettingsDialogThemeChooserRow(
+        SettingsDialogChooserRow(
             text = stringResource(R.string.feature_settings_dark_mode_dark),
             selected = settings.darkThemeConfig == DarkThemeConfig.DARK,
             onClick = { onChangeDarkThemeConfig(DarkThemeConfig.DARK) }
+        )
+    }
+    SettingsDialogSectionTitle(text = stringResource(R.string.feature_settings_more))
+    Column(
+        modifier = Modifier.selectableGroup()
+    ) {
+        SettingsDialogClickerRow(
+            icon = OxygenIcons.Code,
+            text = stringResource(R.string.feature_settings_open_source_license),
+            onClick = {
+                onNavigateToLibraries()
+                onDismiss()
+            }
+        )
+        SettingsDialogClickerRow(
+            icon = OxygenIcons.Info,
+            text = stringResource(R.string.feature_settings_more_about),
+            onClick = {
+                onNavigateToAbout()
+                onDismiss()
+            }
         )
     }
 }
@@ -234,7 +270,7 @@ private fun SettingsDialogSectionTitle(text: String) {
 }
 
 @Composable
-private fun SettingsDialogThemeChooserRow(
+private fun SettingsDialogChooserRow(
     text: String,
     selected: Boolean,
     onClick: () -> Unit
@@ -259,6 +295,27 @@ private fun SettingsDialogThemeChooserRow(
     }
 }
 
+@Composable
+private fun SettingsDialogClickerRow(
+    icon: ImageVector? = null,
+    text: String,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable(
+                onClick = onClick
+            )
+            .padding(12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(imageVector = icon ?: OxygenIcons.Reorder, contentDescription = null)
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text)
+    }
+}
+
 @ThemePreviews
 @Composable
 private fun SettingsDialogLoadingPreview() {
@@ -270,7 +327,9 @@ private fun SettingsDialogLoadingPreview() {
             onChangeLaunchPageConfig = {},
             onchangeThemeBrandConfig = {},
             onChangeDarkThemeConfig = {},
-            onchangeUseDynamicColor = {}
+            onchangeUseDynamicColor = {},
+            onNavigateToLibraries = {},
+            onNavigateToAbout = {}
         )
     }
 }
@@ -294,7 +353,9 @@ private fun SettingDialogPreview() {
             onChangeLaunchPageConfig = {},
             onchangeThemeBrandConfig = {},
             onChangeDarkThemeConfig = {},
-            onchangeUseDynamicColor = {}
+            onchangeUseDynamicColor = {},
+            onNavigateToLibraries = {},
+            onNavigateToAbout = {}
         )
     }
 }

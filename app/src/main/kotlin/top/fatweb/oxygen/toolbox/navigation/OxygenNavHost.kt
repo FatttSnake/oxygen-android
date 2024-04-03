@@ -21,6 +21,13 @@ fun OxygenNavHost(
         searchScreen(
             onBackClick = navController::popBackStack
         )
+        aboutScreen(
+            onBackClick = navController::popBackStack,
+            onNavigateToLibraries = navController::navigateToLibraries
+        )
+        librariesScreen(
+            onBackClick = navController::popBackStack
+        )
         toolsScreen(
 
         )
