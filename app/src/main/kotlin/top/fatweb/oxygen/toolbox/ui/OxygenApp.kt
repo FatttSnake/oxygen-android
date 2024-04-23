@@ -111,7 +111,8 @@ fun OxygenApp(appState: OxygenAppState) {
                         visible = appState.shouldShowBottomBar && destination != null,
                         enter = slideInVertically { it }) {
                         BottomAppBar(
-                            scrollBehavior = bottomAppBarScrollBehavior
+                            scrollBehavior = bottomAppBarScrollBehavior,
+                            windowInsets = WindowInsets(0)
                         ) {
                             OxygenBottomBar(
                                 destinations = appState.topLevelDestinations,
@@ -154,7 +155,8 @@ fun OxygenApp(appState: OxygenAppState) {
                                 actionIcon = OxygenIcons.MoreVert,
                                 actionIconContentDescription = stringResource(R.string.feature_settings_top_app_bar_action_icon_description),
                                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                                    containerColor = Color.Transparent
+                                    containerColor = Color.Transparent,
+                                    scrolledContainerColor = Color.Transparent
                                 ),
                                 onNavigationClick = { appState.navigateToSearch() },
                                 onActionClick = { showSettingsDialog = true }

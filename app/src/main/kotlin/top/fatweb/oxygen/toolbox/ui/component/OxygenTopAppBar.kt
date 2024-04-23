@@ -1,6 +1,8 @@
 package top.fatweb.oxygen.toolbox.ui.component
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -11,10 +13,13 @@ import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 import top.fatweb.oxygen.toolbox.ui.theme.OxygenTheme
 import android.R as androidR
@@ -33,6 +38,10 @@ fun OxygenTopAppBar(
     onNavigationClick: () -> Unit = {},
     onActionClick: () -> Unit = {}
 ) {
+    val topInset by animateIntAsState(
+        if (-scrollBehavior?.state?.heightOffset!! >= with(LocalDensity.current) { 64.0.dp.toPx() }) 0
+        else TopAppBarDefaults.windowInsets.getTop(LocalDensity.current), label = ""
+    )
     CenterAlignedTopAppBar(
         modifier = modifier,
         scrollBehavior = scrollBehavior,
@@ -55,7 +64,8 @@ fun OxygenTopAppBar(
                 )
             }
         },
-        colors = colors
+        colors = colors,
+        windowInsets = WindowInsets(top = topInset)
     )
 }
 
