@@ -1,7 +1,7 @@
 package top.fatweb.oxygen.toolbox.navigation
 
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -19,16 +19,11 @@ fun NavGraphBuilder.librariesScreen(
     composable(
         route = LIBRARIES_ROUTE,
         enterTransition = {
-            scaleIn()
+            slideInHorizontally(initialOffsetX = { fullWidth -> fullWidth })
         },
-        exitTransition = {
-            scaleOut()
-        },
-        popEnterTransition = {
-            scaleIn()
-        },
+        popEnterTransition = null,
         popExitTransition = {
-            scaleOut()
+            slideOutHorizontally(targetOffsetX = { fullWidth -> fullWidth })
         }
     ) {
         LibrariesRoute(onBackClick = onBackClick)
