@@ -4,6 +4,9 @@
     <string name="app_description">All in One</string>
     <string name="core_ok">OK</string>
     <string name="core_back">Back</string>
+    <string name="core_close">Close</string>
+    <string name="core_unknown">Unknown</string>
+    <string name="core_website">Website</string>
     <string name="core_no_connect">⚠️ Unable to connect to the internet</string>
     <string name="feature_tools_title">Tools</string>
     <string name="feature_star_title">Star</string>

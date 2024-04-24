@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.aboutlibraries)
     alias(libs.plugins.hilt)
     alias(libs.plugins.protobuf)
+    alias(libs.plugins.kotlinxSerialization)
 }
 
 android {
@@ -98,11 +99,7 @@ aboutLibraries {
     registerAndroidTasks = false
     configPath = "libConfig"
     outputFileName = "dependencies.json"
-    exclusionPatterns = listOf(
-        Regex("androidx.*"),
-        Regex("org.jetbrains.*"),
-        Regex("com.google.guava:listenablefuture")
-    ).map { it.toPattern() }
+    exclusionPatterns = listOf<Regex>().map { it.toPattern() }
 }
 
 task("exportLibrariesToJson", AboutLibrariesTask::class) {
@@ -158,4 +155,5 @@ dependencies {
     implementation(libs.protobuf.kotlin.lite)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
 }

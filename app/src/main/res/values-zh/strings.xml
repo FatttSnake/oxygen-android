@@ -5,6 +5,9 @@
     <string name="app_description">All in One</string>
     <string name="core_ok">完成</string>
     <string name="core_back">返回</string>
+    <string name="core_close">关闭</string>
+    <string name="core_unknown">未知</string>
+    <string name="core_website">网站</string>
     <string name="core_no_connect">⚠️ 无法连接至互联网</string>
     <string name="feature_tools_title">工具</string>
     <string name="feature_star_title">收藏</string>

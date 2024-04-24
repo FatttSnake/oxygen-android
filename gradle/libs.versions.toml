@@ -4,6 +4,7 @@ kotlin = "1.9.23"
 ksp = "1.9.23-1.0.20"
 aboutlibraries = "11.1.0"
 protobufPlugin = "0.9.4"
+kotlinxSerialization = "1.9.23"
 
 desugarJdkLibs = "2.0.4"
 composeBom = "2024.04.01"
@@ -22,6 +23,7 @@ androidxDataStore = "1.1.0"
 protobuf = "3.25.2"
 androidxNavigation = "2.7.7"
 androidxHiltNavigationCompose = "1.2.0"
+kotlinxSerializationJson = "1.6.3"
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -30,6 +32,7 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 aboutlibraries = {id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutlibraries"}
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
+kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinxSerialization" }
 
 [libraries]
 desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs"}
@@ -73,3 +76,4 @@ protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref 
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "androidxNavigation" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
+kotlinx-serialization-json = {group="org.jetbrains.kotlinx", name="kotlinx-serialization-json", version.ref = "kotlinxSerializationJson"}

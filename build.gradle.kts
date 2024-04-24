@@ -6,4 +6,5 @@ plugins {
     alias(libs.plugins.aboutlibraries) apply false
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.protobuf) apply false
+    alias(libs.plugins.kotlinxSerialization) apply false
 }
