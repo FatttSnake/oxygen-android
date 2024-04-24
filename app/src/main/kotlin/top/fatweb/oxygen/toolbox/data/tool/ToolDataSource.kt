@@ -1,4 +1,4 @@
-package top.fatweb.oxygen.toolbox.datastore.tool
+package top.fatweb.oxygen.toolbox.data.tool
 
 import kotlinx.coroutines.flow.flowOf
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons

@@ -34,7 +34,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import top.fatweb.oxygen.toolbox.datastore.tool.ToolDataSource
+import top.fatweb.oxygen.toolbox.data.tool.ToolDataSource
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 import top.fatweb.oxygen.toolbox.model.tool.Tool
 import top.fatweb.oxygen.toolbox.model.tool.ToolGroup

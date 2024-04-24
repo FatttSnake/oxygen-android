@@ -8,9 +8,9 @@ import top.fatweb.oxygen.toolbox.monitor.ConnectivityManagerNetworkMonitor
 import top.fatweb.oxygen.toolbox.monitor.NetworkMonitor
 import top.fatweb.oxygen.toolbox.monitor.TimeZoneBroadcastMonitor
 import top.fatweb.oxygen.toolbox.monitor.TimeZoneMonitor
-import top.fatweb.oxygen.toolbox.repository.tool.OfflineFirstToolRepository
+import top.fatweb.oxygen.toolbox.repository.tool.LocalToolRepository
 import top.fatweb.oxygen.toolbox.repository.tool.ToolRepository
-import top.fatweb.oxygen.toolbox.repository.userdata.OfflineFirstUserDataRepository
+import top.fatweb.oxygen.toolbox.repository.userdata.LocalUserDataRepository
 import top.fatweb.oxygen.toolbox.repository.userdata.UserDataRepository
 
 @Module
@@ -23,8 +23,8 @@ abstract class DataModule {
     internal abstract fun bindsTimeZoneMonitor(timeZoneMonitor: TimeZoneBroadcastMonitor): TimeZoneMonitor
 
     @Binds
-    internal abstract fun bindsUserDataRepository(userDataRepository: OfflineFirstUserDataRepository): UserDataRepository
+    internal abstract fun bindsUserDataRepository(userDataRepository: LocalUserDataRepository): UserDataRepository
 
     @Binds
-    internal abstract fun bindsToolRepository(toolRepository: OfflineFirstToolRepository): ToolRepository
+    internal abstract fun bindsToolRepository(toolRepository: LocalToolRepository): ToolRepository
 }

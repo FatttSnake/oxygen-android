@@ -1,7 +1,7 @@
 package top.fatweb.oxygen.toolbox.repository.userdata
 
 import kotlinx.coroutines.flow.Flow
-import top.fatweb.oxygen.toolbox.datastore.userdata.OxygenPreferencesDataSource
+import top.fatweb.oxygen.toolbox.data.userdata.OxygenPreferencesDataSource
 import top.fatweb.oxygen.toolbox.model.userdata.DarkThemeConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
@@ -9,7 +9,7 @@ import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
 import top.fatweb.oxygen.toolbox.model.userdata.UserData
 import javax.inject.Inject
 
-internal class OfflineFirstUserDataRepository @Inject constructor(
+internal class LocalUserDataRepository @Inject constructor(
     private val oxygenPreferencesDataSource: OxygenPreferencesDataSource
 ) : UserDataRepository {
     override val userData: Flow<UserData> =

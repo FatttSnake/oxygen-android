@@ -32,7 +32,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import top.fatweb.oxygen.toolbox.R
-import top.fatweb.oxygen.toolbox.datastore.tool.ToolDataSource
+import top.fatweb.oxygen.toolbox.data.tool.ToolDataSource
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.DraggableScrollbar
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.rememberDraggableScroller
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.scrollbarState

@@ -1,9 +1,9 @@
-package top.fatweb.oxygen.toolbox.datastore.userdata
+package top.fatweb.oxygen.toolbox.data.userdata
 
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
 import com.google.protobuf.InvalidProtocolBufferException
-import top.fatweb.oxygen.toolbox.datastore.UserPreferences
+import top.fatweb.oxygen.toolbox.data.UserPreferences
 import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject

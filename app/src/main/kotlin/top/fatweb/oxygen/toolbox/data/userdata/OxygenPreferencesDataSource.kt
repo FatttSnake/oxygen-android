@@ -1,13 +1,13 @@
-package top.fatweb.oxygen.toolbox.datastore.userdata
+package top.fatweb.oxygen.toolbox.data.userdata
 
 import androidx.datastore.core.DataStore
 import kotlinx.coroutines.flow.map
-import top.fatweb.oxygen.toolbox.datastore.DarkThemeConfigProto
-import top.fatweb.oxygen.toolbox.datastore.LanguageConfigProto
-import top.fatweb.oxygen.toolbox.datastore.LaunchPageConfigProto
-import top.fatweb.oxygen.toolbox.datastore.ThemeBrandConfigProto
-import top.fatweb.oxygen.toolbox.datastore.UserPreferences
-import top.fatweb.oxygen.toolbox.datastore.copy
+import top.fatweb.oxygen.toolbox.data.DarkThemeConfigProto
+import top.fatweb.oxygen.toolbox.data.LanguageConfigProto
+import top.fatweb.oxygen.toolbox.data.LaunchPageConfigProto
+import top.fatweb.oxygen.toolbox.data.ThemeBrandConfigProto
+import top.fatweb.oxygen.toolbox.data.UserPreferences
+import top.fatweb.oxygen.toolbox.data.copy
 import top.fatweb.oxygen.toolbox.model.userdata.DarkThemeConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
