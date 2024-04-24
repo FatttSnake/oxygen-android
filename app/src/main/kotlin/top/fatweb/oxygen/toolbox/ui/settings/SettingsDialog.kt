@@ -39,7 +39,7 @@ import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
 import top.fatweb.oxygen.toolbox.model.userdata.UserData
-import top.fatweb.oxygen.toolbox.ui.component.ThemePreviews
+import top.fatweb.oxygen.toolbox.ui.theme.OxygenPreviews
 import top.fatweb.oxygen.toolbox.ui.theme.OxygenTheme
 import top.fatweb.oxygen.toolbox.ui.theme.supportsDynamicTheming
 
@@ -316,7 +316,7 @@ private fun SettingsDialogClickerRow(
     }
 }
 
-@ThemePreviews
+@OxygenPreviews
 @Composable
 private fun SettingsDialogLoadingPreview() {
     OxygenTheme {
@@ -334,7 +334,7 @@ private fun SettingsDialogLoadingPreview() {
     }
 }
 
-@ThemePreviews
+@OxygenPreviews
 @Composable
 private fun SettingDialogPreview() {
     OxygenTheme {

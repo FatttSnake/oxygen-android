@@ -18,9 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
+import top.fatweb.oxygen.toolbox.ui.theme.OxygenPreviews
 import top.fatweb.oxygen.toolbox.ui.theme.OxygenTheme
 import android.R as androidR
 
@@ -39,7 +39,7 @@ fun OxygenTopAppBar(
     onActionClick: () -> Unit = {}
 ) {
     val topInset by animateIntAsState(
-        if (-scrollBehavior?.state?.heightOffset!! >= with(LocalDensity.current) { 64.0.dp.toPx() }) 0
+        if (scrollBehavior != null && -scrollBehavior.state.heightOffset >= with(LocalDensity.current) { 64.0.dp.toPx() }) 0
         else TopAppBarDefaults.windowInsets.getTop(LocalDensity.current), label = ""
     )
     CenterAlignedTopAppBar(
@@ -70,7 +70,7 @@ fun OxygenTopAppBar(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
+@OxygenPreviews
 @Composable
 private fun OxygenTopAppBarPreview() {
     OxygenTheme {

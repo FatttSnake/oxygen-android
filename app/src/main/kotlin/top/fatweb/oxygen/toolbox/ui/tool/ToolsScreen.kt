@@ -25,7 +25,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -36,6 +35,8 @@ import top.fatweb.oxygen.toolbox.data.tool.ToolDataSource
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.DraggableScrollbar
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.rememberDraggableScroller
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.scrollbarState
+import top.fatweb.oxygen.toolbox.ui.theme.OxygenPreviews
+import top.fatweb.oxygen.toolbox.ui.theme.OxygenTheme
 
 @Composable
 internal fun ToolsRoute(
@@ -110,19 +111,23 @@ fun howManyItems(toolScreenUiState: ToolsScreenUiState) =
         is ToolsScreenUiState.Success -> toolScreenUiState.toolGroups.size
     }
 
-@Preview("Loading")
+@OxygenPreviews
 @Composable
 fun ToolsScreenLoadingPreview() {
-    ToolsScreen(toolsScreenUiState = ToolsScreenUiState.Loading)
+    OxygenTheme {
+        ToolsScreen(toolsScreenUiState = ToolsScreenUiState.Loading)
+    }
 }
 
-@Preview("ToolsPage")
+@OxygenPreviews
 @Composable
 fun ToolsScreenPreview() {
-    ToolsScreen(
-        toolsScreenUiState = ToolsScreenUiState.Success(
-            runBlocking {
-                ToolDataSource().tool.first()
-            })
-    )
+    OxygenTheme {
+        ToolsScreen(
+            toolsScreenUiState = ToolsScreenUiState.Success(
+                runBlocking {
+                    ToolDataSource().tool.first()
+                })
+        )
+    }
 }

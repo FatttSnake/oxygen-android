@@ -23,9 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
-import top.fatweb.oxygen.toolbox.ui.component.ApiLevelPreviews
-import top.fatweb.oxygen.toolbox.ui.component.OxygenPreviews
-import top.fatweb.oxygen.toolbox.ui.component.ThemePreviews
+import top.fatweb.oxygen.toolbox.ui.theme.OxygenPreviews
 import top.fatweb.oxygen.toolbox.ui.theme.OxygenTheme
 import top.fatweb.oxygen.toolbox.ui.util.ResourcesUtils
 
@@ -137,7 +135,7 @@ private fun AboutFooter(
     }
 }
 
-@ThemePreviews
+@OxygenPreviews
 @Composable
 fun AboutToolBarPreview() {
     OxygenTheme {
@@ -145,7 +143,7 @@ fun AboutToolBarPreview() {
     }
 }
 
-@ApiLevelPreviews
+@OxygenPreviews
 @Composable
 fun AboutAppInfoPreview() {
     OxygenTheme {

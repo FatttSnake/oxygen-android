@@ -1,6 +1,5 @@
 package top.fatweb.oxygen.toolbox.ui.component
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -15,12 +14,12 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import top.fatweb.oxygen.toolbox.ui.theme.GradientColors
 import top.fatweb.oxygen.toolbox.ui.theme.LocalBackgroundTheme
 import top.fatweb.oxygen.toolbox.ui.theme.LocalGradientColors
+import top.fatweb.oxygen.toolbox.ui.theme.OxygenPreviews
 import top.fatweb.oxygen.toolbox.ui.theme.OxygenTheme
 import kotlin.math.tan
 
@@ -92,21 +91,7 @@ fun OxygenGradientBackground(
     }
 }
 
-
-@Preview(name = "Light theme", group = "ThemePreviews", uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Dark theme", group = "ThemePreviews", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(name = "Api 21", group = "ApiLevelPreviews", apiLevel = 21)
-annotation class OxygenPreviews
-
-@Preview(name = "Light theme", group = "ThemePreviews", uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(name = "Dark theme", group = "ThemePreviews", uiMode = Configuration.UI_MODE_NIGHT_YES)
-annotation class ThemePreviews
-
-@Preview(name = "Api 21", group = "ApiLevelPreviews", apiLevel = 21)
-@Preview(name = "Api Default", group = "ApiLevelPreviews")
-annotation class ApiLevelPreviews
-
-@ThemePreviews
+@OxygenPreviews
 @Composable
 fun BackgroundDefault() {
     OxygenTheme(dynamicColor = false) {
@@ -114,7 +99,7 @@ fun BackgroundDefault() {
     }
 }
 
-@ThemePreviews
+@OxygenPreviews
 @Composable
 fun BackgroundDynamic() {
     OxygenTheme(dynamicColor = true) {
@@ -122,7 +107,7 @@ fun BackgroundDynamic() {
     }
 }
 
-@ThemePreviews
+@OxygenPreviews
 @Composable
 fun BackgroundAndroid() {
     OxygenTheme(androidTheme = true) {
@@ -130,7 +115,7 @@ fun BackgroundAndroid() {
     }
 }
 
-@ThemePreviews
+@OxygenPreviews
 @Composable
 fun GradientBackgroundDefault() {
     OxygenTheme(dynamicColor = false) {
@@ -138,7 +123,7 @@ fun GradientBackgroundDefault() {
     }
 }
 
-@ThemePreviews
+@OxygenPreviews
 @Composable
 fun GradientBackgroundDynamic() {
     OxygenTheme(dynamicColor = true) {
@@ -146,7 +131,7 @@ fun GradientBackgroundDynamic() {
     }
 }
 
-@ThemePreviews
+@OxygenPreviews
 @Composable
 fun GradientBackgroundAndroid() {
     OxygenTheme(androidTheme = true) {

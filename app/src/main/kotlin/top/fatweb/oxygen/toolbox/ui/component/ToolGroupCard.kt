@@ -38,6 +38,7 @@ import top.fatweb.oxygen.toolbox.data.tool.ToolDataSource
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 import top.fatweb.oxygen.toolbox.model.tool.Tool
 import top.fatweb.oxygen.toolbox.model.tool.ToolGroup
+import top.fatweb.oxygen.toolbox.ui.theme.OxygenPreviews
 import top.fatweb.oxygen.toolbox.ui.theme.OxygenTheme
 
 @Composable
@@ -152,7 +153,7 @@ fun SwitchableIcon(
     )
 }
 
-@ThemePreviews
+@OxygenPreviews
 @Composable
 private fun ToolGroupCardPreview() {
     val groups = runBlocking { ToolDataSource().tool.first() }
@@ -171,7 +172,7 @@ private fun ToolGroupCardPreview() {
     }
 }
 
-@ThemePreviews
+@OxygenPreviews
 @Composable
 fun SwitchableIconPreview() {
     var switched by remember { mutableStateOf(false) }
@@ -185,7 +186,7 @@ fun SwitchableIconPreview() {
     }
 }
 
-@ThemePreviews
+@OxygenPreviews
 @Composable
 fun ToolGroupItemPreview() {
     OxygenTheme {
@@ -193,7 +194,7 @@ fun ToolGroupItemPreview() {
     }
 }
 
-@ThemePreviews
+@OxygenPreviews
 @Composable
 fun ToolGroupContentPreview() {
     OxygenTheme {

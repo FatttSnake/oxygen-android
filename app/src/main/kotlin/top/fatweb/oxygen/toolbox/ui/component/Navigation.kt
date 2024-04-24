@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import top.fatweb.oxygen.toolbox.navigation.TopLevelDestination
+import top.fatweb.oxygen.toolbox.ui.theme.OxygenPreviews
 import top.fatweb.oxygen.toolbox.ui.theme.OxygenTheme
 
 @Composable
@@ -116,7 +117,7 @@ object OxygenNavigationDefaults {
     fun navigationIndicatorColor() = MaterialTheme.colorScheme.primaryContainer
 }
 
-@ThemePreviews
+@OxygenPreviews
 @Composable
 fun OxygenNavigationBarPreview() {
     val items = TopLevelDestination.entries
@@ -147,7 +148,7 @@ fun OxygenNavigationBarPreview() {
     }
 }
 
-@ThemePreviews
+@OxygenPreviews
 @Composable
 fun OxygenNavigationRailPreview() {
     val items = TopLevelDestination.entries
