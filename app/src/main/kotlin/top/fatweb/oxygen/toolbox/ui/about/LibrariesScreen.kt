@@ -73,7 +73,8 @@ internal fun LibrariesRoute(
     LibrariesScreen(
         modifier = modifier.safeDrawingPadding(),
         librariesScreenUiState = librariesScreenUiState,
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
+        onSearch = { viewModel.onSearchValueChange(it) }
     )
 }
 
@@ -82,7 +83,8 @@ internal fun LibrariesRoute(
 internal fun LibrariesScreen(
     modifier: Modifier = Modifier,
     librariesScreenUiState: LibrariesScreenUiState,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onSearch: (String) -> Unit
 ) {
     val configuration = LocalConfiguration.current
     val context = LocalContext.current
@@ -101,7 +103,10 @@ internal fun LibrariesScreen(
     var dialogContent by remember { mutableStateOf("") }
     var dialogUrl by remember { mutableStateOf("") }
 
-    val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(canScroll = { state.canScrollForward })
+
+    var activeSearch by remember { mutableStateOf(false) }
+    var searchValue by remember { mutableStateOf("") }
 
     Scaffold(
         modifier = Modifier
@@ -116,11 +121,26 @@ internal fun LibrariesScreen(
                 navigationIconContentDescription = stringResource(R.string.core_back),
                 actionIcon = OxygenIcons.Search,
                 actionIconContentDescription = stringResource(R.string.core_search),
+                activeSearch = activeSearch,
+                query = searchValue,
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = Color.Transparent,
                     scrolledContainerColor = Color.Transparent
                 ),
-                onNavigationClick = onBackClick
+                onNavigationClick = onBackClick,
+                onActionClick = {
+                    activeSearch = true
+                },
+                onQueryChange = {
+                    searchValue = it
+                    onSearch(it)
+                },
+                onSearch = onSearch,
+                onCancelSearch = {
+                    searchValue = ""
+                    activeSearch = false
+                    onSearch("")
+                }
             )
         }
     ) { padding ->
@@ -138,6 +158,14 @@ internal fun LibrariesScreen(
             when (librariesScreenUiState) {
                 LibrariesScreenUiState.Loading -> {
                     Text(text = stringResource(R.string.feature_settings_loading))
+                }
+
+                LibrariesScreenUiState.Nothing -> {
+                    Text(text = "Nothing")
+                }
+
+                LibrariesScreenUiState.NotFound -> {
+                    Text(text = "Not Found")
                 }
 
                 is LibrariesScreenUiState.Success -> {
@@ -225,7 +253,7 @@ internal fun LibrariesScreen(
 
 fun howManyItems(librariesScreenUiState: LibrariesScreenUiState) =
     when (librariesScreenUiState) {
-        LibrariesScreenUiState.Loading -> 0
+        LibrariesScreenUiState.Loading, LibrariesScreenUiState.Nothing, LibrariesScreenUiState.NotFound -> 0
 
         is LibrariesScreenUiState.Success -> librariesScreenUiState.dependencies.libraries.size
     }
@@ -234,6 +262,9 @@ fun howManyItems(librariesScreenUiState: LibrariesScreenUiState) =
 @Composable
 private fun LibrariesScreenLoadingPreview() {
     OxygenTheme {
-        LibrariesScreen(librariesScreenUiState = LibrariesScreenUiState.Loading, onBackClick = {})
+        LibrariesScreen(
+            librariesScreenUiState = LibrariesScreenUiState.Loading,
+            onBackClick = {},
+            onSearch = {})
     }
 }

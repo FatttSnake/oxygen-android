@@ -1,9 +1,9 @@
 package top.fatweb.oxygen.toolbox.icon
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Inbox
 import androidx.compose.material.icons.filled.MoreVert
@@ -18,10 +18,10 @@ import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Star
 
 object OxygenIcons {
-    val ArrowBack = Icons.AutoMirrored.Rounded.ArrowBack
     val ArrowDown = Icons.Rounded.KeyboardArrowDown
     val Back = Icons.Rounded.ArrowBackIosNew
     val Box = Icons.Default.Inbox
+    val Close = Icons.Default.Close
     val Code = Icons.Default.Code
     val Home = Icons.Rounded.Home
     val HomeBorder = Icons.Outlined.Home

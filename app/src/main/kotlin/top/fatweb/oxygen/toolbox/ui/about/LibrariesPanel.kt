@@ -9,7 +9,7 @@ fun LazyStaggeredGridScope.librariesPanel(
     onClickLicense: (key: String) -> Unit
 ) {
     when (librariesScreenUiState) {
-        LibrariesScreenUiState.Loading -> Unit
+        LibrariesScreenUiState.Loading, LibrariesScreenUiState.Nothing, LibrariesScreenUiState.NotFound -> Unit
 
         is LibrariesScreenUiState.Success -> {
             items(

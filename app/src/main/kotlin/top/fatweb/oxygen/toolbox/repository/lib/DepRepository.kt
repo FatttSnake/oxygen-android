@@ -4,5 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import top.fatweb.oxygen.toolbox.model.lib.Dependencies
 
 interface DepRepository {
-    val dependencies: Flow<Dependencies>
+    fun searchName(name: String): Flow<Dependencies>
+
+    fun getSearchNameCount(): Flow<Int>
 }
