@@ -1,34 +1,44 @@
 package top.fatweb.oxygen.toolbox.ui.tool
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
-import top.fatweb.oxygen.toolbox.model.tool.ToolGroup
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import top.fatweb.oxygen.toolbox.model.Page
+import top.fatweb.oxygen.toolbox.model.tool.Tool
 import top.fatweb.oxygen.toolbox.repository.tool.ToolRepository
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class ToolsScreenViewModel @Inject constructor(
-    toolRepository: ToolRepository
+    private val toolRepository: ToolRepository,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    val toolsScreenUiState: StateFlow<ToolsScreenUiState> =
-        toolRepository.toolGroups
-            .map {
-                ToolsScreenUiState.Success(it)
-            }
-            .stateIn(
-                scope = viewModelScope,
-                initialValue = ToolsScreenUiState.Loading,
-                started = SharingStarted.WhileSubscribed(5.seconds.inWholeMilliseconds)
-            )
+    private val searchValue = savedStateHandle.getStateFlow(SEARCH_VALUE, "")
+    private val currentPage = savedStateHandle.getStateFlow(CURRENT_PAGE, 1)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun getStoreData(): Flow<PagingData<Tool>> {
+        return combine(
+            searchValue,
+            currentPage,
+            ::Pair
+        ).flatMapLatest { (searchValue, currentPage) ->
+            toolRepository.getStore(searchValue, currentPage).cachedIn(viewModelScope)
+        }
+    }
 }
 
 sealed interface ToolsScreenUiState {
     data object Loading : ToolsScreenUiState
-    data class Success(val toolGroups: List<ToolGroup>) : ToolsScreenUiState
+    data class Success(val tools: Page<Tool>) : ToolsScreenUiState
 }
+
+private const val SEARCH_VALUE = "searchValue"
+private const val CURRENT_PAGE = "currentPage"

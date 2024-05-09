@@ -1,3 +1,4 @@
+/*
 package top.fatweb.oxygen.toolbox.ui.component
 
 import androidx.compose.animation.AnimatedVisibility
@@ -202,4 +203,4 @@ fun ToolGroupContentPreview() {
             ToolDataSource().tool.first().map { it.tools }.flatten()
         })
     }
-}
+}*/

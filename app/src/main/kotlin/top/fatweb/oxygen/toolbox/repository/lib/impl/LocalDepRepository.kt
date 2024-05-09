@@ -1,4 +1,4 @@
-package top.fatweb.oxygen.toolbox.repository.lib
+package top.fatweb.oxygen.toolbox.repository.lib.impl
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import top.fatweb.oxygen.toolbox.data.lib.DepDataSource
 import top.fatweb.oxygen.toolbox.model.lib.Dependencies
+import top.fatweb.oxygen.toolbox.repository.lib.DepRepository
 import javax.inject.Inject
 
 class LocalDepRepository @Inject constructor(
