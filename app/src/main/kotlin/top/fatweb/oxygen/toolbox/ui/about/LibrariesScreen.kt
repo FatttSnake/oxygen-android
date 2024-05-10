@@ -3,6 +3,11 @@ package top.fatweb.oxygen.toolbox.ui.about
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.ReportDrawnWhen
+import androidx.compose.animation.core.Ease
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,6 +26,7 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
@@ -33,6 +39,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -46,6 +53,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -54,6 +62,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import top.fatweb.oxygen.toolbox.R
+import top.fatweb.oxygen.toolbox.icon.Loading
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 import top.fatweb.oxygen.toolbox.ui.component.OxygenTopAppBar
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.DraggableScrollbar
@@ -104,6 +113,8 @@ internal fun LibrariesScreen(
     var dialogUrl by remember { mutableStateOf("") }
 
     val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(canScroll = { state.canScrollForward })
+
+    val infiniteTransition = rememberInfiniteTransition(label = "infiniteTransition")
 
     var activeSearch by remember { mutableStateOf(false) }
     var searchValue by remember { mutableStateOf("") }
@@ -156,8 +167,26 @@ internal fun LibrariesScreen(
                 )
         ) {
             when (librariesScreenUiState) {
-                LibrariesScreenUiState.Loading -> {
-                    Text(text = stringResource(R.string.feature_settings_loading))
+                LibrariesScreenUiState.Loading -> {Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    val angle by infiniteTransition.animateFloat(
+                        initialValue = 0F,
+                        targetValue = 360F,
+                        animationSpec = infiniteRepeatable(
+                            animation = tween(800, easing = Ease),
+                        ), label = "angle"
+                    )
+                    Icon(
+                        modifier = Modifier
+                            .size(32.dp)
+                            .graphicsLayer { rotationZ = angle },
+                        imageVector = OxygenIcons.Loading,
+                        contentDescription = ""
+                    )
+                }
                 }
 
                 LibrariesScreenUiState.Nothing -> {

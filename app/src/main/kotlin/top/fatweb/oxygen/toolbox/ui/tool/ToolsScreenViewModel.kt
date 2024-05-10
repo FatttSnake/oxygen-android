@@ -24,14 +24,12 @@ class ToolsScreenViewModel @Inject constructor(
     private val currentPage = savedStateHandle.getStateFlow(CURRENT_PAGE, 1)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun getStoreData(): Flow<PagingData<Tool>> {
-        return combine(
-            searchValue,
-            currentPage,
-            ::Pair
-        ).flatMapLatest { (searchValue, currentPage) ->
-            toolRepository.getStore(searchValue, currentPage).cachedIn(viewModelScope)
-        }
+    val storeData: Flow<PagingData<Tool>> = combine(
+        searchValue,
+        currentPage,
+        ::Pair
+    ).flatMapLatest { (searchValue, currentPage) ->
+        toolRepository.getStore(searchValue, currentPage).cachedIn(viewModelScope)
     }
 }
 

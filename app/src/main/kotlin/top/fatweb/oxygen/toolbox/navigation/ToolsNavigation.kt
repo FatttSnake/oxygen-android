@@ -10,10 +10,16 @@ const val TOOLS_ROUTE = "tools_route"
 
 fun NavController.navigateToTools(navOptions: NavOptions) = navigate(TOOLS_ROUTE, navOptions)
 
-fun NavGraphBuilder.toolsScreen() {
+fun NavGraphBuilder.toolsScreen(
+    onShowSnackbar: suspend (String, String?) -> Boolean,
+    handleOnCanScrollChange: (Boolean) -> Unit
+) {
     composable(
         route = TOOLS_ROUTE
     ) {
-        ToolsRoute()
+        ToolsRoute(
+            onShowSnackbar = onShowSnackbar,
+            handleOnCanScrollChange = handleOnCanScrollChange
+        )
     }
 }

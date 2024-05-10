@@ -8,11 +8,11 @@
     <string name="core_unknown">Unknown</string>
     <string name="core_website">Website</string>
     <string name="core_search">Search</string>
+    <string name="core_loading">Loading…</string>
     <string name="core_no_connect">⚠️ Unable to connect to the internet</string>
     <string name="feature_tools_title">Tools</string>
     <string name="feature_star_title">Star</string>
     <string name="feature_settings_title">Settings</string>
-    <string name="feature_settings_loading">Loading…</string>
     <string name="feature_settings_language">Language</string>
     <string name="feature_settings_language_system_default">System Default</string>
     <string name="feature_settings_language_chinese" translatable="false">中文</string>
@@ -35,4 +35,5 @@
     <string name="feature_settings_more_about">About</string>
     <string name="feature_settings_top_app_bar_action_icon_description">More</string>
     <string name="feature_settings_top_app_bar_navigation_icon_description">Search</string>
+    <string name="feature_tools_description">Desc</string>
 </resources>

@@ -78,7 +78,12 @@ fun OxygenApp(appState: OxygenAppState) {
 
             val noConnectMessage = stringResource(R.string.core_no_connect)
 
-            val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+            var canScroll by remember { mutableStateOf(false) }
+            val handleOnCanScrollChange = { value: Boolean ->
+                canScroll = value
+            }
+            val topAppBarScrollBehavior =
+                TopAppBarDefaults.enterAlwaysScrollBehavior(canScroll = { canScroll })
             val bottomAppBarScrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
 
             LaunchedEffect(isOffline) {
@@ -175,7 +180,8 @@ fun OxygenApp(appState: OxygenAppState) {
                             startDestination = when (appState.launchPageConfig) {
                                 LaunchPageConfig.TOOLS -> TOOLS_ROUTE
                                 LaunchPageConfig.STAR -> STAR_ROUTE
-                            }
+                            },
+                            handleOnCanScrollChange = handleOnCanScrollChange
                         )
                     }
                 }

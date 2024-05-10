@@ -168,4 +168,5 @@ dependencies {
     implementation(libs.okhttp.logging)
     implementation(libs.paging.runtime)
     implementation(libs.paging.compose)
+    implementation(libs.androidsvg.aar)
 }
