@@ -35,4 +35,5 @@
     <string name="feature_settings_top_app_bar_action_icon_description">更多</string>
     <string name="feature_settings_top_app_bar_navigation_icon_description">搜索</string>
     <string name="feature_tools_description">简介</string>
+    <string name="feature_tools_can_not_open">⚠️ 无法打开工具</string>
 </resources>

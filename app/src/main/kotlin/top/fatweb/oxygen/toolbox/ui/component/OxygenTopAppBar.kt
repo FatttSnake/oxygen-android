@@ -46,7 +46,7 @@ import android.R as androidR
 fun OxygenTopAppBar(
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
-    @StringRes titleRes: Int,
+    @StringRes titleRes: Int? = null,
     navigationIcon: ImageVector? = null,
     navigationIconContentDescription: String? = null,
     actionIcon: ImageVector? = null,
@@ -120,7 +120,7 @@ fun OxygenTopAppBar(
                     if ("\n" !in it) onQueryChange(it)
                 }
             )
-            else Text(stringResource(titleRes))
+            else if (titleRes != null) Text(stringResource(titleRes))
         },
         navigationIcon = {
             navigationIcon?.let {

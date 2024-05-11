@@ -1,6 +1,5 @@
 package top.fatweb.oxygen.toolbox.ui.tool
 
-import android.widget.Toast
 import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.animation.core.Ease
 import androidx.compose.animation.core.animateFloat
@@ -35,7 +34,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
@@ -52,6 +50,7 @@ import top.fatweb.oxygen.toolbox.ui.component.scrollbar.scrollbarState
 internal fun ToolsRoute(
     modifier: Modifier = Modifier,
     viewModel: ToolsScreenViewModel = hiltViewModel(),
+    onNavigateToToolView: (username: String, toolId: String) -> Unit,
     onShowSnackbar: suspend (String, String?) -> Boolean,
     handleOnCanScrollChange: (Boolean) -> Unit
 ) {
@@ -59,6 +58,7 @@ internal fun ToolsRoute(
 
     ToolsScreen(
         modifier = modifier,
+        onNavigateToToolView = onNavigateToToolView,
         onShowSnackbar = onShowSnackbar,
         handleOnCanScrollChange = handleOnCanScrollChange,
         toolStorePagingItems = toolStorePagingItems
@@ -68,11 +68,11 @@ internal fun ToolsRoute(
 @Composable
 internal fun ToolsScreen(
     modifier: Modifier = Modifier,
+    onNavigateToToolView: (username: String, toolId: String) -> Unit,
     onShowSnackbar: suspend (String, String?) -> Boolean,
     handleOnCanScrollChange: (Boolean) -> Unit,
     toolStorePagingItems: LazyPagingItems<Tool>
 ) {
-    val context = LocalContext.current
     val isToolLoading =
         toolStorePagingItems.loadState.refresh is LoadState.Loading
                 || toolStorePagingItems.loadState.append is LoadState.Loading
@@ -85,10 +85,6 @@ internal fun ToolsScreen(
     val scrollbarState = state.scrollbarState(itemsAvailable = itemsAvailable)
 
     val infiniteTransition = rememberInfiniteTransition(label = "infiniteTransition")
-
-    val handleOnClickToolCard = { username: String, toolId: String ->
-        Toast.makeText(context, "$username:$toolId", Toast.LENGTH_LONG).show()
-    }
 
     LaunchedEffect(state.canScrollForward) {
         handleOnCanScrollChange(state.canScrollForward)
@@ -106,7 +102,7 @@ internal fun ToolsScreen(
 
             toolsPanel(
                 toolStorePagingItems = toolStorePagingItems,
-                onClickToolCard = handleOnClickToolCard
+                onClickToolCard = onNavigateToToolView
             )
 
             item(span = StaggeredGridItemSpan.FullLine) {

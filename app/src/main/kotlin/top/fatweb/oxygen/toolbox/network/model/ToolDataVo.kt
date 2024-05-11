@@ -11,8 +11,8 @@ data class ToolDataVo(
     val data: String,
 
     @Serializable(LocalDateTimeSerializer::class)
-    val createTime: LocalDateTime,
+    val createTime: LocalDateTime? = null,
 
     @Serializable(LocalDateTimeSerializer::class)
-    val updateTime: LocalDateTime
+    val updateTime: LocalDateTime? = null
 )

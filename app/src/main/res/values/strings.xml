@@ -36,4 +36,5 @@
     <string name="feature_settings_top_app_bar_action_icon_description">More</string>
     <string name="feature_settings_top_app_bar_navigation_icon_description">Search</string>
     <string name="feature_tools_description">Desc</string>
+    <string name="feature_tools_can_not_open">⚠️ Can not open the tool</string>
 </resources>

@@ -58,7 +58,7 @@ internal class RetrofitOxygenNetwork @Inject constructor(
     ): ResponseResult<PageVo<ToolVo>> =
         networkApi.getStore(searchValue = searchValue, currentPage = currentPage)
 
-    override suspend fun detail(
+    override fun detail(
         username: String,
         toolId: String,
         ver: String,

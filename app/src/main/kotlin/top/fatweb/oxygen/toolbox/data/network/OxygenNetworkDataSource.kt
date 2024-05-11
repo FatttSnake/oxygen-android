@@ -13,7 +13,7 @@ interface OxygenNetworkDataSource {
         currentPage: Int = 1
     ): ResponseResult<PageVo<ToolVo>>
 
-    suspend fun detail(
+    fun detail(
         username: String,
         toolId: String,
         ver: String = "latest",

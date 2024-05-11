@@ -14,8 +14,8 @@ fun NavController.navigateToAbout(navOptions: NavOptions? = null) =
     navigate(ABOUT_ROUTE, navOptions)
 
 fun NavGraphBuilder.aboutScreen(
-    onBackClick: () -> Unit,
-    onNavigateToLibraries: () -> Unit
+    onNavigateToLibraries: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     composable(
         route = ABOUT_ROUTE,
@@ -28,8 +28,8 @@ fun NavGraphBuilder.aboutScreen(
         }
     ) {
         AboutRoute(
-            onBackClick = onBackClick,
-            onNavigateToLibraries = onNavigateToLibraries
+            onNavigateToLibraries = onNavigateToLibraries,
+            onBackClick = onBackClick
         )
     }
 }

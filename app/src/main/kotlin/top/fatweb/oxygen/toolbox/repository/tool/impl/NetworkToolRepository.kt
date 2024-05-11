@@ -6,6 +6,7 @@ import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import top.fatweb.oxygen.toolbox.data.network.OxygenNetworkDataSource
+import top.fatweb.oxygen.toolbox.data.tool.ToolDataSource
 import top.fatweb.oxygen.toolbox.model.Result
 import top.fatweb.oxygen.toolbox.model.asExternalModel
 import top.fatweb.oxygen.toolbox.model.tool.Tool
@@ -19,8 +20,11 @@ import javax.inject.Inject
 private const val PAGE_SIZE = 20
 
 internal class NetworkToolRepository @Inject constructor(
-    private val oxygenNetworkDataSource: OxygenNetworkDataSource
+    private val oxygenNetworkDataSource: OxygenNetworkDataSource,
+    private val toolDataSource: ToolDataSource
 ) : ToolRepository {
+    override val toolViewTemplate: Flow<String>
+        get() = toolDataSource.toolViewTemplate
 
     override suspend fun getStore(searchValue: String, currentPage: Int): Flow<PagingData<Tool>> =
         Pager(
@@ -28,7 +32,7 @@ internal class NetworkToolRepository @Inject constructor(
             pagingSourceFactory = { ToolStorePagingSource(oxygenNetworkDataSource, searchValue) }
         ).flow
 
-    override suspend fun detail(
+    override fun detail(
         username: String,
         toolId: String,
         ver: String,

@@ -14,13 +14,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
@@ -29,11 +27,9 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -112,7 +108,8 @@ internal fun LibrariesScreen(
     var dialogContent by remember { mutableStateOf("") }
     var dialogUrl by remember { mutableStateOf("") }
 
-    val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(canScroll = { state.canScrollForward })
+    val topAppBarScrollBehavior =
+        TopAppBarDefaults.enterAlwaysScrollBehavior(canScroll = { state.canScrollForward })
 
     val infiniteTransition = rememberInfiniteTransition(label = "infiniteTransition")
 
@@ -124,7 +121,18 @@ internal fun LibrariesScreen(
             .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
         containerColor = Color.Transparent,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
-        topBar = {
+    ) { padding ->
+        Column(
+            modifier
+                .fillMaxWidth()
+                .padding(padding)
+                .consumeWindowInsets(padding)
+                .windowInsetsPadding(
+                    WindowInsets.safeDrawing.only(
+                        WindowInsetsSides.Horizontal
+                    )
+                )
+        ) {
             OxygenTopAppBar(
                 scrollBehavior = topAppBarScrollBehavior,
                 titleRes = R.string.feature_settings_open_source_license,
@@ -153,88 +161,73 @@ internal fun LibrariesScreen(
                     onSearch("")
                 }
             )
-        }
-    ) { padding ->
-        Box(
-            modifier
-                .fillMaxWidth()
-                .padding(padding)
-                .consumeWindowInsets(padding)
-                .windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(
-                        WindowInsetsSides.Horizontal
-                    )
-                )
-        ) {
-            when (librariesScreenUiState) {
-                LibrariesScreenUiState.Loading -> {Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    val angle by infiniteTransition.animateFloat(
-                        initialValue = 0F,
-                        targetValue = 360F,
-                        animationSpec = infiniteRepeatable(
-                            animation = tween(800, easing = Ease),
-                        ), label = "angle"
-                    )
-                    Icon(
-                        modifier = Modifier
-                            .size(32.dp)
-                            .graphicsLayer { rotationZ = angle },
-                        imageVector = OxygenIcons.Loading,
-                        contentDescription = ""
-                    )
-                }
-                }
-
-                LibrariesScreenUiState.Nothing -> {
-                    Text(text = "Nothing")
-                }
-
-                LibrariesScreenUiState.NotFound -> {
-                    Text(text = "Not Found")
-                }
-
-                is LibrariesScreenUiState.Success -> {
-                    val handleOnClickLicense = { key: String ->
-                        val license = librariesScreenUiState.dependencies.licenses[key]
-                        if (license != null) {
-                            showDialog = true
-                            dialogTitle = license.name
-                            dialogContent = license.content ?: ""
-                            dialogUrl = license.url ?: ""
+            Box(modifier = Modifier) {
+                when (librariesScreenUiState) {
+                    LibrariesScreenUiState.Loading -> {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            val angle by infiniteTransition.animateFloat(
+                                initialValue = 0F,
+                                targetValue = 360F,
+                                animationSpec = infiniteRepeatable(
+                                    animation = tween(800, easing = Ease),
+                                ), label = "angle"
+                            )
+                            Icon(
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .graphicsLayer { rotationZ = angle },
+                                imageVector = OxygenIcons.Loading,
+                                contentDescription = ""
+                            )
                         }
                     }
 
-                    LazyVerticalStaggeredGrid(
-                        columns = StaggeredGridCells.Adaptive(300.dp),
-                        contentPadding = PaddingValues(16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalItemSpacing = 24.dp,
-                        state = state
-                    ) {
-                        librariesPanel(
-                            librariesScreenUiState = librariesScreenUiState,
-                            onClickLicense = handleOnClickLicense
+                    LibrariesScreenUiState.Nothing -> {
+                        Text(text = "Nothing")
+                    }
+
+                    LibrariesScreenUiState.NotFound -> {
+                        Text(text = "Not Found")
+                    }
+
+                    is LibrariesScreenUiState.Success -> {
+                        val handleOnClickLicense = { key: String ->
+                            val license = librariesScreenUiState.dependencies.licenses[key]
+                            if (license != null) {
+                                showDialog = true
+                                dialogTitle = license.name
+                                dialogContent = license.content ?: ""
+                                dialogUrl = license.url ?: ""
+                            }
+                        }
+
+                        LazyVerticalStaggeredGrid(
+                            columns = StaggeredGridCells.Adaptive(300.dp),
+                            contentPadding = PaddingValues(16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                            verticalItemSpacing = 24.dp,
+                            state = state
+                        ) {
+                            librariesPanel(
+                                librariesScreenUiState = librariesScreenUiState,
+                                onClickLicense = handleOnClickLicense
+                            )
+                        }
+
+                        state.DraggableScrollbar(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .windowInsetsPadding(WindowInsets.systemBars)
+                                .padding(horizontal = 2.dp)
+                                .align(Alignment.CenterEnd),
+                            state = scrollbarState, orientation = Orientation.Vertical,
+                            onThumbMoved = state.rememberDraggableScroller(itemsAvailable = itemsAvailable)
                         )
-
-                        item(span = StaggeredGridItemSpan.FullLine) {
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
-                        }
                     }
-
-                    state.DraggableScrollbar(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .windowInsetsPadding(WindowInsets.systemBars)
-                            .padding(horizontal = 2.dp)
-                            .align(Alignment.CenterEnd),
-                        state = scrollbarState, orientation = Orientation.Vertical,
-                        onThumbMoved = state.rememberDraggableScroller(itemsAvailable = itemsAvailable)
-                    )
                 }
             }
         }

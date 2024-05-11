@@ -30,6 +30,7 @@ retrofit = "2.9.0"
 retrofitKotlinxSerializationJson = "1.0.0"
 okhttp = "4.12.0"
 androidsvg = "1.4"
+webviewCompose = "0.33.6"
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -91,3 +92,4 @@ okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor",
 paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
 paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
 androidsvg-aar = { group = "com.caverock", name = "androidsvg-aar", version.ref = "androidsvg" }
+compose-webview = { group = "io.github.kevinnzou", name = "compose-webview", version.ref = "webviewCompose" }

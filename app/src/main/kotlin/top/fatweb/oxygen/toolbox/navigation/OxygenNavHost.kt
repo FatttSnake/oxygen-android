@@ -30,8 +30,12 @@ fun OxygenNavHost(
             onBackClick = navController::popBackStack
         )
         toolsScreen(
+            onNavigateToToolView = navController::navigateToToolView,
             onShowSnackbar = onShowSnackbar,
             handleOnCanScrollChange = handleOnCanScrollChange
+        )
+        toolViewScreen(
+            onBackClick = navController::popBackStack
         )
         starScreen(
 

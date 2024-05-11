@@ -11,6 +11,7 @@ const val TOOLS_ROUTE = "tools_route"
 fun NavController.navigateToTools(navOptions: NavOptions) = navigate(TOOLS_ROUTE, navOptions)
 
 fun NavGraphBuilder.toolsScreen(
+    onNavigateToToolView: (username: String, toolId: String) -> Unit,
     onShowSnackbar: suspend (String, String?) -> Boolean,
     handleOnCanScrollChange: (Boolean) -> Unit
 ) {
@@ -18,6 +19,7 @@ fun NavGraphBuilder.toolsScreen(
         route = TOOLS_ROUTE
     ) {
         ToolsRoute(
+            onNavigateToToolView = onNavigateToToolView,
             onShowSnackbar = onShowSnackbar,
             handleOnCanScrollChange = handleOnCanScrollChange
         )

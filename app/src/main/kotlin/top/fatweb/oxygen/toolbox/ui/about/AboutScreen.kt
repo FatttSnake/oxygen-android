@@ -7,8 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
@@ -43,7 +42,9 @@ import top.fatweb.oxygen.toolbox.ui.util.ResourcesUtils
 
 @Composable
 internal fun AboutRoute(
-    modifier: Modifier = Modifier, onBackClick: () -> Unit, onNavigateToLibraries: () -> Unit
+    modifier: Modifier = Modifier,
+    onNavigateToLibraries: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     AboutScreen(
         modifier = modifier.safeDrawingPadding(),
@@ -55,7 +56,9 @@ internal fun AboutRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AboutScreen(
-    modifier: Modifier = Modifier, onBackClick: () -> Unit, onNavigateToLibraries: () -> Unit
+    modifier: Modifier = Modifier,
+    onNavigateToLibraries: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
     val topAppBarScrollBehavior =
@@ -66,7 +69,19 @@ internal fun AboutScreen(
             .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
         containerColor = Color.Transparent,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
-        topBar = {
+    ) { padding ->
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(padding)
+                .consumeWindowInsets(padding)
+                .windowInsetsPadding(
+                    WindowInsets.safeDrawing.only(
+                        WindowInsetsSides.Horizontal
+                    )
+                )
+                .verticalScroll(scrollState), horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             OxygenTopAppBar(
                 scrollBehavior = topAppBarScrollBehavior,
                 titleRes = R.string.feature_settings_more_about,
@@ -78,21 +93,6 @@ internal fun AboutScreen(
                 ),
                 onNavigationClick = onBackClick
             )
-        }
-    ) { padding ->
-        Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .padding(padding)
-                .consumeWindowInsets(padding)
-                .windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(
-                        WindowInsetsSides.Horizontal
-                    )
-                )
-                .verticalScroll(scrollState), horizontalAlignment = Alignment.CenterHorizontally
-        ) {
             Spacer(
                 modifier = Modifier.height(64.dp)
             )

@@ -22,6 +22,8 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.graphics.drawable.toBitmap
 import com.caverock.androidsvg.SVG
+import top.fatweb.oxygen.toolbox.util.decodeToByteArray
+import top.fatweb.oxygen.toolbox.util.decodeToString
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -42,22 +44,16 @@ object OxygenIcons {
     val Time = Icons.Default.AccessTime
     val Tool = Icons.Default.Build
 
+    @OptIn(ExperimentalEncodingApi::class)
     fun fromSvgBase64(base64String: String): ImageBitmap {
-        val svg = SVG.getFromString(base64DecodeToString(base64String))
+        val svg = SVG.getFromString(Base64.decodeToString(base64String))
         val drawable = PictureDrawable(svg.renderToPicture())
         return drawable.toBitmap().asImageBitmap()
     }
 
+    @OptIn(ExperimentalEncodingApi::class)
     fun fromPngBase64(base64String: String): ImageBitmap {
-        val byteArray = base64DecodeToByteArray(base64String)
+        val byteArray = Base64.decodeToByteArray(base64String)
         return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size).asImageBitmap()
     }
-
-    @OptIn(ExperimentalEncodingApi::class)
-    private fun base64DecodeToString(base64String: String): String =
-        Base64.decode(base64String).decodeToString()
-
-    @OptIn(ExperimentalEncodingApi::class)
-    private fun base64DecodeToByteArray(base64String: String): ByteArray =
-        Base64.decode(base64String)
 }
