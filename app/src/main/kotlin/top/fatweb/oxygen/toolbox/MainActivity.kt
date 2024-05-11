@@ -37,6 +37,7 @@ import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
 import top.fatweb.oxygen.toolbox.monitor.NetworkMonitor
 import top.fatweb.oxygen.toolbox.monitor.TimeZoneMonitor
+import top.fatweb.oxygen.toolbox.navigation.navigateToToolView
 import top.fatweb.oxygen.toolbox.repository.userdata.UserDataRepository
 import top.fatweb.oxygen.toolbox.ui.OxygenApp
 import top.fatweb.oxygen.toolbox.ui.rememberOxygenAppState
@@ -117,6 +118,15 @@ class MainActivity : ComponentActivity() {
                     dynamicColor = shouldUseDynamicColor(uiState)
                 ) {
                     OxygenApp(appState)
+                }
+            }
+
+            LaunchedEffect(intent.data) {
+                intent.data?.run {
+                    val pathSegments = pathSegments
+                    if (pathSegments.size == 2) {
+                        appState.navController.navigateToToolView(pathSegments[0], pathSegments[1])
+                    }
                 }
             }
         }

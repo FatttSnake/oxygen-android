@@ -43,8 +43,8 @@ class TimeZoneBroadcastMonitor @Inject constructor(
                 val zonIdFromIntent = if (Build.VERSION.SDK_INT < VERSION_CODES.R) {
                     null
                 } else {
-                    intent.getStringExtra(Intent.EXTRA_TIMEZONE)?.let { timeZoneId ->
-                        val zoneId = ZoneId.of(timeZoneId, ZoneId.SHORT_IDS)
+                    intent.getStringExtra(Intent.EXTRA_TIMEZONE)?.run {
+                        val zoneId = ZoneId.of(this, ZoneId.SHORT_IDS)
                         zoneId.toKotlinTimeZone()
                     }
                 }

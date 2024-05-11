@@ -250,11 +250,11 @@ fun Scrollbar(
                     draggedOffset = offset
                 }
                 val onDragEnd: () -> Unit = {
-                    dragInteraction?.let { interactionSource?.tryEmit(DragInteraction.Stop(it)) }
+                    dragInteraction?.run { interactionSource?.tryEmit(DragInteraction.Stop(this)) }
                     draggedOffset = Offset.Unspecified
                 }
                 val onDragCancel: () -> Unit = {
-                    dragInteraction?.let { interactionSource?.tryEmit(DragInteraction.Cancel(it)) }
+                    dragInteraction?.run { interactionSource?.tryEmit(DragInteraction.Cancel(this)) }
                     draggedOffset = Offset.Unspecified
                 }
                 val onDrag: (change: PointerInputChange, dragAmount: Float) -> Unit =

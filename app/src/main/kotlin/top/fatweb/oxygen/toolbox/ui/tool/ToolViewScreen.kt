@@ -9,11 +9,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -45,7 +42,7 @@ internal fun ToolViewRoute(
     val toolViewUiState by viewModel.toolViewUiState.collectAsStateWithLifecycle()
 
     ToolViewScreen(
-        modifier = modifier.safeDrawingPadding(),
+        modifier = modifier,
         onBackClick = onBackClick,
         toolViewUiState = toolViewUiState
     )
@@ -63,7 +60,7 @@ internal fun ToolViewScreen(
     val infiniteTransition = rememberInfiniteTransition(label = "infiniteTransition")
 
     Box(
-        modifier = modifier.windowInsetsPadding(WindowInsets(0, 0, 0, 0)),
+        modifier = modifier,
     ) {
         OxygenTopAppBar(
             modifier = Modifier.zIndex(100f),
