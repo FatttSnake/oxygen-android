@@ -7,12 +7,20 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -59,63 +67,77 @@ internal fun ToolViewScreen(
 
     val infiniteTransition = rememberInfiniteTransition(label = "infiniteTransition")
 
-    Box(
-        modifier = modifier,
-    ) {
-        OxygenTopAppBar(
-            modifier = Modifier.zIndex(100f),
-            navigationIcon = OxygenIcons.Back,
-            navigationIconContentDescription = stringResource(R.string.core_back),
-            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = Color.Transparent,
-                scrolledContainerColor = Color.Transparent
-            ),
-            onNavigationClick = onBackClick
-        )
-        when (toolViewUiState) {
-            ToolViewUiState.Loading -> {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    val angle by infiniteTransition.animateFloat(
-                        initialValue = 0F,
-                        targetValue = 360F,
-                        animationSpec = infiniteRepeatable(
-                            animation = tween(800, easing = Ease),
-                        ), label = "angle"
+    Scaffold(
+        modifier = Modifier,
+        containerColor = Color.Transparent,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+    ) { padding ->
+        Column(
+            modifier
+                .fillMaxWidth()
+                .padding(padding)
+                .consumeWindowInsets(padding)
+                .windowInsetsPadding(
+                    WindowInsets.safeDrawing.only(
+                        WindowInsetsSides.Horizontal
                     )
-                    Icon(
-                        modifier = Modifier
-                            .size(32.dp)
-                            .graphicsLayer { rotationZ = angle },
-                        imageVector = OxygenIcons.Loading,
-                        contentDescription = ""
-                    )
-                }
-            }
-
-            ToolViewUiState.Error -> {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(text = stringResource(R.string.feature_tools_can_not_open))
-                }
-            }
-
-            is ToolViewUiState.Success -> {
-                val webViewState = rememberWebViewStateWithHTMLData(
-                    data = toolViewUiState.htmlData,
                 )
-                WebView(
-                    modifier = Modifier.fillMaxSize(),
-                    state = webViewState,
-                    onCreated = {
-                        it.settings.javaScriptEnabled = true
-                    })
+        ) {
+            OxygenTopAppBar(
+                modifier = Modifier.zIndex(100f),
+                navigationIcon = OxygenIcons.Back,
+                navigationIconContentDescription = stringResource(R.string.core_back),
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color.Transparent,
+                    scrolledContainerColor = Color.Transparent
+                ),
+                onNavigationClick = onBackClick
+            )
+            when (toolViewUiState) {
+                ToolViewUiState.Loading -> {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        val angle by infiniteTransition.animateFloat(
+                            initialValue = 0F,
+                            targetValue = 360F,
+                            animationSpec = infiniteRepeatable(
+                                animation = tween(800, easing = Ease),
+                            ), label = "angle"
+                        )
+                        Icon(
+                            modifier = Modifier
+                                .size(32.dp)
+                                .graphicsLayer { rotationZ = angle },
+                            imageVector = OxygenIcons.Loading,
+                            contentDescription = ""
+                        )
+                    }
+                }
+
+                ToolViewUiState.Error -> {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(text = stringResource(R.string.feature_tools_can_not_open))
+                    }
+                }
+
+                is ToolViewUiState.Success -> {
+                    val webViewState = rememberWebViewStateWithHTMLData(
+                        data = toolViewUiState.htmlData,
+                    )
+                    WebView(
+                        modifier = Modifier.fillMaxSize(),
+                        state = webViewState,
+                        onCreated = {
+                            it.settings.javaScriptEnabled = true
+                        })
+                }
             }
         }
     }
