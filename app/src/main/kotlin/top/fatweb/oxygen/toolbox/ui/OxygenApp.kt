@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -82,9 +81,7 @@ fun OxygenApp(appState: OxygenAppState) {
             val handleOnCanScrollChange = { value: Boolean ->
                 canScroll = value
             }
-            val topAppBarScrollBehavior =
-                TopAppBarDefaults.enterAlwaysScrollBehavior(canScroll = { canScroll })
-            val bottomAppBarScrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
+            val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
             LaunchedEffect(isOffline) {
                 if (isOffline) {
@@ -105,8 +102,7 @@ fun OxygenApp(appState: OxygenAppState) {
 
             Scaffold(
                 modifier = Modifier
-                    .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
-                    .nestedScroll(bottomAppBarScrollBehavior.nestedScrollConnection),
+                    .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
                 containerColor = Color.Transparent,
                 contentColor = MaterialTheme.colorScheme.onBackground,
                 contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -116,7 +112,6 @@ fun OxygenApp(appState: OxygenAppState) {
                         visible = appState.shouldShowBottomBar && destination != null,
                         enter = slideInVertically { it }) {
                         BottomAppBar(
-                            scrollBehavior = bottomAppBarScrollBehavior,
                             windowInsets = WindowInsets(0)
                         ) {
                             OxygenBottomBar(
