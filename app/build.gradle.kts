@@ -4,6 +4,7 @@ import com.mikepenz.aboutlibraries.plugin.AboutLibrariesTask
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.aboutlibraries)
     alias(libs.plugins.hilt)
