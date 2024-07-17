@@ -62,7 +62,7 @@ internal fun AboutScreen(
 ) {
     val scrollState = rememberScrollState()
     val topAppBarScrollBehavior =
-        TopAppBarDefaults.enterAlwaysScrollBehavior(canScroll = { scrollState.maxValue > 0 })
+        TopAppBarDefaults.pinnedScrollBehavior(canScroll = { scrollState.maxValue > 0 })
 
     Scaffold(
         modifier = Modifier
