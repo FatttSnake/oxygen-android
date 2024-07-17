@@ -13,7 +13,7 @@ data class Tool(
 
     val platform: Platform,
 
-    val description: String,
+    val description: String? = null,
 
     val base: String? = null,
 

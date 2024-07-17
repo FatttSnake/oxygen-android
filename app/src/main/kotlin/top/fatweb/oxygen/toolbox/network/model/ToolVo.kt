@@ -18,7 +18,7 @@ data class ToolVo(
 
     val platform: ToolBaseVo.Platform,
 
-    val description: String,
+    val description: String? = null,
 
     val base: ToolBaseVo? = null,
 

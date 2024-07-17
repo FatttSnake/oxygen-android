@@ -49,7 +49,7 @@ fun ToolCard(
             ToolInfo(
                 toolName = tool.name,
                 toolId = tool.toolId,
-                toolDesc = tool.description
+                toolDesc = tool.description ?: ""
             )
             Spacer(modifier = Modifier.height(16.dp))
             AuthorInfo(
