@@ -108,8 +108,7 @@ internal fun LibrariesScreen(
     var dialogContent by remember { mutableStateOf("") }
     var dialogUrl by remember { mutableStateOf("") }
 
-    val topAppBarScrollBehavior =
-        TopAppBarDefaults.enterAlwaysScrollBehavior(canScroll = { state.canScrollForward })
+    val topAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     val infiniteTransition = rememberInfiniteTransition(label = "infiniteTransition")
 
@@ -224,7 +223,8 @@ internal fun LibrariesScreen(
                                 .windowInsetsPadding(WindowInsets.systemBars)
                                 .padding(horizontal = 2.dp)
                                 .align(Alignment.CenterEnd),
-                            state = scrollbarState, orientation = Orientation.Vertical,
+                            state = scrollbarState,
+                            orientation = Orientation.Vertical,
                             onThumbMoved = state.rememberDraggableScroller(itemsAvailable = itemsAvailable)
                         )
                     }
