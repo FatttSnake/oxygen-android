@@ -6,7 +6,7 @@ aboutlibraries = "11.2.2"
 protobufPlugin = "0.9.4"
 kotlinxSerialization = "2.0.0"
 secrets = "2.0.1"
-paging = "3.3.0"
+paging = "3.3.1"
 
 desugarJdkLibs = "2.0.4"
 composeBom = "2024.06.00"
@@ -14,15 +14,15 @@ junit = "4.13.2"
 coreKtx = "1.13.1"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-activityCompose = "1.9.0"
+activityCompose = "1.9.1"
 appcompat = "1.7.0"
-androidxLifecycle = "2.8.3"
+androidxLifecycle = "2.8.4"
 androidxCoreSplashscreen = "1.0.1"
 hilt = "2.51.1"
-coil = "2.6.0"
+coil = "2.7.0"
 kotlinxDatetime = "0.6.0"
 androidxDataStore = "1.1.1"
-protobuf = "4.27.2"
+protobuf = "4.27.3"
 androidxNavigation = "2.7.7"
 androidxHiltNavigationCompose = "1.2.0"
 kotlinxSerializationJson = "1.7.1"
@@ -31,6 +31,7 @@ retrofitKotlinxSerializationJson = "1.0.0"
 okhttp = "4.12.0"
 androidsvg = "1.4"
 webviewCompose = "0.33.6"
+room = "2.6.1"
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -42,6 +43,7 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinxSerialization" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
+room = { id = "androidx.room", version.ref = "room" }
 
 [libraries]
 desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }
@@ -94,3 +96,6 @@ paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.r
 paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
 androidsvg-aar = { group = "com.caverock", name = "androidsvg-aar", version.ref = "androidsvg" }
 compose-webview = { group = "io.github.kevinnzou", name = "compose-webview", version.ref = "webviewCompose" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
