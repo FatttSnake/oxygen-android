@@ -26,11 +26,11 @@ class LibrariesScreenViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val librariesScreenUiState: StateFlow<LibrariesScreenUiState> =
         depRepository.getSearchNameCount()
-            .flatMapLatest {totalCount ->
+            .flatMapLatest { totalCount ->
                 if (totalCount < SEARCH_MIN_COUNT) {
                     flowOf(LibrariesScreenUiState.Nothing)
                 } else {
-                    searchValue.flatMapLatest {value ->
+                    searchValue.flatMapLatest { value ->
                         depRepository.searchName(value).map {
                             if (it.libraries.isEmpty()) {
                                 LibrariesScreenUiState.NotFound
@@ -53,11 +53,11 @@ class LibrariesScreenViewModel @Inject constructor(
 }
 
 sealed interface LibrariesScreenUiState {
-    data object Loading: LibrariesScreenUiState
+    data object Loading : LibrariesScreenUiState
 
-    data object Nothing: LibrariesScreenUiState
+    data object Nothing : LibrariesScreenUiState
 
-    data object NotFound: LibrariesScreenUiState
+    data object NotFound : LibrariesScreenUiState
 
     data class Success(val dependencies: Dependencies) : LibrariesScreenUiState
 }
