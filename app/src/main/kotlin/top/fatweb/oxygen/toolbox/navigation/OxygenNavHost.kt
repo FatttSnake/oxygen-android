@@ -10,8 +10,7 @@ fun OxygenNavHost(
     modifier: Modifier = Modifier,
     appState: OxygenAppState,
     onShowSnackbar: suspend (String, String?) -> Boolean,
-    startDestination: String,
-    handleOnCanScrollChange: (Boolean) -> Unit
+    startDestination: String
 ) {
     val navController = appState.navController
     NavHost(
@@ -31,8 +30,7 @@ fun OxygenNavHost(
         )
         toolsScreen(
             onNavigateToToolView = navController::navigateToToolView,
-            onShowSnackbar = onShowSnackbar,
-            handleOnCanScrollChange = handleOnCanScrollChange
+            onShowSnackbar = onShowSnackbar
         )
         toolViewScreen(
             onBackClick = navController::popBackStack

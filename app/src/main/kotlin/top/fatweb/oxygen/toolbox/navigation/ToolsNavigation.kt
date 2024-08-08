@@ -12,16 +12,14 @@ fun NavController.navigateToTools(navOptions: NavOptions) = navigate(TOOLS_ROUTE
 
 fun NavGraphBuilder.toolsScreen(
     onNavigateToToolView: (username: String, toolId: String) -> Unit,
-    onShowSnackbar: suspend (String, String?) -> Boolean,
-    handleOnCanScrollChange: (Boolean) -> Unit
+    onShowSnackbar: suspend (String, String?) -> Boolean
 ) {
     composable(
         route = TOOLS_ROUTE
     ) {
         ToolsRoute(
             onNavigateToToolView = onNavigateToToolView,
-            onShowSnackbar = onShowSnackbar,
-            handleOnCanScrollChange = handleOnCanScrollChange
+            onShowSnackbar = onShowSnackbar
         )
     }
 }

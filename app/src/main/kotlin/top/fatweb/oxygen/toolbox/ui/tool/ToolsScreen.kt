@@ -51,16 +51,13 @@ internal fun ToolsRoute(
     modifier: Modifier = Modifier,
     viewModel: ToolsScreenViewModel = hiltViewModel(),
     onNavigateToToolView: (username: String, toolId: String) -> Unit,
-    onShowSnackbar: suspend (String, String?) -> Boolean,
-    handleOnCanScrollChange: (Boolean) -> Unit
+    onShowSnackbar: suspend (String, String?) -> Boolean
 ) {
     val toolStorePagingItems = viewModel.storeData.collectAsLazyPagingItems()
 
     ToolsScreen(
         modifier = modifier,
         onNavigateToToolView = onNavigateToToolView,
-        onShowSnackbar = onShowSnackbar,
-        handleOnCanScrollChange = handleOnCanScrollChange,
         toolStorePagingItems = toolStorePagingItems
     )
 }
@@ -69,8 +66,6 @@ internal fun ToolsRoute(
 internal fun ToolsScreen(
     modifier: Modifier = Modifier,
     onNavigateToToolView: (username: String, toolId: String) -> Unit,
-    onShowSnackbar: suspend (String, String?) -> Boolean,
-    handleOnCanScrollChange: (Boolean) -> Unit,
     toolStorePagingItems: LazyPagingItems<Tool>
 ) {
     val isToolLoading =
@@ -86,9 +81,6 @@ internal fun ToolsScreen(
 
     val infiniteTransition = rememberInfiniteTransition(label = "infiniteTransition")
 
-    LaunchedEffect(state.canScrollForward) {
-        handleOnCanScrollChange(state.canScrollForward)
-    }
     Box(
         modifier.fillMaxSize()
     ) {
