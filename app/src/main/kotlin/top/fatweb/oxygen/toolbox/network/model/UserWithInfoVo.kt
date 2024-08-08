@@ -1,7 +1,6 @@
 package top.fatweb.oxygen.toolbox.network.model
 
 import kotlinx.serialization.Serializable
-import top.fatweb.oxygen.toolbox.model.tool.Tool
 
 @Serializable
 data class UserWithInfoVo(
@@ -20,9 +19,3 @@ data class UserWithInfoVo(
         val avatar: String
     )
 }
-
-fun UserWithInfoVo.asExternalModel() = Tool.Author(
-    username = username,
-    nickname = userInfo.nickname,
-    avatar = userInfo.avatar
-)

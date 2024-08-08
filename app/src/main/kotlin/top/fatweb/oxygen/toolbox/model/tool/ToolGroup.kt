@@ -10,5 +10,5 @@ data class ToolGroup(
 
     val title: String,
 
-    val tools: List<Tool> = emptyList()
+    val tools: List<ToolEntity> = emptyList()
 )

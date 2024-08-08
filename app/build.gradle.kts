@@ -11,6 +11,8 @@ plugins {
     alias(libs.plugins.protobuf)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.secrets)
+    alias(libs.plugins.room)
+    alias(libs.plugins.parcelize)
 }
 
 android {
@@ -120,6 +122,14 @@ secrets {
     defaultPropertiesFileName = "secrets.defaults.properties"
 }
 
+ksp {
+    arg("room.generateKotlin", "true")
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
 dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
@@ -171,4 +181,7 @@ dependencies {
     implementation(libs.paging.compose)
     implementation(libs.androidsvg.aar)
     implementation(libs.compose.webview)
+    ksp(libs.room.compiler)
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
 }

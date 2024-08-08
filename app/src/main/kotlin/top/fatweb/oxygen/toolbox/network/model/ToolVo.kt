@@ -3,7 +3,7 @@ package top.fatweb.oxygen.toolbox.network.model
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import top.fatweb.oxygen.toolbox.model.tool.Tool
+import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
 import top.fatweb.oxygen.toolbox.network.serializer.LocalDateTimeSerializer
 
 @Serializable
@@ -62,7 +62,7 @@ data class ToolVo(
     }
 }
 
-fun ToolVo.asExternalModel() = Tool(
+fun ToolVo.asExternalModel() = ToolEntity(
     id = id,
     name = name,
     toolId = toolId,
@@ -70,7 +70,9 @@ fun ToolVo.asExternalModel() = Tool(
     platform = platform.asExternalModel(),
     description = description,
     base = base?.dist?.data,
-    author = author.asExternalModel(),
+    authorUsername = author.username,
+    authorNickname = author.userInfo.nickname,
+    authorAvatar = author.userInfo.avatar,
     ver = ver,
     keywords = keywords,
     categories = categories.map { it.name },

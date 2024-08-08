@@ -1,8 +1,16 @@
 package top.fatweb.oxygen.toolbox.model.tool
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import kotlinx.datetime.LocalDateTime
+import top.fatweb.oxygen.toolbox.model.Converters
 
-data class Tool(
+@Entity(tableName = "tools")
+@TypeConverters(Converters::class)
+data class ToolEntity(
+    @PrimaryKey
     val id: Long,
 
     val name: String,
@@ -17,7 +25,11 @@ data class Tool(
 
     val base: String? = null,
 
-    val author: Author,
+    val authorUsername: String,
+
+    val authorNickname: String,
+
+    val authorAvatar: String,
 
     val ver: String,
 
@@ -33,7 +45,13 @@ data class Tool(
 
     val createTime: LocalDateTime,
 
-    val updateTime: LocalDateTime
+    val updateTime: LocalDateTime,
+
+    @ColumnInfo(defaultValue = "false")
+    val isStar: Boolean = false,
+
+    @ColumnInfo(defaultValue = "NULL")
+    val upgrade: String? = null
 ) {
     enum class Platform {
         WEB,
@@ -42,12 +60,4 @@ data class Tool(
 
         ANDROID
     }
-
-    data class Author(
-        val username: String,
-
-        val nickname: String,
-
-        val avatar: String
-    )
 }

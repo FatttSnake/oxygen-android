@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import top.fatweb.oxygen.toolbox.model.Result
 import top.fatweb.oxygen.toolbox.navigation.ToolViewArgs
-import top.fatweb.oxygen.toolbox.repository.tool.ToolRepository
+import top.fatweb.oxygen.toolbox.repository.tool.StoreRepository
 import top.fatweb.oxygen.toolbox.util.decodeToStringWithZip
 import javax.inject.Inject
 import kotlin.io.encoding.Base64
@@ -22,7 +22,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class ToolViewScreenViewModel @Inject constructor(
-    toolRepository: ToolRepository,
+    storeRepository: StoreRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val toolViewArgs = ToolViewArgs(savedStateHandle)
@@ -32,7 +32,7 @@ class ToolViewScreenViewModel @Inject constructor(
     val toolViewUiState: StateFlow<ToolViewUiState> = toolViewUiState(
         username = username,
         toolId = toolId,
-        toolRepository = toolRepository
+        storeRepository = storeRepository
     )
         .stateIn(
             scope = viewModelScope,
@@ -44,13 +44,13 @@ class ToolViewScreenViewModel @Inject constructor(
 private fun toolViewUiState(
     username: String,
     toolId: String,
-    toolRepository: ToolRepository
+    storeRepository: StoreRepository
 ): Flow<ToolViewUiState> {
-    val result = toolRepository.detail(
+    val result = storeRepository.detail(
         username = username,
         toolId = toolId
     )
-    val toolViewTemplate = toolRepository.toolViewTemplate
+    val toolViewTemplate = storeRepository.toolViewTemplate
 
     return combine(result, toolViewTemplate, ::Pair).map { (result, toolViewTemplate) ->
         when (result) {
@@ -87,7 +87,7 @@ sealed interface ToolViewUiState {
 }
 
 @OptIn(ExperimentalEncodingApi::class)
-fun processHtml(toolViewTemplate: String, distBase64: String, baseBase64: String): String {
+private fun processHtml(toolViewTemplate: String, distBase64: String, baseBase64: String): String {
     val dist = Base64.decodeToStringWithZip(distBase64)
     val base = Base64.decodeToStringWithZip(baseBase64)
 

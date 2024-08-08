@@ -1,19 +1,18 @@
 package top.fatweb.oxygen.toolbox.repository.tool
 
-import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
-import top.fatweb.oxygen.toolbox.model.Result
-import top.fatweb.oxygen.toolbox.model.tool.Tool
+import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
 
 interface ToolRepository {
-    val toolViewTemplate: Flow<String>
+    fun getAllToolsStream(): Flow<List<ToolEntity>>
 
-    suspend fun getStore(searchValue: String, currentPage: Int): Flow<PagingData<Tool>>
+    fun getToolById(id: Long): Flow<ToolEntity?>
 
-    fun detail(
-        username: String,
-        toolId: String,
-        ver: String = "latest",
-        platform: Tool.Platform = Tool.Platform.ANDROID
-    ): Flow<Result<Tool>>
+    fun getToolByUsernameAndToolId(username: String, toolId: String): Flow<ToolEntity?>
+
+    suspend fun saveTool(toolEntity: ToolEntity)
+
+    suspend fun updateTool(toolEntity: ToolEntity)
+
+    suspend fun removeTool(toolEntity: ToolEntity)
 }

@@ -28,9 +28,12 @@ fun OxygenNavHost(
         librariesScreen(
             onBackClick = navController::popBackStack
         )
+        toolStoreScreen(
+            onNavigateToToolView = navController::navigateToToolView
+        )
         toolsScreen(
             onNavigateToToolView = navController::navigateToToolView,
-            onShowSnackbar = onShowSnackbar
+            onNavigateToToolStore = { appState.navigateToTopLevelDestination(TopLevelDestination.TOOL_STORE) }
         )
         toolViewScreen(
             onBackClick = navController::popBackStack

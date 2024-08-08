@@ -22,11 +22,13 @@ import top.fatweb.oxygen.toolbox.monitor.NetworkMonitor
 import top.fatweb.oxygen.toolbox.monitor.TimeZoneMonitor
 import top.fatweb.oxygen.toolbox.navigation.STAR_ROUTE
 import top.fatweb.oxygen.toolbox.navigation.TOOLS_ROUTE
+import top.fatweb.oxygen.toolbox.navigation.TOOL_STORE_ROUTE
 import top.fatweb.oxygen.toolbox.navigation.TopLevelDestination
 import top.fatweb.oxygen.toolbox.navigation.navigateToAbout
 import top.fatweb.oxygen.toolbox.navigation.navigateToLibraries
 import top.fatweb.oxygen.toolbox.navigation.navigateToSearch
 import top.fatweb.oxygen.toolbox.navigation.navigateToStar
+import top.fatweb.oxygen.toolbox.navigation.navigateToToolStore
 import top.fatweb.oxygen.toolbox.navigation.navigateToTools
 import kotlin.time.Duration.Companion.seconds
 
@@ -73,6 +75,7 @@ class OxygenAppState(
 
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when (currentDestination?.route) {
+            TOOL_STORE_ROUTE -> TopLevelDestination.TOOL_STORE
             TOOLS_ROUTE -> TopLevelDestination.TOOLS
             STAR_ROUTE -> TopLevelDestination.STAR
             else -> null
@@ -110,6 +113,7 @@ class OxygenAppState(
         }
 
         when (topLevelDestination) {
+            TopLevelDestination.TOOL_STORE -> navController.navigateToToolStore(topLevelNavOptions)
             TopLevelDestination.TOOLS -> navController.navigateToTools(topLevelNavOptions)
             TopLevelDestination.STAR -> navController.navigateToStar(topLevelNavOptions)
         }

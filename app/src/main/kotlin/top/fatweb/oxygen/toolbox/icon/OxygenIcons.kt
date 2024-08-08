@@ -5,19 +5,25 @@ import android.graphics.drawable.PictureDrawable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Code
+import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Inbox
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Reorder
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.StarBorder
+import androidx.compose.material.icons.outlined.Store
 import androidx.compose.material.icons.rounded.ArrowBackIosNew
+import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.rounded.Store
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.graphics.drawable.toBitmap
@@ -33,6 +39,8 @@ object OxygenIcons {
     val Box = Icons.Default.Inbox
     val Close = Icons.Default.Close
     val Code = Icons.Default.Code
+    val Download = Icons.Default.Download
+    val Error = Icons.Default.Cancel
     val Home = Icons.Rounded.Home
     val HomeBorder = Icons.Outlined.Home
     val Info = Icons.Outlined.Info
@@ -41,6 +49,9 @@ object OxygenIcons {
     val Search = Icons.Rounded.Search
     val Star = Icons.Rounded.Star
     val StarBorder = Icons.Outlined.StarBorder
+    val Store = Icons.Rounded.Store
+    val StoreBorder = Icons.Outlined.Store
+    val Success = Icons.Rounded.CheckCircle
     val Time = Icons.Default.AccessTime
     val Tool = Icons.Default.Build
 

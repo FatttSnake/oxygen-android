@@ -9,24 +9,24 @@ import top.fatweb.oxygen.toolbox.data.network.OxygenNetworkDataSource
 import top.fatweb.oxygen.toolbox.data.tool.ToolDataSource
 import top.fatweb.oxygen.toolbox.model.Result
 import top.fatweb.oxygen.toolbox.model.asExternalModel
-import top.fatweb.oxygen.toolbox.model.tool.Tool
+import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
 import top.fatweb.oxygen.toolbox.network.model.ToolBaseVo
 import top.fatweb.oxygen.toolbox.network.model.ToolVo
 import top.fatweb.oxygen.toolbox.network.model.asExternalModel
 import top.fatweb.oxygen.toolbox.network.paging.ToolStorePagingSource
-import top.fatweb.oxygen.toolbox.repository.tool.ToolRepository
+import top.fatweb.oxygen.toolbox.repository.tool.StoreRepository
 import javax.inject.Inject
 
 private const val PAGE_SIZE = 20
 
-internal class NetworkToolRepository @Inject constructor(
+internal class NetworkStoreRepository @Inject constructor(
     private val oxygenNetworkDataSource: OxygenNetworkDataSource,
     private val toolDataSource: ToolDataSource
-) : ToolRepository {
+) : StoreRepository {
     override val toolViewTemplate: Flow<String>
         get() = toolDataSource.toolViewTemplate
 
-    override suspend fun getStore(searchValue: String, currentPage: Int): Flow<PagingData<Tool>> =
+    override suspend fun getStore(searchValue: String, currentPage: Int): Flow<PagingData<ToolEntity>> =
         Pager(
             config = PagingConfig(PAGE_SIZE),
             pagingSourceFactory = { ToolStorePagingSource(oxygenNetworkDataSource, searchValue) }
@@ -36,8 +36,8 @@ internal class NetworkToolRepository @Inject constructor(
         username: String,
         toolId: String,
         ver: String,
-        platform: Tool.Platform
-    ): Flow<Result<Tool>> =
+        platform: ToolEntity.Platform
+    ): Flow<Result<ToolEntity>> =
         oxygenNetworkDataSource.detail(
             username,
             toolId,

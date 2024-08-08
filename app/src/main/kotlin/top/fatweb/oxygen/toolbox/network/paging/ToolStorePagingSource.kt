@@ -3,17 +3,17 @@ package top.fatweb.oxygen.toolbox.network.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import top.fatweb.oxygen.toolbox.data.network.OxygenNetworkDataSource
-import top.fatweb.oxygen.toolbox.model.tool.Tool
+import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
 import top.fatweb.oxygen.toolbox.network.model.ToolVo
 import top.fatweb.oxygen.toolbox.network.model.asExternalModel
 
 internal class ToolStorePagingSource(
     private val oxygenNetworkDataSource: OxygenNetworkDataSource,
     private val searchValue: String
-) : PagingSource<Int, Tool>() {
-    override fun getRefreshKey(state: PagingState<Int, Tool>): Int? = null
+) : PagingSource<Int, ToolEntity>() {
+    override fun getRefreshKey(state: PagingState<Int, ToolEntity>): Int? = null
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Tool> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ToolEntity> {
         return try {
             val currentPage = params.key ?: 1
             val (_, success, msg, data) = oxygenNetworkDataSource.getStore(searchValue, currentPage)
