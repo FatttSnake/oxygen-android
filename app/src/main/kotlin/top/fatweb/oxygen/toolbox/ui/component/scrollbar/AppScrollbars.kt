@@ -87,8 +87,8 @@ private fun ScrollableState.DraggableScrollbarThumb(
         modifier = Modifier
             .run {
                 when (orientation) {
-                    Orientation.Vertical -> width(12.dp).fillMaxHeight()
-                    Orientation.Horizontal -> height(12.dp).fillMaxWidth()
+                    Orientation.Vertical -> width(2.dp).fillMaxHeight()
+                    Orientation.Horizontal -> height(2.dp).fillMaxWidth()
                 }
             }
             .scrollThumb(this, interactionSource)
