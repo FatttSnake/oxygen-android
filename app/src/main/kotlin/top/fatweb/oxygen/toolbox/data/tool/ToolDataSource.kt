@@ -1,6 +1,7 @@
 package top.fatweb.oxygen.toolbox.data.tool
 
 import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -9,7 +10,7 @@ import top.fatweb.oxygen.toolbox.network.OxygenDispatchers
 import javax.inject.Inject
 
 class ToolDataSource @Inject constructor(
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     @Dispatcher(OxygenDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) {
     val toolViewTemplate = flow {
