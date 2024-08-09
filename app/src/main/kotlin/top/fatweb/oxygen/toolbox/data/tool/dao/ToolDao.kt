@@ -21,7 +21,7 @@ interface ToolDao {
     suspend fun deleteTool(tool: ToolEntity)
 
     @Query("SELECT * FROM tools WHERE id = :id")
-    fun selectToolById(id: Long): Flow<ToolEntity>
+    fun selectToolById(id: Long): Flow<ToolEntity?>
 
     @Query("SELECT * FROM tools ORDER BY updateTime DESC")
     fun selectAllTools(): Flow<List<ToolEntity>>
