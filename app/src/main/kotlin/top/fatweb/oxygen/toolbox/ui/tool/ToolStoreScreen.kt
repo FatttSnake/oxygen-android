@@ -39,6 +39,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
@@ -84,8 +87,8 @@ internal fun ToolStoreScreen(
     onNavigateToToolView: (username: String, toolId: String) -> Unit,
     toolStorePagingItems: LazyPagingItems<ToolEntity>,
     hasInstalled: (ToolEntity) -> StateFlow<Boolean>,
-    onChangeInstallStatus: (installStatus: ToolStoreUiState.Status, username: String?, toolId: String?) -> Unit,
-    onInstallTool: () -> Unit,
+    onChangeInstallStatus: (installStatus: ToolStoreUiState.Status) -> Unit,
+    onInstallTool: (username: String, toolId: String) -> Unit,
     installInfo: ToolStoreUiState.InstallInfo
 ) {
     val isToolLoading =
@@ -101,6 +104,9 @@ internal fun ToolStoreScreen(
 
     val infiniteTransition = rememberInfiniteTransition(label = "infiniteTransition")
 
+    var installToolUsername by remember { mutableStateOf("Unknown") }
+    var installToolId by remember { mutableStateOf("Unknown") }
+
     Box(
         modifier.fillMaxSize()
     ) {
@@ -115,11 +121,9 @@ internal fun ToolStoreScreen(
                 toolStorePagingItems = toolStorePagingItems,
                 hasInstalled = hasInstalled,
                 onAction = { username, toolId ->
-                    onChangeInstallStatus(
-                        ToolStoreUiState.Status.Pending,
-                        username,
-                        toolId
-                    )
+                    installToolUsername = username
+                    installToolId = toolId
+                    onChangeInstallStatus(ToolStoreUiState.Status.Pending)
                 },
                 onClick = onNavigateToToolView
             )
@@ -164,112 +168,13 @@ internal fun ToolStoreScreen(
         )
     }
 
-    if (installInfo.status != ToolStoreUiState.Status.None) {
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            AlertDialog(
-                onDismissRequest = {
-                    if (installInfo.status == ToolStoreUiState.Status.Pending) {
-                        onChangeInstallStatus(ToolStoreUiState.Status.None, null, null)
-                    }
-                },
-                title = {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = when (installInfo.status) {
-                                ToolStoreUiState.Status.Success -> OxygenIcons.Success
-                                ToolStoreUiState.Status.Fail -> OxygenIcons.Error
-                                else -> OxygenIcons.Info
-                            },
-                            contentDescription = stringResource(R.string.core_install)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = stringResource(
-                                when (installInfo.status) {
-                                    ToolStoreUiState.Status.Success -> R.string.feature_store_install_success
-                                    ToolStoreUiState.Status.Fail -> R.string.feature_store_install_fail
-                                    else -> R.string.feature_store_install_tool
-                                }
-                            )
-                        )
-                    }
-                },
-                text = {
-                    Column(
-                        modifier = Modifier
-                            .width(360.dp)
-                            .padding(vertical = 16.dp)
-                    ) {
-                        when (installInfo.status) {
-                            ToolStoreUiState.Status.Pending ->
-                                Text(
-                                    text = stringResource(
-                                        R.string.feature_store_ask_install,
-                                        installInfo.username,
-                                        installInfo.toolId
-                                    )
-                                )
-
-                            ToolStoreUiState.Status.Installing ->
-                                Column(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    CircularProgressIndicator()
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                    Text(text = stringResource(R.string.core_installing))
-                                }
-
-                            ToolStoreUiState.Status.Success ->
-                                Text(text = stringResource(R.string.feature_store_install_success_info))
-
-                            ToolStoreUiState.Status.Fail ->
-                                Text(text = stringResource(R.string.feature_store_install_fail_info))
-
-                            ToolStoreUiState.Status.None -> Unit
-                        }
-                    }
-                },
-                dismissButton = {
-                    if (installInfo.status == ToolStoreUiState.Status.Pending) {
-                        TextButton(onClick = {
-                            onChangeInstallStatus(ToolStoreUiState.Status.None, null, null)
-                        }) {
-                            Text(text = stringResource(R.string.core_cancel))
-                        }
-                    }
-                },
-                confirmButton = {
-                    when (installInfo.status) {
-                        ToolStoreUiState.Status.Pending ->
-                            TextButton(onClick = onInstallTool) {
-                                Text(text = stringResource(R.string.core_install))
-                            }
-
-                        ToolStoreUiState.Status.Success,
-                        ToolStoreUiState.Status.Fail ->
-                            TextButton(onClick = {
-                                onChangeInstallStatus(ToolStoreUiState.Status.None, null, null)
-                            }) {
-                                Text(
-                                    text = stringResource(
-                                        if (installInfo.status == ToolStoreUiState.Status.Success) R.string.core_ok
-                                        else R.string.core_close
-                                    )
-                                )
-                            }
-
-                        ToolStoreUiState.Status.None,
-                        ToolStoreUiState.Status.Installing -> Unit
-                    }
-                }
-            )
-        }
-    }
+    InstallAlertDialog(
+        status = installInfo.status,
+        onChangeInstallStatus = onChangeInstallStatus,
+        onInstallTool = { onInstallTool(installToolUsername, installToolId) },
+        username = installToolUsername,
+        toolId = installToolId
+    )
 }
 
 private fun LazyStaggeredGridScope.toolsPanel(
@@ -290,6 +195,117 @@ private fun LazyStaggeredGridScope.toolsPanel(
             onAction = { onAction(it.authorUsername, it.toolId) },
             onClick = { onClick(it.authorUsername, it.toolId) },
             onLongClick = { onClick(it.authorUsername, it.toolId) },
+        )
+    }
+}
+
+@Composable
+private fun InstallAlertDialog(
+    status: ToolStoreUiState.Status,
+    onChangeInstallStatus: (ToolStoreUiState.Status) -> Unit,
+    onInstallTool: () -> Unit,
+    username: String,
+    toolId: String
+) {
+    if (status != ToolStoreUiState.Status.None) {
+        AlertDialog(
+            onDismissRequest = {
+                if (status == ToolStoreUiState.Status.Pending) {
+                    onChangeInstallStatus(ToolStoreUiState.Status.None)
+                }
+            },
+            title = {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = when (status) {
+                            ToolStoreUiState.Status.Success -> OxygenIcons.Success
+                            ToolStoreUiState.Status.Fail -> OxygenIcons.Error
+                            else -> OxygenIcons.Info
+                        },
+                        contentDescription = stringResource(R.string.core_install)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = stringResource(
+                            when (status) {
+                                ToolStoreUiState.Status.Success -> R.string.feature_store_install_success
+                                ToolStoreUiState.Status.Fail -> R.string.feature_store_install_fail
+                                else -> R.string.feature_store_install_tool
+                            }
+                        )
+                    )
+                }
+            },
+            text = {
+                Column(
+                    modifier = Modifier
+                        .width(360.dp)
+                        .padding(vertical = 16.dp)
+                ) {
+                    when (status) {
+                        ToolStoreUiState.Status.Pending ->
+                            Text(
+                                text = stringResource(
+                                    R.string.feature_store_ask_install,
+                                    username,
+                                    toolId
+                                )
+                            )
+
+                        ToolStoreUiState.Status.Installing ->
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                CircularProgressIndicator()
+                                Spacer(modifier = Modifier.height(16.dp))
+                                Text(text = stringResource(R.string.core_installing))
+                            }
+
+                        ToolStoreUiState.Status.Success ->
+                            Text(text = stringResource(R.string.feature_store_install_success_info))
+
+                        ToolStoreUiState.Status.Fail ->
+                            Text(text = stringResource(R.string.feature_store_install_fail_info))
+
+                        else -> Unit
+                    }
+                }
+            },
+            dismissButton = {
+                if (status == ToolStoreUiState.Status.Pending) {
+                    TextButton(onClick = {
+                        onChangeInstallStatus(ToolStoreUiState.Status.None)
+                    }) {
+                        Text(text = stringResource(R.string.core_cancel))
+                    }
+                }
+            },
+            confirmButton = {
+                when (status) {
+                    ToolStoreUiState.Status.Pending ->
+                        TextButton(onClick = onInstallTool) {
+                            Text(text = stringResource(R.string.core_install))
+                        }
+
+                    ToolStoreUiState.Status.Success,
+                    ToolStoreUiState.Status.Fail ->
+                        TextButton(onClick = {
+                            onChangeInstallStatus(ToolStoreUiState.Status.None)
+                        }) {
+                            Text(
+                                text = stringResource(
+                                    if (status == ToolStoreUiState.Status.Success) R.string.core_ok
+                                    else R.string.core_close
+                                )
+                            )
+                        }
+
+                    else -> Unit
+                }
+            }
         )
     }
 }

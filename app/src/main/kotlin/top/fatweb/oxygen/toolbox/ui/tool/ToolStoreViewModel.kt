@@ -35,12 +35,9 @@ class ToolStoreViewModel @Inject constructor(
     private val currentPage = savedStateHandle.getStateFlow(CURRENT_PAGE, 1)
     private val installedStatus =
         savedStateHandle.getStateFlow<MutableMap<String, MutableMap<String, Boolean>>>(
-            INSTALLED_STATUS,
-            mutableMapOf()
+            INSTALLED_STATUS, mutableMapOf()
         )
-    val installInfo = savedStateHandle.getStateFlow(
-        INSTALL_INFO, ToolStoreUiState.InstallInfo()
-    )
+    val installInfo = savedStateHandle.getStateFlow(INSTALL_INFO, ToolStoreUiState.InstallInfo())
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val storeData: Flow<PagingData<ToolEntity>> = combine(
@@ -52,31 +49,31 @@ class ToolStoreViewModel @Inject constructor(
     }
 
     fun hasInstalled(toolEntity: ToolEntity): StateFlow<Boolean> =
-        installedStatus.value[toolEntity.authorUsername]?.get(toolEntity.toolId)?.let { MutableStateFlow(it) }
-            ?: toolRepository.getToolByUsernameAndToolId(toolEntity.authorUsername, toolEntity.toolId).map {
-                if (installedStatus.value[toolEntity.authorUsername] == null) {
-                    installedStatus.value[toolEntity.authorUsername] =
-                        mutableMapOf(toolEntity.toolId to (it != null))
-                } else {
-                    installedStatus.value[toolEntity.authorUsername]?.set(toolEntity.toolId, it != null)
-                }
-                it != null
-            }.stateIn(
-                scope = viewModelScope,
-                initialValue = true,
-                started = SharingStarted.WhileSubscribed(5.seconds.inWholeMilliseconds)
-            )
+        installedStatus.value[toolEntity.authorUsername]?.get(toolEntity.toolId)
+            ?.let { MutableStateFlow(it) } ?: toolRepository.getToolByUsernameAndToolId(
+            toolEntity.authorUsername, toolEntity.toolId
+        ).map {
+            if (installedStatus.value[toolEntity.authorUsername] == null) {
+                installedStatus.value[toolEntity.authorUsername] =
+                    mutableMapOf(toolEntity.toolId to (it != null))
+            } else {
+                installedStatus.value[toolEntity.authorUsername]?.set(
+                    toolEntity.toolId, it != null
+                )
+            }
+            it != null
+        }.stateIn(
+            scope = viewModelScope,
+            initialValue = true,
+            started = SharingStarted.WhileSubscribed(5.seconds.inWholeMilliseconds)
+        )
 
-    fun changeInstallStatus(
-        installStatus: ToolStoreUiState.Status, username: String?, toolId: String?
-    ) {
-        savedStateHandle[INSTALL_INFO] =
-            ToolStoreUiState.InstallInfo(installStatus, username ?: "Unknown", toolId ?: "Unknown")
+    fun changeInstallStatus(installStatus: ToolStoreUiState.Status) {
+        savedStateHandle[INSTALL_INFO] = ToolStoreUiState.InstallInfo(installStatus)
     }
 
-    fun installTool() {
+    fun installTool(username: String, toolId: String) {
         viewModelScope.launch {
-            val (_, username, toolId) = installInfo.value
             storeRepository.detail(username, toolId).collect {
                 when (it) {
                     Result.Loading -> savedStateHandle[INSTALL_INFO] =
@@ -90,8 +87,7 @@ class ToolStoreViewModel @Inject constructor(
                         savedStateHandle[INSTALL_INFO] =
                             ToolStoreUiState.InstallInfo(ToolStoreUiState.Status.Success)
                         if (installedStatus.value[username] == null) {
-                            installedStatus.value[username] =
-                                mutableMapOf(toolId to true)
+                            installedStatus.value[username] = mutableMapOf(toolId to true)
                         } else {
                             installedStatus.value[username]?.set(toolId, true)
                         }
@@ -108,9 +104,7 @@ data class ToolStoreUiState(
 ) : Parcelable {
     @Parcelize
     data class InstallInfo(
-        var status: Status = Status.None,
-        var username: String = "Unknown",
-        var toolId: String = "Unknown"
+        var status: Status = Status.None
     ) : Parcelable
 
     enum class Status {
