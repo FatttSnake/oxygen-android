@@ -82,7 +82,7 @@ fun ToolCard(
 }
 
 @Composable
-fun ToolHeader(
+private fun ToolHeader(
     modifier: Modifier = Modifier,
     ver: String,
     actionIcon: ImageVector?,
@@ -106,7 +106,7 @@ fun ToolHeader(
 }
 
 @Composable
-fun ToolVer(
+private fun ToolVer(
     modifier: Modifier = Modifier,
     ver: String
 ) {
@@ -133,7 +133,7 @@ fun ToolVer(
 }
 
 @Composable
-fun ToolAction(
+private fun ToolAction(
     modifier: Modifier = Modifier,
     actionIcon: ImageVector,
     actionIconContentDescription: String,
@@ -165,7 +165,7 @@ fun ToolAction(
 }
 
 @Composable
-fun ToolIcon(
+private fun ToolIcon(
     modifier: Modifier = Modifier,
     icon: String
 ) {
@@ -183,7 +183,7 @@ fun ToolIcon(
 }
 
 @Composable
-fun ToolInfo(
+private fun ToolInfo(
     modifier: Modifier = Modifier,
     toolName: String,
     toolId: String,
@@ -215,7 +215,7 @@ fun ToolInfo(
 }
 
 @Composable
-fun AuthorInfo(
+private fun AuthorInfo(
     modifier: Modifier = Modifier,
     avatar: String,
     nickname: String

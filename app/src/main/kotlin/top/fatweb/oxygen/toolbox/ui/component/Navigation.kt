@@ -119,7 +119,7 @@ object OxygenNavigationDefaults {
 
 @OxygenPreviews
 @Composable
-fun OxygenNavigationBarPreview() {
+private fun OxygenNavigationBarPreview() {
     val items = TopLevelDestination.entries
 
     OxygenTheme {
@@ -150,7 +150,7 @@ fun OxygenNavigationBarPreview() {
 
 @OxygenPreviews
 @Composable
-fun OxygenNavigationRailPreview() {
+private fun OxygenNavigationRailPreview() {
     val items = TopLevelDestination.entries
 
     OxygenTheme {

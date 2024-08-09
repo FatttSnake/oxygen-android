@@ -164,7 +164,7 @@ private fun AboutFooter(
 
 @OxygenPreviews
 @Composable
-fun AboutAppInfoPreview() {
+private fun AboutAppInfoPreview() {
     OxygenTheme {
         AboutAppInfo()
     }
@@ -172,7 +172,7 @@ fun AboutAppInfoPreview() {
 
 @OxygenPreviews
 @Composable
-fun AboutScreenPreview() {
+private fun AboutScreenPreview() {
     OxygenTheme {
         AboutScreen(onBackClick = {}, onNavigateToLibraries = {})
     }

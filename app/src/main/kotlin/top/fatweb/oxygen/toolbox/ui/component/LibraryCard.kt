@@ -76,7 +76,7 @@ fun LibraryCard(
 }
 
 @Composable
-fun LibraryTitle(
+private fun LibraryTitle(
     modifier: Modifier = Modifier,
     name: String,
     developers: String,
@@ -107,7 +107,7 @@ fun LibraryTitle(
 }
 
 @Composable
-fun LibraryContent(
+private fun LibraryContent(
     modifier: Modifier = Modifier,
     text: String
 ) {
@@ -120,7 +120,7 @@ fun LibraryContent(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun LibraryFooter(
+private fun LibraryFooter(
     modifier: Modifier = Modifier,
     licenses: Map<String, License>,
     onClickLicense: (key: String) -> Unit
@@ -140,7 +140,7 @@ fun LibraryFooter(
 
 @OxygenPreviews
 @Composable
-fun LibraryCardPreview() {
+private fun LibraryCardPreview() {
     LibraryCard(
         library = Library(
             uniqueId = "androidx.activity:activity",

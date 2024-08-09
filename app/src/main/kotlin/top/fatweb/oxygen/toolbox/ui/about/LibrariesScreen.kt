@@ -273,7 +273,7 @@ internal fun LibrariesScreen(
     }
 }
 
-fun howManyItems(librariesScreenUiState: LibrariesScreenUiState) =
+private fun howManyItems(librariesScreenUiState: LibrariesScreenUiState) =
     when (librariesScreenUiState) {
         LibrariesScreenUiState.Loading, LibrariesScreenUiState.Nothing, LibrariesScreenUiState.NotFound -> 0
 
