@@ -6,8 +6,6 @@ import top.fatweb.oxygen.toolbox.model.Result
 import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
 
 interface StoreRepository {
-    val toolViewTemplate: Flow<String>
-
     suspend fun getStore(searchValue: String, currentPage: Int): Flow<PagingData<ToolEntity>>
 
     fun detail(

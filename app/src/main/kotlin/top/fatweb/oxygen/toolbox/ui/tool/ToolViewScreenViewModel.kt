@@ -9,11 +9,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import top.fatweb.oxygen.toolbox.model.Result
 import top.fatweb.oxygen.toolbox.navigation.ToolViewArgs
 import top.fatweb.oxygen.toolbox.repository.tool.StoreRepository
+import top.fatweb.oxygen.toolbox.repository.tool.ToolRepository
 import top.fatweb.oxygen.toolbox.util.decodeToStringWithZip
 import javax.inject.Inject
 import kotlin.io.encoding.Base64
@@ -23,6 +24,7 @@ import kotlin.time.Duration.Companion.seconds
 @HiltViewModel
 class ToolViewScreenViewModel @Inject constructor(
     storeRepository: StoreRepository,
+    toolRepository: ToolRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val toolViewArgs = ToolViewArgs(savedStateHandle)
@@ -32,7 +34,8 @@ class ToolViewScreenViewModel @Inject constructor(
     val toolViewUiState: StateFlow<ToolViewUiState> = toolViewUiState(
         username = username,
         toolId = toolId,
-        storeRepository = storeRepository
+        storeRepository = storeRepository,
+        toolRepository = toolRepository
     )
         .stateIn(
             scope = viewModelScope,
@@ -44,36 +47,52 @@ class ToolViewScreenViewModel @Inject constructor(
 private fun toolViewUiState(
     username: String,
     toolId: String,
-    storeRepository: StoreRepository
+    storeRepository: StoreRepository,
+    toolRepository: ToolRepository
 ): Flow<ToolViewUiState> {
-    val result = storeRepository.detail(
-        username = username,
-        toolId = toolId
-    )
-    val toolViewTemplate = storeRepository.toolViewTemplate
+    val toolViewTemplate = toolRepository.toolViewTemplate
+    val entityFlow = toolRepository.getToolByUsernameAndToolId(username, toolId)
 
-    return combine(result, toolViewTemplate, ::Pair).map { (result, toolViewTemplate) ->
-        when (result) {
-            is Result.Success -> {
-                val dist = result.data.dist!!
-                val base = result.data.base!!
-                ToolViewUiState.Success(
-                    processHtml(
-                        toolViewTemplate = toolViewTemplate,
-                        distBase64 = dist,
-                        baseBase64 = base
+    return flow {
+        combine(entityFlow, toolViewTemplate, ::Pair).collect { (entityFlow, toolViewTemplate) ->
+            if (entityFlow == null) {
+                storeRepository.detail(username, toolId).collect {
+                    emit(
+                        when (it) {
+                            is Result.Success -> {
+                                val dist = it.data.dist!!
+                                val base = it.data.base!!
+                                ToolViewUiState.Success(
+                                    processHtml(
+                                        toolViewTemplate = toolViewTemplate,
+                                        distBase64 = dist,
+                                        baseBase64 = base
+                                    )
+                                )
+                            }
+
+                            is Result.Loading -> ToolViewUiState.Loading
+                            is Result.Error -> {
+                                Log.e("TAG", "toolViewUiState: can not load tool", it.exception)
+
+                                ToolViewUiState.Error
+                            }
+
+                            is Result.Fail -> ToolViewUiState.Error
+                        }
+                    )
+                }
+            } else {
+                emit(
+                    ToolViewUiState.Success(
+                        processHtml(
+                            toolViewTemplate = toolViewTemplate,
+                            distBase64 = entityFlow.dist!!,
+                            baseBase64 = entityFlow.base!!
+                        )
                     )
                 )
             }
-
-            is Result.Loading -> ToolViewUiState.Loading
-            is Result.Error -> {
-                Log.e("TAG", "toolViewUiState: can not load tool", result.exception)
-
-                ToolViewUiState.Error
-            }
-
-            is Result.Fail -> ToolViewUiState.Error
         }
     }
 }

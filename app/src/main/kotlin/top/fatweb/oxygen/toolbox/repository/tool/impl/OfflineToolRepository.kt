@@ -1,14 +1,19 @@
 package top.fatweb.oxygen.toolbox.repository.tool.impl
 
 import kotlinx.coroutines.flow.Flow
+import top.fatweb.oxygen.toolbox.data.tool.ToolDataSource
 import top.fatweb.oxygen.toolbox.data.tool.dao.ToolDao
 import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
 import top.fatweb.oxygen.toolbox.repository.tool.ToolRepository
 import javax.inject.Inject
 
 class OfflineToolRepository @Inject constructor(
+    private val toolDataSource: ToolDataSource,
     private val toolDao: ToolDao
 ) : ToolRepository {
+    override val toolViewTemplate: Flow<String>
+        get() = toolDataSource.toolViewTemplate
+
     override fun getAllToolsStream(): Flow<List<ToolEntity>> =
         toolDao.selectAllTools()
 

@@ -4,6 +4,8 @@ import kotlinx.coroutines.flow.Flow
 import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
 
 interface ToolRepository {
+    val toolViewTemplate: Flow<String>
+
     fun getAllToolsStream(): Flow<List<ToolEntity>>
 
     fun getToolById(id: Long): Flow<ToolEntity?>
