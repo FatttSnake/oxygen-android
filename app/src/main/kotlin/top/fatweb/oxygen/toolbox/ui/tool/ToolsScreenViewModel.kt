@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
 import top.fatweb.oxygen.toolbox.repository.tool.StoreRepository
 import top.fatweb.oxygen.toolbox.repository.tool.ToolRepository
@@ -17,7 +18,7 @@ import kotlin.time.Duration.Companion.seconds
 @HiltViewModel
 class ToolsScreenViewModel @Inject constructor(
     private val storeRepository: StoreRepository,
-    toolRepository: ToolRepository,
+    private val toolRepository: ToolRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val searchValue = savedStateHandle.getStateFlow(SEARCH_VALUE, "")
@@ -37,6 +38,17 @@ class ToolsScreenViewModel @Inject constructor(
                 started = SharingStarted.WhileSubscribed(5.seconds.inWholeMilliseconds)
             )
 
+    fun uninstall(tool: ToolEntity) {
+        viewModelScope.launch {
+            toolRepository.removeTool(tool)
+        }
+    }
+
+    fun undo(tool: ToolEntity) {
+        viewModelScope.launch {
+            toolRepository.saveTool(tool)
+        }
+    }
 }
 
 sealed interface ToolsScreenUiState {

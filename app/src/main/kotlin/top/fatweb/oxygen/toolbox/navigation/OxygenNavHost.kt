@@ -9,7 +9,7 @@ import top.fatweb.oxygen.toolbox.ui.OxygenAppState
 fun OxygenNavHost(
     modifier: Modifier = Modifier,
     appState: OxygenAppState,
-    onShowSnackbar: suspend (String, String?) -> Boolean,
+    onShowSnackbar: suspend (message: String, action: String?) -> Boolean,
     startDestination: String
 ) {
     val navController = appState.navController
@@ -32,6 +32,7 @@ fun OxygenNavHost(
             onNavigateToToolView = navController::navigateToToolView
         )
         toolsScreen(
+            onShowSnackbar = onShowSnackbar,
             onNavigateToToolView = navController::navigateToToolView,
             onNavigateToToolStore = { appState.navigateToTopLevelDestination(TopLevelDestination.TOOL_STORE) }
         )

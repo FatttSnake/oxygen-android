@@ -14,7 +14,10 @@
     <string name="core_no_connect">⚠️ 无法连接至互联网</string>
     <string name="core_install">安装</string>
     <string name="core_installing">安装中……</string>
+    <string name="core_uninstall">卸载</string>
+    <string name="core_uninstall_success">卸载成功</string>
     <string name="core_cancel">取消</string>
+    <string name="core_undo">撤消</string>
 
     <string name="feature_store_title">商店</string>
     <string name="feature_store_install_tool">安装工具</string>

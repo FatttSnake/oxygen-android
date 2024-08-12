@@ -29,31 +29,45 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.Loading
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
+import top.fatweb.oxygen.toolbox.ui.component.DialogClickerRow
+import top.fatweb.oxygen.toolbox.ui.component.DialogSectionGroup
+import top.fatweb.oxygen.toolbox.ui.component.DialogTitle
 import top.fatweb.oxygen.toolbox.ui.component.ToolCard
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.DraggableScrollbar
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.rememberDraggableScroller
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.scrollbarState
+import top.fatweb.oxygen.toolbox.ui.util.ResourcesUtils
 
 @Composable
 internal fun ToolsRoute(
     modifier: Modifier = Modifier,
     viewModel: ToolsScreenViewModel = hiltViewModel(),
+    onShowSnackbar: suspend (message: String, action: String?) -> Boolean,
     onNavigateToToolView: (username: String, toolId: String) -> Unit,
     onNavigateToToolStore: () -> Unit
 ) {
@@ -61,19 +75,29 @@ internal fun ToolsRoute(
 
     ToolsScreen(
         modifier = modifier,
+        onShowSnackbar = onShowSnackbar,
         onNavigateToToolView = onNavigateToToolView,
         onNavigateToToolStore = onNavigateToToolStore,
-        toolsScreenUiState = toolsScreenUiStateState
+        toolsScreenUiState = toolsScreenUiStateState,
+        onUninstall = viewModel::uninstall,
+        onUndo = viewModel::undo
     )
 }
 
 @Composable
 internal fun ToolsScreen(
     modifier: Modifier = Modifier,
+    onShowSnackbar: suspend (message: String, action: String?) -> Boolean,
     onNavigateToToolView: (username: String, toolId: String) -> Unit,
     onNavigateToToolStore: () -> Unit,
-    toolsScreenUiState: ToolsScreenUiState
+    toolsScreenUiState: ToolsScreenUiState,
+    onUninstall: (ToolEntity) -> Unit,
+    onUndo: (ToolEntity) -> Unit
 ) {
+    val localContext = LocalContext.current
+
+    val scope = rememberCoroutineScope()
+
     ReportDrawnWhen { toolsScreenUiState !is ToolsScreenUiState.Loading }
 
     val itemsAvailable = howManyTools(toolsScreenUiState)
@@ -82,6 +106,9 @@ internal fun ToolsScreen(
     val scrollbarState = state.scrollbarState(itemsAvailable = itemsAvailable)
 
     val infiniteTransition = rememberInfiniteTransition(label = "infiniteTransition")
+
+    var selectedTool by remember { mutableStateOf<ToolEntity?>(null) }
+    var isShowMenu by remember { mutableStateOf(true) }
 
     Box(
         modifier.fillMaxSize()
@@ -95,9 +122,7 @@ internal fun ToolsScreen(
                     verticalArrangement = Arrangement.Center
                 ) {
                     val angle by infiniteTransition.animateFloat(
-                        initialValue = 0F,
-                        targetValue = 360F,
-                        animationSpec = infiniteRepeatable(
+                        initialValue = 0F, targetValue = 360F, animationSpec = infiniteRepeatable(
                             animation = tween(800, easing = Ease),
                         ), label = "angle"
                     )
@@ -110,6 +135,7 @@ internal fun ToolsScreen(
                     )
                 }
             }
+
             ToolsScreenUiState.Nothing -> {
                 Column(
                     modifier = Modifier.fillMaxSize(),
@@ -122,6 +148,7 @@ internal fun ToolsScreen(
                     }
                 }
             }
+
             is ToolsScreenUiState.Success -> {
                 LazyVerticalStaggeredGrid(
                     columns = StaggeredGridCells.Adaptive(160.dp),
@@ -131,10 +158,12 @@ internal fun ToolsScreen(
                     state = state
                 ) {
 
-                    toolsPanel(
-                        toolItems = toolsScreenUiState.tools,
-                        onClickToolCard = onNavigateToToolView
-                    )
+                    toolsPanel(toolItems = toolsScreenUiState.tools,
+                        onClick = onNavigateToToolView,
+                        onLongClick = {
+                            selectedTool = it
+                            isShowMenu = true
+                        })
 
                     item(span = StaggeredGridItemSpan.FullLine) {
                         Spacer(modifier = Modifier.height(8.dp))
@@ -150,27 +179,74 @@ internal fun ToolsScreen(
                 .windowInsetsPadding(WindowInsets.systemBars)
                 .padding(horizontal = 2.dp)
                 .align(Alignment.CenterEnd),
-            state = scrollbarState, orientation = Orientation.Vertical,
+            state = scrollbarState,
+            orientation = Orientation.Vertical,
             onThumbMoved = state.rememberDraggableScroller(itemsAvailable = itemsAvailable)
+        )
+    }
+
+    if (isShowMenu && selectedTool != null) {
+        ToolMenu(
+            onDismiss = { isShowMenu = false },
+            selectedTool = selectedTool!!,
+            onUninstall = {
+                isShowMenu = false
+                onUninstall(selectedTool!!)
+                scope.launch {
+                    if (onShowSnackbar(
+                            ResourcesUtils.getString(localContext, R.string.core_uninstall_success),
+                            ResourcesUtils.getString(localContext, R.string.core_undo)
+                        )
+                    ) {
+                        onUndo(selectedTool!!)
+                    }
+                }
+            }
         )
     }
 }
 
 private fun LazyStaggeredGridScope.toolsPanel(
     toolItems: List<ToolEntity>,
-    onClickToolCard: (username: String, toolId: String) -> Unit
+    onClick: (username: String, toolId: String) -> Unit,
+    onLongClick: (ToolEntity) -> Unit
 ) {
     items(
         items = toolItems,
         key = { it.id },
     ) {
-        ToolCard(
-            tool = it,
-            onClick = {onClickToolCard(it.authorUsername, it.toolId)},
-            onLongClick = {onClickToolCard(it.authorUsername, it.toolId)}
-        )
+        ToolCard(tool = it,
+            onClick = { onClick(it.authorUsername, it.toolId) },
+            onLongClick = { onLongClick(it) })
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ToolMenu(
+    modifier: Modifier = Modifier,
+    onDismiss: () -> Unit,
+    selectedTool: ToolEntity,
+    onUninstall: () -> Unit
+) {
+    ModalBottomSheet(onDismissRequest = onDismiss, dragHandle = {}) {
+        Column(
+            modifier = modifier.padding(16.dp)
+        ) {
+            DialogTitle(text = selectedTool.name)
+            HorizontalDivider()
+            Spacer(modifier = Modifier.height(4.dp))
+            DialogSectionGroup {
+                DialogClickerRow(
+                    icon = OxygenIcons.Delete,
+                    text = stringResource(R.string.core_uninstall),
+                    onClick = onUninstall
+                )
+            }
+        }
+    }
+}
+
 
 @Composable
 private fun howManyTools(toolsScreenUiState: ToolsScreenUiState) =

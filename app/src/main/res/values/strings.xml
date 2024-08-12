@@ -13,7 +13,10 @@
     <string name="core_no_connect">⚠️ Unable to connect to the internet</string>
     <string name="core_install">Install</string>
     <string name="core_installing">Installing…</string>
+    <string name="core_uninstall">Uninstall</string>
+    <string name="core_uninstall_success">Uninstalled successfully</string>
     <string name="core_cancel">Cancel</string>
+    <string name="core_undo">Undo</string>
 
     <string name="feature_store_title">Store</string>
     <string name="feature_store_install_tool">Install Tool</string>

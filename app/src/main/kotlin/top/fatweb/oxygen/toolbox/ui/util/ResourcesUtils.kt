@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Build
+import androidx.annotation.StringRes
 import androidx.core.os.ConfigurationCompat
 import androidx.core.os.LocaleListCompat
 import java.util.Locale
@@ -33,8 +34,14 @@ object ResourcesUtils {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
                 context.packageManager.getPackageInfo(context.packageName, 0)?.longVersionCode ?: -1
-            else context.packageManager.getPackageInfo(context.packageName, 0)?.versionCode?.toLong() ?: -1
+            else context.packageManager.getPackageInfo(
+                context.packageName,
+                0
+            )?.versionCode?.toLong() ?: -1
         } catch (e: PackageManager.NameNotFoundException) {
             -1
         }
+
+    fun getString(context: Context, @StringRes resId: Int): String =
+        context.resources.getString(resId)
 }

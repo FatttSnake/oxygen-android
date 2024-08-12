@@ -8,8 +8,8 @@ import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Code
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Inbox
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Reorder
@@ -39,6 +39,7 @@ object OxygenIcons {
     val Box = Icons.Default.Inbox
     val Close = Icons.Default.Close
     val Code = Icons.Default.Code
+    val Delete = Icons.Default.Delete
     val Download = Icons.Default.Download
     val Error = Icons.Default.Cancel
     val Home = Icons.Rounded.Home
