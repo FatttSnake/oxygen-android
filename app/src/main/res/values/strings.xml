@@ -32,6 +32,8 @@
     <string name="feature_tools_no_tools_installed">No tools installed yet</string>
     <string name="feature_tools_go_to_store">Go to store…</string>
 
+    <string name="feature_tool_view_preview_suffix">%1$s (Preview)</string>
+
     <string name="feature_star_title">Star</string>
 
     <string name="feature_settings_title">Settings</string>

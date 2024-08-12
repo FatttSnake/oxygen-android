@@ -27,11 +27,14 @@ class ToolViewScreenViewModel @Inject constructor(
     toolRepository: ToolRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+    val isPreview = savedStateHandle.getStateFlow(IS_PREVIEW, false)
+
     private val toolViewArgs = ToolViewArgs(savedStateHandle)
-    val username = toolViewArgs.username
-    val toolId = toolViewArgs.toolId
+    private val username = toolViewArgs.username
+    private val toolId = toolViewArgs.toolId
 
     val toolViewUiState: StateFlow<ToolViewUiState> = toolViewUiState(
+        savedStateHandle = savedStateHandle,
         username = username,
         toolId = toolId,
         storeRepository = storeRepository,
@@ -45,6 +48,7 @@ class ToolViewScreenViewModel @Inject constructor(
 }
 
 private fun toolViewUiState(
+    savedStateHandle: SavedStateHandle,
     username: String,
     toolId: String,
     storeRepository: StoreRepository,
@@ -56,6 +60,7 @@ private fun toolViewUiState(
     return flow {
         combine(entityFlow, toolViewTemplate, ::Pair).collect { (entityFlow, toolViewTemplate) ->
             if (entityFlow == null) {
+                savedStateHandle[IS_PREVIEW] = true
                 storeRepository.detail(username, toolId).collect {
                     emit(
                         when (it) {
@@ -63,6 +68,7 @@ private fun toolViewUiState(
                                 val dist = it.data.dist!!
                                 val base = it.data.base!!
                                 ToolViewUiState.Success(
+                                    it.data.name,
                                     processHtml(
                                         toolViewTemplate = toolViewTemplate,
                                         distBase64 = dist,
@@ -83,8 +89,10 @@ private fun toolViewUiState(
                     )
                 }
             } else {
+                savedStateHandle[IS_PREVIEW] = false
                 emit(
                     ToolViewUiState.Success(
+                        entityFlow.name,
                         processHtml(
                             toolViewTemplate = toolViewTemplate,
                             distBase64 = entityFlow.dist!!,
@@ -98,7 +106,10 @@ private fun toolViewUiState(
 }
 
 sealed interface ToolViewUiState {
-    data class Success(val htmlData: String) : ToolViewUiState
+    data class Success(
+        val toolName: String,
+        val htmlData: String
+    ) : ToolViewUiState
 
     data object Error : ToolViewUiState
 
@@ -112,3 +123,5 @@ private fun processHtml(toolViewTemplate: String, distBase64: String, baseBase64
 
     return toolViewTemplate.replace("{{replace_code}}", "$dist\n$base")
 }
+
+private const val IS_PREVIEW = "IS_PREVIEW"

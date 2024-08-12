@@ -145,7 +145,9 @@ fun OxygenApp(appState: OxygenAppState) {
                         if (destination != null) {
                             OxygenTopAppBar(
                                 scrollBehavior = topAppBarScrollBehavior,
-                                titleRes = destination.titleTextId,
+                                title = {
+                                    Text(text = stringResource(id = destination.titleTextId))
+                                },
                                 navigationIcon = OxygenIcons.Search,
                                 navigationIconContentDescription = stringResource(R.string.feature_settings_top_app_bar_navigation_icon_description),
                                 actionIcon = OxygenIcons.MoreVert,

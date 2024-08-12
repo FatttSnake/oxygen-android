@@ -1,6 +1,5 @@
 package top.fatweb.oxygen.toolbox.ui.component
 
-import androidx.annotation.StringRes
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.WindowInsets
@@ -46,7 +45,7 @@ import android.R as androidR
 fun OxygenTopAppBar(
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
-    @StringRes titleRes: Int? = null,
+    title: @Composable () -> Unit = {},
     navigationIcon: ImageVector? = null,
     navigationIconContentDescription: String? = null,
     actionIcon: ImageVector? = null,
@@ -120,7 +119,7 @@ fun OxygenTopAppBar(
                     if ("\n" !in it) onQueryChange(it)
                 }
             )
-            else if (titleRes != null) Text(stringResource(titleRes))
+            else title()
         },
         navigationIcon = {
             navigationIcon?.let {
@@ -161,7 +160,7 @@ fun OxygenTopAppBar(
 private fun OxygenTopAppBarPreview() {
     OxygenTheme {
         OxygenTopAppBar(
-            titleRes = androidR.string.untitled,
+            title = { Text(text = stringResource(androidR.string.untitled)) },
             navigationIcon = OxygenIcons.Search,
             navigationIconContentDescription = "Navigation icon",
             actionIcon = OxygenIcons.MoreVert,

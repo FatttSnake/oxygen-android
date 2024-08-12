@@ -134,7 +134,9 @@ internal fun LibrariesScreen(
         ) {
             OxygenTopAppBar(
                 scrollBehavior = topAppBarScrollBehavior,
-                titleRes = R.string.feature_settings_open_source_license,
+                title = {
+                    Text(text = stringResource(id = R.string.feature_settings_open_source_license))
+                },
                 navigationIcon = OxygenIcons.Back,
                 navigationIconContentDescription = stringResource(R.string.core_back),
                 actionIcon = OxygenIcons.Search,

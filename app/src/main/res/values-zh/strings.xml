@@ -33,6 +33,8 @@
     <string name="feature_tools_no_tools_installed">暂无工具已安装</string>
     <string name="feature_tools_go_to_store">前往商店…</string>
 
+    <string name="feature_tool_view_preview_suffix">%1$s （预览）</string>
+
     <string name="feature_star_title">收藏</string>
 
     <string name="feature_settings_title">设置</string>

@@ -84,7 +84,9 @@ internal fun AboutScreen(
         ) {
             OxygenTopAppBar(
                 scrollBehavior = topAppBarScrollBehavior,
-                titleRes = R.string.feature_settings_more_about,
+                title = {
+                    Text(text = stringResource(id = R.string.feature_settings_more_about))
+                },
                 navigationIcon = OxygenIcons.Back,
                 navigationIconContentDescription = stringResource(R.string.core_back),
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(

@@ -47,10 +47,12 @@ internal fun ToolViewRoute(
     viewModel: ToolViewScreenViewModel = hiltViewModel(),
     onBackClick: () -> Unit
 ) {
+    val isPreview by viewModel.isPreview.collectAsStateWithLifecycle()
     val toolViewUiState by viewModel.toolViewUiState.collectAsStateWithLifecycle()
 
     ToolViewScreen(
         modifier = modifier,
+        isPreview = isPreview,
         onBackClick = onBackClick,
         toolViewUiState = toolViewUiState
     )
@@ -61,6 +63,7 @@ internal fun ToolViewRoute(
 @Composable
 internal fun ToolViewScreen(
     modifier: Modifier = Modifier,
+    isPreview: Boolean,
     onBackClick: () -> Unit,
     toolViewUiState: ToolViewUiState
 ) {
@@ -70,7 +73,7 @@ internal fun ToolViewScreen(
     Scaffold(
         modifier = Modifier,
         containerColor = Color.Transparent,
-        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) { padding ->
         Column(
             modifier
@@ -85,6 +88,18 @@ internal fun ToolViewScreen(
         ) {
             OxygenTopAppBar(
                 modifier = Modifier.zIndex(100f),
+                title = {
+                    Text(
+                        text = when (toolViewUiState) {
+                            ToolViewUiState.Loading -> stringResource(R.string.core_loading)
+                            ToolViewUiState.Error -> stringResource(R.string.feature_tools_can_not_open)
+                            is ToolViewUiState.Success -> if (isPreview) stringResource(
+                                R.string.feature_tool_view_preview_suffix,
+                                toolViewUiState.toolName
+                            ) else toolViewUiState.toolName
+                        }
+                    )
+                },
                 navigationIcon = OxygenIcons.Back,
                 navigationIconContentDescription = stringResource(R.string.core_back),
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
