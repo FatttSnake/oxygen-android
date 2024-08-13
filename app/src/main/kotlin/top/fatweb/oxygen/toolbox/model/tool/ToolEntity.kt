@@ -47,8 +47,9 @@ data class ToolEntity(
 
     val updateTime: LocalDateTime,
 
-    @ColumnInfo(defaultValue = "false")
     val isStar: Boolean = false,
+
+    val isInstalled: Boolean = false,
 
     @ColumnInfo(defaultValue = "NULL")
     val upgrade: String? = null

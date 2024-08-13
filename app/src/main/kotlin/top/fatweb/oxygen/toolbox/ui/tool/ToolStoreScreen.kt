@@ -51,7 +51,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import kotlinx.coroutines.flow.StateFlow
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.Loading
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
@@ -74,7 +73,6 @@ internal fun ToolStoreRoute(
         modifier = modifier,
         onNavigateToToolView = onNavigateToToolView,
         toolStorePagingItems = toolStorePagingItems,
-        hasInstalled = { viewModel.hasInstalled(it) },
         onChangeInstallStatus = viewModel::changeInstallStatus,
         onInstallTool = viewModel::installTool,
         installInfo = installInfo
@@ -86,7 +84,6 @@ internal fun ToolStoreScreen(
     modifier: Modifier = Modifier,
     onNavigateToToolView: (username: String, toolId: String) -> Unit,
     toolStorePagingItems: LazyPagingItems<ToolEntity>,
-    hasInstalled: (ToolEntity) -> StateFlow<Boolean>,
     onChangeInstallStatus: (installStatus: ToolStoreUiState.Status) -> Unit,
     onInstallTool: (username: String, toolId: String) -> Unit,
     installInfo: ToolStoreUiState.InstallInfo
@@ -119,7 +116,6 @@ internal fun ToolStoreScreen(
         ) {
             toolsPanel(
                 toolStorePagingItems = toolStorePagingItems,
-                hasInstalled = hasInstalled,
                 onAction = { username, toolId ->
                     installToolUsername = username
                     installToolId = toolId
@@ -179,7 +175,6 @@ internal fun ToolStoreScreen(
 
 private fun LazyStaggeredGridScope.toolsPanel(
     toolStorePagingItems: LazyPagingItems<ToolEntity>,
-    hasInstalled: (ToolEntity) -> StateFlow<Boolean>,
     onAction: (username: String, toolId: String) -> Unit,
     onClick: (username: String, toolId: String) -> Unit
 ) {
@@ -187,10 +182,9 @@ private fun LazyStaggeredGridScope.toolsPanel(
         items = toolStorePagingItems.itemSnapshotList,
         key = { it!!.id },
     ) {
-        val installed by hasInstalled(it!!).collectAsState()
         ToolCard(
             tool = it!!,
-            actionIcon = if (installed) null else OxygenIcons.Download,
+            actionIcon = if (!it.isInstalled) OxygenIcons.Download else null,
             actionIconContentDescription = stringResource(R.string.core_install),
             onAction = { onAction(it.authorUsername, it.toolId) },
             onClick = { onClick(it.authorUsername, it.toolId) },

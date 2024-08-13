@@ -24,7 +24,7 @@ class OfflineToolRepository @Inject constructor(
         toolDao.selectToolByUsernameAndToolId(username, toolId)
 
     override suspend fun saveTool(toolEntity: ToolEntity) =
-        toolDao.insertTool(toolEntity)
+        toolDao.insertTool(toolEntity.copy(isInstalled = true))
 
     override suspend fun updateTool(toolEntity: ToolEntity) =
         toolDao.updateTool(toolEntity)
