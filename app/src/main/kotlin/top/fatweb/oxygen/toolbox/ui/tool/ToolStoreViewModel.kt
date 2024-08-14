@@ -38,24 +38,36 @@ class ToolStoreViewModel @Inject constructor(
         )
     }
 
-    fun changeInstallStatus(installStatus: ToolStoreUiState.Status) {
-        savedStateHandle[INSTALL_INFO] = ToolStoreUiState.InstallInfo(installStatus)
+    fun changeInstallInfo(
+        status: ToolStoreUiState.InstallInfo.Status = installInfo.value.status,
+        type: ToolStoreUiState.InstallInfo.Type = installInfo.value.type
+    ) {
+        savedStateHandle[INSTALL_INFO] = ToolStoreUiState.InstallInfo(status, type)
     }
 
-    fun installTool(username: String, toolId: String) {
+    fun installTool(
+        toolEntity: ToolEntity
+    ) {
         viewModelScope.launch {
-            storeRepository.detail(username, toolId).collect {
-                when (it) {
-                    Result.Loading -> savedStateHandle[INSTALL_INFO] =
-                        ToolStoreUiState.InstallInfo(ToolStoreUiState.Status.Installing)
+            storeRepository.detail(toolEntity.authorUsername, toolEntity.toolId).collect { result ->
+                when (result) {
+                    Result.Loading -> changeInstallInfo(status = ToolStoreUiState.InstallInfo.Status.Processing)
 
-                    is Result.Error, is Result.Fail -> savedStateHandle[INSTALL_INFO] =
-                        ToolStoreUiState.InstallInfo(ToolStoreUiState.Status.Fail)
+                    is Result.Error, is Result.Fail -> changeInstallInfo(status = ToolStoreUiState.InstallInfo.Status.Fail)
 
                     is Result.Success -> {
-                        toolRepository.saveTool(it.data)
-                        savedStateHandle[INSTALL_INFO] =
-                            ToolStoreUiState.InstallInfo(ToolStoreUiState.Status.Success)
+                        when (installInfo.value.type) {
+                            ToolStoreUiState.InstallInfo.Type.Install -> toolRepository.saveTool(
+                                result.data
+                            )
+
+                            ToolStoreUiState.InstallInfo.Type.Upgrade -> {
+                                toolRepository.removeTool(toolEntity)
+                                toolRepository.saveTool(result.data)
+                            }
+                        }
+
+                        changeInstallInfo(status = ToolStoreUiState.InstallInfo.Status.Success)
                     }
                 }
             }
@@ -69,11 +81,16 @@ data class ToolStoreUiState(
 ) : Parcelable {
     @Parcelize
     data class InstallInfo(
-        var status: Status = Status.None
-    ) : Parcelable
+        var status: Status = Status.None,
+        var type: Type = Type.Install
+    ) : Parcelable {
+        enum class Status {
+            None, Pending, Processing, Success, Fail
+        }
 
-    enum class Status {
-        None, Pending, Installing, Success, Fail
+        enum class Type {
+            Install, Upgrade
+        }
     }
 }
 

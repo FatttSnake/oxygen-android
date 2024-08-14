@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Inbox
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Reorder
+import androidx.compose.material.icons.filled.Upgrade
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.StarBorder
@@ -55,6 +56,7 @@ object OxygenIcons {
     val Success = Icons.Rounded.CheckCircle
     val Time = Icons.Default.AccessTime
     val Tool = Icons.Default.Build
+    val Upgrade = Icons.Default.Upgrade
 
     @OptIn(ExperimentalEncodingApi::class)
     fun fromSvgBase64(base64String: String): ImageBitmap {

@@ -13,6 +13,8 @@
     <string name="core_no_connect">⚠️ Unable to connect to the internet</string>
     <string name="core_install">Install</string>
     <string name="core_installing">Installing…</string>
+    <string name="core_upgrade">Upgrade</string>
+    <string name="core_upgrading">Upgrading…</string>
     <string name="core_uninstall">Uninstall</string>
     <string name="core_uninstall_success">Uninstalled successfully</string>
     <string name="core_cancel">Cancel</string>
@@ -20,11 +22,17 @@
 
     <string name="feature_store_title">Store</string>
     <string name="feature_store_install_tool">Install Tool</string>
-    <string name="feature_store_ask_install">Are you sure to install tool %1$s provided by user %2$s?</string>
+    <string name="feature_store_ask_install">Are you sure you want to install tool %1$s provided by user %2$s?</string>
     <string name="feature_store_install_success">Install Success</string>
     <string name="feature_store_install_success_info">Congratulations, the tool installation is successful.</string>
     <string name="feature_store_install_fail">Install Failed</string>
     <string name="feature_store_install_fail_info">Installation failed, please try again later…</string>
+    <string name="feature_store_upgrade_tool">Upgrade Tool</string>
+    <string name="feature_store_ask_upgrade">Are you sure you want to upgrade tool %1$s provided by user %2$s from version %3$s to version %4$s?</string>
+    <string name="feature_store_upgrade_success">Upgrade Success</string>
+    <string name="feature_store_upgrade_success_info">Congratulations, the tool upgrade was successful.</string>
+    <string name="feature_store_upgrade_fail">Upgrade Failed</string>
+    <string name="feature_store_upgrade_fail_info">Upgrade failed, please try again later…</string>
 
     <string name="feature_tools_title">Tools</string>
     <string name="feature_tools_description">Desc</string>

@@ -54,6 +54,25 @@ data class ToolEntity(
     @ColumnInfo(defaultValue = "NULL")
     val upgrade: String? = null
 ) {
+    constructor(toolId: String, authorUsername: String, ver: String, upgrade: String? = null) :
+            this(
+                id = -1,
+                name = "Unknown",
+                toolId = toolId,
+                icon = "",
+                platform = Platform.Android,
+                authorUsername = authorUsername,
+                authorNickname = "Unknown",
+                authorAvatar = "",
+                ver = ver,
+                keywords = emptyList(),
+                categories = emptyList(),
+                entryPoint = "",
+                createTime = LocalDateTime(1970, 1, 1, 0, 0),
+                updateTime = LocalDateTime(1970, 1, 1, 0, 0),
+                upgrade = upgrade
+            )
+
     enum class Platform {
         Web,
 

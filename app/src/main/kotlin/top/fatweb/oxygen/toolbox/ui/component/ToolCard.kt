@@ -39,6 +39,7 @@ import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
 fun ToolCard(
     modifier: Modifier = Modifier,
     tool: ToolEntity,
+    specifyVer: String? = null,
     actionIcon: ImageVector? = null,
     actionIconContentDescription: String = "",
     onAction: () -> Unit = {},
@@ -59,7 +60,7 @@ fun ToolCard(
             modifier = Modifier.padding(16.dp)
         ) {
             ToolHeader(
-                ver = tool.ver,
+                ver = specifyVer ?: tool.ver,
                 actionIcon = actionIcon,
                 actionIconContentDescription = actionIconContentDescription,
                 onAction = onAction
