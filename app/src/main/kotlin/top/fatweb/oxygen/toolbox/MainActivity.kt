@@ -46,8 +46,6 @@ import top.fatweb.oxygen.toolbox.ui.util.LocalTimeZone
 import top.fatweb.oxygen.toolbox.ui.util.LocaleUtils
 import javax.inject.Inject
 
-const val TAG = "MainActivity"
-
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -153,9 +151,9 @@ private fun shouldUseDarkTheme(
 ): Boolean = when (uiState) {
     MainActivityUiState.Loading -> isSystemInDarkTheme()
     is MainActivityUiState.Success -> when (uiState.userData.darkThemeConfig) {
-        DarkThemeConfig.FOLLOW_SYSTEM -> isSystemInDarkTheme()
-        DarkThemeConfig.LIGHT -> false
-        DarkThemeConfig.DARK -> true
+        DarkThemeConfig.FollowSystem -> isSystemInDarkTheme()
+        DarkThemeConfig.Light -> false
+        DarkThemeConfig.Dark -> true
     }
 }
 
@@ -165,8 +163,8 @@ private fun shouldUseAndroidTheme(
 ): Boolean = when (uiState) {
     MainActivityUiState.Loading -> false
     is MainActivityUiState.Success -> when (uiState.userData.themeBrandConfig) {
-        ThemeBrandConfig.DEFAULT -> false
-        ThemeBrandConfig.ANDROID -> true
+        ThemeBrandConfig.Default -> false
+        ThemeBrandConfig.Android -> true
     }
 }
 
@@ -182,7 +180,7 @@ private fun shouldUseDynamicColor(
 private fun whatLocale(
     uiState: MainActivityUiState
 ): LanguageConfig = when (uiState) {
-    MainActivityUiState.Loading -> LanguageConfig.FOLLOW_SYSTEM
+    MainActivityUiState.Loading -> LanguageConfig.FollowSystem
     is MainActivityUiState.Success -> uiState.userData.languageConfig
 }
 
@@ -190,6 +188,6 @@ private fun whatLocale(
 private fun whatLaunchPage(
     uiState: MainActivityUiState
 ): LaunchPageConfig = when (uiState) {
-    MainActivityUiState.Loading -> LaunchPageConfig.TOOLS
+    MainActivityUiState.Loading -> LaunchPageConfig.Tools
     is MainActivityUiState.Success -> uiState.userData.launchPageConfig
 }

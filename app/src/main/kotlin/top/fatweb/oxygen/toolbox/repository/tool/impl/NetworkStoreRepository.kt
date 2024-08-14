@@ -10,7 +10,6 @@ import top.fatweb.oxygen.toolbox.data.tool.dao.ToolDao
 import top.fatweb.oxygen.toolbox.model.Result
 import top.fatweb.oxygen.toolbox.model.asExternalModel
 import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
-import top.fatweb.oxygen.toolbox.network.model.ToolBaseVo
 import top.fatweb.oxygen.toolbox.network.model.ToolVo
 import top.fatweb.oxygen.toolbox.network.model.asExternalModel
 import top.fatweb.oxygen.toolbox.network.paging.ToolStorePagingSource
@@ -42,14 +41,12 @@ internal class NetworkStoreRepository @Inject constructor(
     override fun detail(
         username: String,
         toolId: String,
-        ver: String,
-        platform: ToolEntity.Platform
+        ver: String
     ): Flow<Result<ToolEntity>> =
         oxygenNetworkDataSource.detail(
             username,
             toolId,
-            ver,
-            ToolBaseVo.Platform.valueOf(platform.name)
+            ver
         ).map {
             it.asExternalModel(ToolVo::asExternalModel)
         }

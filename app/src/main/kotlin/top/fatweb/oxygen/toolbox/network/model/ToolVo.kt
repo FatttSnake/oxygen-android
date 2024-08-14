@@ -49,16 +49,16 @@ data class ToolVo(
     @Serializable
     enum class ReviewType {
         @SerialName("NONE")
-        NONE,
+        None,
 
         @SerialName("PROCESSING")
-        PROCESSING,
+        Processing,
 
         @SerialName("PASS")
-        PASS,
+        Pass,
 
         @SerialName("REJECT")
-        REJECT
+        Reject
     }
 }
 

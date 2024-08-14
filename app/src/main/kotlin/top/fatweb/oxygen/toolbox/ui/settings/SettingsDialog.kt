@@ -175,47 +175,47 @@ private fun ColumnScope.SettingsPanel(
     DialogSectionGroup {
         DialogChooserRow(
             text = stringResource(R.string.feature_settings_language_system_default),
-            selected = settings.languageConfig == LanguageConfig.FOLLOW_SYSTEM,
-            onClick = { onChangeLanguageConfig(LanguageConfig.FOLLOW_SYSTEM) }
+            selected = settings.languageConfig == LanguageConfig.FollowSystem,
+            onClick = { onChangeLanguageConfig(LanguageConfig.FollowSystem) }
         )
         DialogChooserRow(
             text = stringResource(R.string.feature_settings_language_chinese),
-            selected = settings.languageConfig == LanguageConfig.CHINESE,
-            onClick = { onChangeLanguageConfig(LanguageConfig.CHINESE) }
+            selected = settings.languageConfig == LanguageConfig.Chinese,
+            onClick = { onChangeLanguageConfig(LanguageConfig.Chinese) }
         )
         DialogChooserRow(
             text = stringResource(R.string.feature_settings_language_english),
-            selected = settings.languageConfig == LanguageConfig.ENGLISH,
-            onClick = { onChangeLanguageConfig(LanguageConfig.ENGLISH) }
+            selected = settings.languageConfig == LanguageConfig.English,
+            onClick = { onChangeLanguageConfig(LanguageConfig.English) }
         )
     }
     DialogSectionTitle(text = stringResource(R.string.feature_settings_launch_page))
     DialogSectionGroup {
         DialogChooserRow(
             text = stringResource(R.string.feature_settings_launch_page_tools),
-            selected = settings.launchPageConfig == LaunchPageConfig.TOOLS,
-            onClick = { onChangeLaunchPageConfig(LaunchPageConfig.TOOLS) }
+            selected = settings.launchPageConfig == LaunchPageConfig.Tools,
+            onClick = { onChangeLaunchPageConfig(LaunchPageConfig.Tools) }
         )
         DialogChooserRow(
             text = stringResource(R.string.feature_settings_launch_page_star),
-            selected = settings.launchPageConfig == LaunchPageConfig.STAR,
-            onClick = { onChangeLaunchPageConfig(LaunchPageConfig.STAR) }
+            selected = settings.launchPageConfig == LaunchPageConfig.Star,
+            onClick = { onChangeLaunchPageConfig(LaunchPageConfig.Star) }
         )
     }
     DialogSectionTitle(text = stringResource(R.string.feature_settings_theme_brand))
     DialogSectionGroup {
         DialogChooserRow(
             text = stringResource(R.string.feature_settings_theme_brand_default),
-            selected = settings.themeBrandConfig == ThemeBrandConfig.DEFAULT,
-            onClick = { onchangeThemeBrandConfig(ThemeBrandConfig.DEFAULT) }
+            selected = settings.themeBrandConfig == ThemeBrandConfig.Default,
+            onClick = { onchangeThemeBrandConfig(ThemeBrandConfig.Default) }
         )
         DialogChooserRow(
             text = stringResource(R.string.feature_settings_theme_brand_android),
-            selected = settings.themeBrandConfig == ThemeBrandConfig.ANDROID,
-            onClick = { onchangeThemeBrandConfig(ThemeBrandConfig.ANDROID) }
+            selected = settings.themeBrandConfig == ThemeBrandConfig.Android,
+            onClick = { onchangeThemeBrandConfig(ThemeBrandConfig.Android) }
         )
     }
-    AnimatedVisibility(visible = settings.themeBrandConfig == ThemeBrandConfig.DEFAULT && supportDynamicColor) {
+    AnimatedVisibility(visible = settings.themeBrandConfig == ThemeBrandConfig.Default && supportDynamicColor) {
         DialogSectionGroup {
             DialogSectionTitle(text = stringResource(R.string.feature_settings_dynamic_color))
             DialogChooserRow(
@@ -234,18 +234,18 @@ private fun ColumnScope.SettingsPanel(
     DialogSectionGroup {
         DialogChooserRow(
             text = stringResource(R.string.feature_settings_dark_mode_system_default),
-            selected = settings.darkThemeConfig == DarkThemeConfig.FOLLOW_SYSTEM,
-            onClick = { onChangeDarkThemeConfig(DarkThemeConfig.FOLLOW_SYSTEM) }
+            selected = settings.darkThemeConfig == DarkThemeConfig.FollowSystem,
+            onClick = { onChangeDarkThemeConfig(DarkThemeConfig.FollowSystem) }
         )
         DialogChooserRow(
             text = stringResource(R.string.feature_settings_dark_mode_light),
-            selected = settings.darkThemeConfig == DarkThemeConfig.LIGHT,
-            onClick = { onChangeDarkThemeConfig(DarkThemeConfig.LIGHT) }
+            selected = settings.darkThemeConfig == DarkThemeConfig.Light,
+            onClick = { onChangeDarkThemeConfig(DarkThemeConfig.Light) }
         )
         DialogChooserRow(
             text = stringResource(R.string.feature_settings_dark_mode_dark),
-            selected = settings.darkThemeConfig == DarkThemeConfig.DARK,
-            onClick = { onChangeDarkThemeConfig(DarkThemeConfig.DARK) }
+            selected = settings.darkThemeConfig == DarkThemeConfig.Dark,
+            onClick = { onChangeDarkThemeConfig(DarkThemeConfig.Dark) }
         )
     }
     DialogSectionTitle(text = stringResource(R.string.feature_settings_more))
@@ -296,10 +296,10 @@ private fun SettingDialogPreview() {
             onDismiss = {},
             settingsUiState = SettingsUiState.Success(
                 UserData(
-                    languageConfig = LanguageConfig.FOLLOW_SYSTEM,
-                    launchPageConfig = LaunchPageConfig.TOOLS,
-                    themeBrandConfig = ThemeBrandConfig.DEFAULT,
-                    darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
+                    languageConfig = LanguageConfig.FollowSystem,
+                    launchPageConfig = LaunchPageConfig.Tools,
+                    themeBrandConfig = ThemeBrandConfig.Default,
+                    darkThemeConfig = DarkThemeConfig.FollowSystem,
                     useDynamicColor = true
                 )
             ),

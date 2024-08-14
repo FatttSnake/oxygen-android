@@ -11,21 +11,21 @@ enum class TopLevelDestination(
     @StringRes val iconTextId: Int,
     @StringRes val titleTextId: Int
 ) {
-    TOOL_STORE(
+    ToolStore(
         selectedIcon = OxygenIcons.Store,
         unselectedIcon = OxygenIcons.StoreBorder,
         iconTextId = R.string.feature_store_title,
         titleTextId = R.string.feature_store_title
     ),
 
-    TOOLS(
+    Tools(
         selectedIcon = OxygenIcons.Home,
         unselectedIcon = OxygenIcons.HomeBorder,
         iconTextId = R.string.feature_tools_title,
         titleTextId = R.string.feature_tools_title
     ),
 
-    STAR(
+    Star(
         selectedIcon = OxygenIcons.Star,
         unselectedIcon = OxygenIcons.StarBorder,
         iconTextId = R.string.feature_star_title,

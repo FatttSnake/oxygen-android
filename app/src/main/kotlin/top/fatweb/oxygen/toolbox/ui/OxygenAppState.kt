@@ -75,9 +75,9 @@ class OxygenAppState(
 
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when (currentDestination?.route) {
-            TOOL_STORE_ROUTE -> TopLevelDestination.TOOL_STORE
-            TOOLS_ROUTE -> TopLevelDestination.TOOLS
-            STAR_ROUTE -> TopLevelDestination.STAR
+            TOOL_STORE_ROUTE -> TopLevelDestination.ToolStore
+            TOOLS_ROUTE -> TopLevelDestination.Tools
+            STAR_ROUTE -> TopLevelDestination.Star
             else -> null
         }
 
@@ -113,9 +113,9 @@ class OxygenAppState(
         }
 
         when (topLevelDestination) {
-            TopLevelDestination.TOOL_STORE -> navController.navigateToToolStore(topLevelNavOptions)
-            TopLevelDestination.TOOLS -> navController.navigateToTools(topLevelNavOptions)
-            TopLevelDestination.STAR -> navController.navigateToStar(topLevelNavOptions)
+            TopLevelDestination.ToolStore -> navController.navigateToToolStore(topLevelNavOptions)
+            TopLevelDestination.Tools -> navController.navigateToTools(topLevelNavOptions)
+            TopLevelDestination.Star -> navController.navigateToStar(topLevelNavOptions)
         }
     }
 

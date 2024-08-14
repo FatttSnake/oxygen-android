@@ -26,23 +26,23 @@ class OxygenPreferencesDataSource @Inject constructor(
                     LanguageConfigProto.UNRECOGNIZED,
                     LanguageConfigProto.LANGUAGE_CONFIG_UNSPECIFIED,
                     LanguageConfigProto.LANGUAGE_CONFIG_FOLLOW_SYSTEM
-                    -> LanguageConfig.FOLLOW_SYSTEM
+                    -> LanguageConfig.FollowSystem
 
                     LanguageConfigProto.LANGUAGE_CONFIG_CHINESE
-                    -> LanguageConfig.CHINESE
+                    -> LanguageConfig.Chinese
 
                     LanguageConfigProto.LANGUAGE_CONFIG_ENGLISH
-                    -> LanguageConfig.ENGLISH
+                    -> LanguageConfig.English
                 },
                 launchPageConfig = when (it.launchPageConfig) {
                     null,
                     LaunchPageConfigProto.UNRECOGNIZED,
                     LaunchPageConfigProto.LAUNCH_PAGE_CONFIG_UNSPECIFIED,
                     LaunchPageConfigProto.LAUNCH_PAGE_CONFIG_TOOLS
-                    -> LaunchPageConfig.TOOLS
+                    -> LaunchPageConfig.Tools
 
                     LaunchPageConfigProto.LAUNCH_PAGE_CONFIG_STAR
-                    -> LaunchPageConfig.STAR
+                    -> LaunchPageConfig.Star
                 },
                 themeBrandConfig = when (it.themeBrandConfig) {
                     null,
@@ -50,10 +50,10 @@ class OxygenPreferencesDataSource @Inject constructor(
                     ThemeBrandConfigProto.THEME_BRAND_CONFIG_UNSPECIFIED,
                     ThemeBrandConfigProto.THEME_BRAND_CONFIG_DEFAULT
                     ->
-                        ThemeBrandConfig.DEFAULT
+                        ThemeBrandConfig.Default
 
                     ThemeBrandConfigProto.THEME_BRAND_CONFIG_ANDROID
-                    -> ThemeBrandConfig.ANDROID
+                    -> ThemeBrandConfig.Android
                 },
                 darkThemeConfig = when (it.darkThemeConfig) {
                     null,
@@ -61,13 +61,13 @@ class OxygenPreferencesDataSource @Inject constructor(
                     DarkThemeConfigProto.DARK_THEME_CONFIG_UNSPECIFIED,
                     DarkThemeConfigProto.DARK_THEME_CONFIG_FOLLOW_SYSTEM
                     ->
-                        DarkThemeConfig.FOLLOW_SYSTEM
+                        DarkThemeConfig.FollowSystem
 
                     DarkThemeConfigProto.DARK_THEME_CONFIG_LIGHT
-                    -> DarkThemeConfig.LIGHT
+                    -> DarkThemeConfig.Light
 
                     DarkThemeConfigProto.DARK_THEME_CONFIG_DARK
-                    -> DarkThemeConfig.DARK
+                    -> DarkThemeConfig.Dark
                 },
                 useDynamicColor = it.useDynamicColor
             )
@@ -77,9 +77,9 @@ class OxygenPreferencesDataSource @Inject constructor(
         userPreferences.updateData {
             it.copy {
                 this.languageConfig = when (languageConfig) {
-                    LanguageConfig.FOLLOW_SYSTEM -> LanguageConfigProto.LANGUAGE_CONFIG_FOLLOW_SYSTEM
-                    LanguageConfig.CHINESE -> LanguageConfigProto.LANGUAGE_CONFIG_CHINESE
-                    LanguageConfig.ENGLISH -> LanguageConfigProto.LANGUAGE_CONFIG_ENGLISH
+                    LanguageConfig.FollowSystem -> LanguageConfigProto.LANGUAGE_CONFIG_FOLLOW_SYSTEM
+                    LanguageConfig.Chinese -> LanguageConfigProto.LANGUAGE_CONFIG_CHINESE
+                    LanguageConfig.English -> LanguageConfigProto.LANGUAGE_CONFIG_ENGLISH
                 }
             }
         }
@@ -89,8 +89,8 @@ class OxygenPreferencesDataSource @Inject constructor(
         userPreferences.updateData {
             it.copy {
                 this.launchPageConfig = when (launchPageConfig) {
-                    LaunchPageConfig.TOOLS -> LaunchPageConfigProto.LAUNCH_PAGE_CONFIG_TOOLS
-                    LaunchPageConfig.STAR -> LaunchPageConfigProto.LAUNCH_PAGE_CONFIG_STAR
+                    LaunchPageConfig.Tools -> LaunchPageConfigProto.LAUNCH_PAGE_CONFIG_TOOLS
+                    LaunchPageConfig.Star -> LaunchPageConfigProto.LAUNCH_PAGE_CONFIG_STAR
                 }
             }
         }
@@ -100,8 +100,8 @@ class OxygenPreferencesDataSource @Inject constructor(
         userPreferences.updateData {
             it.copy {
                 this.themeBrandConfig = when (themeBrandConfig) {
-                    ThemeBrandConfig.DEFAULT -> ThemeBrandConfigProto.THEME_BRAND_CONFIG_DEFAULT
-                    ThemeBrandConfig.ANDROID -> ThemeBrandConfigProto.THEME_BRAND_CONFIG_ANDROID
+                    ThemeBrandConfig.Default -> ThemeBrandConfigProto.THEME_BRAND_CONFIG_DEFAULT
+                    ThemeBrandConfig.Android -> ThemeBrandConfigProto.THEME_BRAND_CONFIG_ANDROID
                 }
             }
         }
@@ -111,9 +111,9 @@ class OxygenPreferencesDataSource @Inject constructor(
         userPreferences.updateData {
             it.copy {
                 this.darkThemeConfig = when (darkThemeConfig) {
-                    DarkThemeConfig.FOLLOW_SYSTEM -> DarkThemeConfigProto.DARK_THEME_CONFIG_FOLLOW_SYSTEM
-                    DarkThemeConfig.LIGHT -> DarkThemeConfigProto.DARK_THEME_CONFIG_LIGHT
-                    DarkThemeConfig.DARK -> DarkThemeConfigProto.DARK_THEME_CONFIG_DARK
+                    DarkThemeConfig.FollowSystem -> DarkThemeConfigProto.DARK_THEME_CONFIG_FOLLOW_SYSTEM
+                    DarkThemeConfig.Light -> DarkThemeConfigProto.DARK_THEME_CONFIG_LIGHT
+                    DarkThemeConfig.Dark -> DarkThemeConfigProto.DARK_THEME_CONFIG_DARK
                 }
             }
         }

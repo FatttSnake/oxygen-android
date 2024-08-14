@@ -25,7 +25,7 @@ private interface RetrofitOxygenNetworkApi {
     suspend fun getStore(
         @Query("currentPage") currentPage: Int,
         @Query("searchValue") searchValue: String,
-        @Query("platform") platform: ToolBaseVo.Platform? = ToolBaseVo.Platform.ANDROID
+        @Query("platform") platform: ToolBaseVo.Platform? = ToolBaseVo.Platform.Android
     ): ResponseResult<PageVo<ToolVo>>
 
     @GET(value = "/tool/detail/{username}/{toolId}/{ver}")
@@ -33,7 +33,7 @@ private interface RetrofitOxygenNetworkApi {
         @Path("username") username: String,
         @Path("toolId") toolId: String,
         @Path("ver") ver: String,
-        @Query("platform") platform: String
+        @Query("platform") platform: ToolBaseVo.Platform? = ToolBaseVo.Platform.Android
     ): ResponseResult<ToolVo>
 }
 
@@ -69,7 +69,7 @@ internal class RetrofitOxygenNetwork @Inject constructor(
                 username = username,
                 toolId = toolId,
                 ver = ver,
-                platform = platform.name
+                platform = platform
             )
         )
     }.asResult()

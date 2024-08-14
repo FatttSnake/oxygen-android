@@ -60,7 +60,7 @@ import top.fatweb.oxygen.toolbox.ui.theme.LocalGradientColors
 @Composable
 fun OxygenApp(appState: OxygenAppState) {
     val shouldShowGradientBackground =
-        appState.currentTopLevelDestination == TopLevelDestination.TOOLS
+        appState.currentTopLevelDestination == TopLevelDestination.Tools
     var showSettingsDialog by rememberSaveable {
         mutableStateOf(false)
     }
@@ -171,8 +171,8 @@ fun OxygenApp(appState: OxygenAppState) {
                                 ) == SnackbarResult.ActionPerformed
                             },
                             startDestination = when (appState.launchPageConfig) {
-                                LaunchPageConfig.TOOLS -> TOOLS_ROUTE
-                                LaunchPageConfig.STAR -> STAR_ROUTE
+                                LaunchPageConfig.Tools -> TOOLS_ROUTE
+                                LaunchPageConfig.Star -> STAR_ROUTE
                             }
                         )
                     }

@@ -11,9 +11,9 @@ import java.util.Locale
 object LocaleUtils {
     fun switchLocale(activity: Activity, languageConfig: LanguageConfig) {
         val newLanguage = when (languageConfig) {
-            LanguageConfig.FOLLOW_SYSTEM -> ResourcesUtils.getSystemLocale().get(0)!!.language
-            LanguageConfig.CHINESE -> "zh"
-            LanguageConfig.ENGLISH -> "en"
+            LanguageConfig.FollowSystem -> ResourcesUtils.getSystemLocale().get(0)!!.language
+            LanguageConfig.Chinese -> "zh"
+            LanguageConfig.English -> "en"
         }
         val currentLanguage = ResourcesUtils.getAppLocale(activity).language
         if (newLanguage != currentLanguage) {
@@ -33,9 +33,9 @@ object LocaleUtils {
 
     private fun getLocaleFromLanguageConfig(languageConfig: LanguageConfig): Locale =
         when (languageConfig) {
-            LanguageConfig.FOLLOW_SYSTEM -> ResourcesUtils.getSystemLocale().get(0)!!
-            LanguageConfig.CHINESE -> Locale("zh")
-            LanguageConfig.ENGLISH -> Locale("en")
+            LanguageConfig.FollowSystem -> ResourcesUtils.getSystemLocale().get(0)!!
+            LanguageConfig.Chinese -> Locale("zh")
+            LanguageConfig.English -> Locale("en")
         }
 
     @RequiresApi(Build.VERSION_CODES.N)

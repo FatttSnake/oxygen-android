@@ -17,6 +17,6 @@ interface OxygenNetworkDataSource {
         username: String,
         toolId: String,
         ver: String = "latest",
-        platform: ToolBaseVo.Platform = ToolBaseVo.Platform.ANDROID
+        platform: ToolBaseVo.Platform = ToolBaseVo.Platform.Android
     ): Flow<Result<ToolVo>>
 }

@@ -11,7 +11,6 @@ interface StoreRepository {
     fun detail(
         username: String,
         toolId: String,
-        ver: String = "latest",
-        platform: ToolEntity.Platform = ToolEntity.Platform.ANDROID
+        ver: String = "latest"
     ): Flow<Result<ToolEntity>>
 }

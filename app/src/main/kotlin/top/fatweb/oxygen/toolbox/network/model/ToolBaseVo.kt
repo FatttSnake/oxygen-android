@@ -29,13 +29,16 @@ data class ToolBaseVo(
     @Serializable
     enum class Platform {
         @SerialName("WEB")
-        WEB,
+        Web,
 
         @SerialName("DESKTOP")
-        DESKTOP,
+        Desktop,
 
         @SerialName("ANDROID")
-        ANDROID
+        Android;
+
+        override fun toString(): String =
+            javaClass.getField(name).getAnnotation(SerialName::class.java)!!.value
     }
 }
 

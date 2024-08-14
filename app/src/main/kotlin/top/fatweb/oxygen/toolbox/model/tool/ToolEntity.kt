@@ -55,10 +55,10 @@ data class ToolEntity(
     val upgrade: String? = null
 ) {
     enum class Platform {
-        WEB,
+        Web,
 
-        DESKTOP,
+        Desktop,
 
-        ANDROID
+        Android
     }
 }
