@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import top.fatweb.oxygen.toolbox.model.Result
 import top.fatweb.oxygen.toolbox.navigation.ToolViewArgs
@@ -32,11 +33,14 @@ class ToolViewScreenViewModel @Inject constructor(
     private val toolViewArgs = ToolViewArgs(savedStateHandle)
     private val username = toolViewArgs.username
     private val toolId = toolViewArgs.toolId
+    private val preview = toolViewArgs.preview
+
 
     val toolViewUiState: StateFlow<ToolViewUiState> = toolViewUiState(
         savedStateHandle = savedStateHandle,
         username = username,
         toolId = toolId,
+        preview = preview,
         storeRepository = storeRepository,
         toolRepository = toolRepository
     )
@@ -51,11 +55,13 @@ private fun toolViewUiState(
     savedStateHandle: SavedStateHandle,
     username: String,
     toolId: String,
+    preview: Boolean,
     storeRepository: StoreRepository,
     toolRepository: ToolRepository
 ): Flow<ToolViewUiState> {
     val toolViewTemplate = toolRepository.toolViewTemplate
-    val entityFlow = toolRepository.getToolByUsernameAndToolId(username, toolId)
+    val entityFlow =
+        if (!preview) toolRepository.getToolByUsernameAndToolId(username, toolId) else flowOf(null)
 
     return flow {
         combine(entityFlow, toolViewTemplate, ::Pair).collect { (entityFlow, toolViewTemplate) ->

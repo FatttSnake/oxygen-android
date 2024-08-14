@@ -11,7 +11,7 @@ const val TOOL_STORE_ROUTE = "tool_store_route"
 fun NavController.navigateToToolStore(navOptions: NavOptions? = null) = navigate(TOOL_STORE_ROUTE, navOptions)
 
 fun NavGraphBuilder.toolStoreScreen(
-    onNavigateToToolView: (username: String, toolId: String) -> Unit
+    onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit
 ) {
     composable(
         route = TOOL_STORE_ROUTE

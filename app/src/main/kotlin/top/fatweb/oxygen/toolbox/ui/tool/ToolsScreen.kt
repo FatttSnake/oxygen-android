@@ -68,7 +68,7 @@ internal fun ToolsRoute(
     modifier: Modifier = Modifier,
     viewModel: ToolsScreenViewModel = hiltViewModel(),
     onShowSnackbar: suspend (message: String, action: String?) -> Boolean,
-    onNavigateToToolView: (username: String, toolId: String) -> Unit,
+    onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit,
     onNavigateToToolStore: () -> Unit
 ) {
     val toolsScreenUiStateState by viewModel.toolsScreenUiState.collectAsStateWithLifecycle()
@@ -88,7 +88,7 @@ internal fun ToolsRoute(
 internal fun ToolsScreen(
     modifier: Modifier = Modifier,
     onShowSnackbar: suspend (message: String, action: String?) -> Boolean,
-    onNavigateToToolView: (username: String, toolId: String) -> Unit,
+    onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit,
     onNavigateToToolStore: () -> Unit,
     toolsScreenUiState: ToolsScreenUiState,
     onUninstall: (ToolEntity) -> Unit,
@@ -208,7 +208,7 @@ internal fun ToolsScreen(
 
 private fun LazyStaggeredGridScope.toolsPanel(
     toolItems: List<ToolEntity>,
-    onClick: (username: String, toolId: String) -> Unit,
+    onClick: (username: String, toolId: String, preview: Boolean) -> Unit,
     onLongClick: (ToolEntity) -> Unit
 ) {
     items(
@@ -216,7 +216,7 @@ private fun LazyStaggeredGridScope.toolsPanel(
         key = { it.id },
     ) {
         ToolCard(tool = it,
-            onClick = { onClick(it.authorUsername, it.toolId) },
+            onClick = { onClick(it.authorUsername, it.toolId, false) },
             onLongClick = { onLongClick(it) })
     }
 }

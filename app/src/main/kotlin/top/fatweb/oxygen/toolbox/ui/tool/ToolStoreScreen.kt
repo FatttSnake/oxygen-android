@@ -64,7 +64,7 @@ import top.fatweb.oxygen.toolbox.ui.component.scrollbar.scrollbarState
 internal fun ToolStoreRoute(
     modifier: Modifier = Modifier,
     viewModel: ToolStoreViewModel = hiltViewModel(),
-    onNavigateToToolView: (username: String, toolId: String) -> Unit,
+    onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit,
 ) {
     val toolStorePagingItems = viewModel.storeData.collectAsLazyPagingItems()
     val installInfo by viewModel.installInfo.collectAsState()
@@ -85,7 +85,7 @@ internal fun ToolStoreRoute(
 @Composable
 internal fun ToolStoreScreen(
     modifier: Modifier = Modifier,
-    onNavigateToToolView: (username: String, toolId: String) -> Unit,
+    onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit,
     toolStorePagingItems: LazyPagingItems<ToolEntity>,
     onChangeInstallStatus: (status: ToolStoreUiState.InstallInfo.Status) -> Unit,
     onChangeInstallType: (type: ToolStoreUiState.InstallInfo.Type) -> Unit,
@@ -125,7 +125,7 @@ internal fun ToolStoreScreen(
                     onChangeInstallType(installType)
                 },
                 onClick = {
-                    onNavigateToToolView(it.authorUsername, it.toolId)
+                    onNavigateToToolView(it.authorUsername, it.toolId, it.upgrade != null)
                 }
             )
 
