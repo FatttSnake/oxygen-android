@@ -30,7 +30,7 @@ internal object NetworkModule {
                 HttpLoggingInterceptor()
                     .apply {
                         if (BuildConfig.DEBUG) {
-                            setLevel(HttpLoggingInterceptor.Level.BODY)
+                            level = HttpLoggingInterceptor.Level.BODY
                         }
                     }
             )

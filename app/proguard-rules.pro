@@ -17,6 +17,11 @@
    <fields>;
 }
 
+# Keep SerialName annotation
+-keepclassmembers class * {
+    @kotlinx.serialization.SerialName <fields>;
+}
+
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
 #-keepattributes SourceFile,LineNumberTable
