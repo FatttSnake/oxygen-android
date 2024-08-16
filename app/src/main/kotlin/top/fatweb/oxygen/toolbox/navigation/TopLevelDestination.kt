@@ -6,12 +6,14 @@ import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 
 enum class TopLevelDestination(
+    val route: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
     @StringRes val iconTextId: Int,
     @StringRes val titleTextId: Int
 ) {
     ToolStore(
+        route = "tool_store_route",
         selectedIcon = OxygenIcons.Store,
         unselectedIcon = OxygenIcons.StoreBorder,
         iconTextId = R.string.feature_store_title,
@@ -19,6 +21,7 @@ enum class TopLevelDestination(
     ),
 
     Tools(
+        route = "tools_route",
         selectedIcon = OxygenIcons.Home,
         unselectedIcon = OxygenIcons.HomeBorder,
         iconTextId = R.string.feature_tools_title,
@@ -26,6 +29,7 @@ enum class TopLevelDestination(
     ),
 
     Star(
+        route = "star_route",
         selectedIcon = OxygenIcons.Star,
         unselectedIcon = OxygenIcons.StarBorder,
         iconTextId = R.string.feature_star_title,

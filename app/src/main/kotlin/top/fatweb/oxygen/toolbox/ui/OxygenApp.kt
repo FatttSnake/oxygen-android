@@ -252,5 +252,5 @@ private fun OxygenNavRail(
 
 private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination) =
     this?.hierarchy?.any {
-        it.route?.contains(destination.name, true) ?: false
+        it.route?.equals(destination.route) ?: false
     } ?: false
