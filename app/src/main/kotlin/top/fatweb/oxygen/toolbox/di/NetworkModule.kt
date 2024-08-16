@@ -11,6 +11,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import top.fatweb.oxygen.toolbox.BuildConfig
 import top.fatweb.oxygen.toolbox.data.network.OxygenNetworkDataSource
 import top.fatweb.oxygen.toolbox.network.retrofit.RetrofitOxygenNetwork
+import top.fatweb.oxygen.toolbox.util.HttpLogger
 import javax.inject.Singleton
 
 @Module
@@ -27,11 +28,10 @@ internal object NetworkModule {
     fun okHttpCallFactory(): Call.Factory =
         OkHttpClient.Builder()
             .addInterceptor(
-                HttpLoggingInterceptor()
+                HttpLoggingInterceptor(HttpLogger())
                     .apply {
-                        if (BuildConfig.DEBUG) {
-                            level = HttpLoggingInterceptor.Level.BODY
-                        }
+                        level =
+                            if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.BASIC
                     }
             )
             .build()

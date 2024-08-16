@@ -32,6 +32,7 @@ okhttp = "4.12.0"
 androidsvg = "1.4"
 webviewCompose = "0.33.6"
 room = "2.6.1"
+timber = "5.0.1"
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -100,3 +101,4 @@ compose-webview = { group = "io.github.kevinnzou", name = "compose-webview", ver
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
