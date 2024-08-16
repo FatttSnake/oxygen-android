@@ -108,7 +108,7 @@ internal fun LibrariesScreen(
     var dialogContent by remember { mutableStateOf("") }
     var dialogUrl by remember { mutableStateOf("") }
 
-    val topAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     val infiniteTransition = rememberInfiniteTransition(label = "infiniteTransition")
 
