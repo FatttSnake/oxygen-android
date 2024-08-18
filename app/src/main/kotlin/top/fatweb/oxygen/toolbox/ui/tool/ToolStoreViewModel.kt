@@ -57,13 +57,17 @@ class ToolStoreViewModel @Inject constructor(
 
                     is Result.Success -> {
                         when (installInfo.value.type) {
-                            ToolStoreUiState.InstallInfo.Type.Install -> toolRepository.saveTool(
-                                result.data
-                            )
+                            ToolStoreUiState.InstallInfo.Type.Install -> {
+                                toolRepository.saveTool(
+                                    result.data
+                                )
+                                toolEntity.isInstalled = true
+                            }
 
                             ToolStoreUiState.InstallInfo.Type.Upgrade -> {
                                 toolRepository.removeTool(toolEntity)
                                 toolRepository.saveTool(result.data)
+                                toolEntity.upgrade = null
                             }
                         }
 

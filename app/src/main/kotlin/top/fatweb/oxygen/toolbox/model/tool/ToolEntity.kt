@@ -49,10 +49,10 @@ data class ToolEntity(
 
     val isStar: Boolean = false,
 
-    val isInstalled: Boolean = false,
+    var isInstalled: Boolean = false,
 
     @ColumnInfo(defaultValue = "NULL")
-    val upgrade: String? = null
+    var upgrade: String? = null
 ) {
     constructor(toolId: String, authorUsername: String, ver: String, upgrade: String? = null) :
             this(
