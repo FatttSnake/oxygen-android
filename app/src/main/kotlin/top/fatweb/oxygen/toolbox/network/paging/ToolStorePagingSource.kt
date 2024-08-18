@@ -14,7 +14,11 @@ internal class ToolStorePagingSource(
     private val toolDao: ToolDao,
     private val searchValue: String
 ) : PagingSource<Int, ToolEntity>() {
-    override fun getRefreshKey(state: PagingState<Int, ToolEntity>): Int? = null
+    override fun getRefreshKey(state: PagingState<Int, ToolEntity>): Int? =
+        state.anchorPosition?.let {
+            val anchorPage = state.closestPageToPosition(it)
+            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
+        }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ToolEntity> {
         return try {
@@ -26,7 +30,6 @@ internal class ToolStorePagingSource(
             }
             val (_, pages, _, _, records) = data!!
 
-            val nextPage = if (currentPage < pages) currentPage + 1 else null
             LoadResult.Page(
                 data = records.map(ToolVo::asExternalModel).map { toolEntity ->
                     toolDao.selectToolByUsernameAndToolId(
@@ -42,8 +45,8 @@ internal class ToolStorePagingSource(
                         }
                     } ?: toolEntity
                 },
-                prevKey = null,
-                nextKey = nextPage
+                prevKey = if (currentPage == 0) null else currentPage - 1,
+                nextKey = if (currentPage < pages) currentPage + 1 else null
             )
         } catch (e: Throwable) {
             LoadResult.Error(e)
