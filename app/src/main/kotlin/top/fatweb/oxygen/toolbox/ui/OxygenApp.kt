@@ -173,7 +173,8 @@ fun OxygenApp(appState: OxygenAppState) {
                             startDestination = when (appState.launchPageConfig) {
                                 LaunchPageConfig.Tools -> TOOLS_ROUTE
                                 LaunchPageConfig.Star -> STAR_ROUTE
-                            }
+                            },
+                            isVertical = appState.shouldShowBottomBar
                         )
                     }
                 }

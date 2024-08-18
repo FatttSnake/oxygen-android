@@ -10,7 +10,8 @@ fun OxygenNavHost(
     modifier: Modifier = Modifier,
     appState: OxygenAppState,
     onShowSnackbar: suspend (message: String, action: String?) -> Boolean,
-    startDestination: String
+    startDestination: String,
+    isVertical: Boolean
 ) {
     val navController = appState.navController
     NavHost(
@@ -29,9 +30,11 @@ fun OxygenNavHost(
             onBackClick = navController::popBackStack
         )
         toolStoreScreen(
+            isVertical = isVertical,
             onNavigateToToolView = navController::navigateToToolView
         )
         toolsScreen(
+            isVertical = isVertical,
             onShowSnackbar = onShowSnackbar,
             onNavigateToToolView = navController::navigateToToolView,
             onNavigateToToolStore = { appState.navigateToTopLevelDestination(TopLevelDestination.ToolStore) }
@@ -40,7 +43,7 @@ fun OxygenNavHost(
             onBackClick = navController::popBackStack
         )
         starScreen(
-
+            isVertical = isVertical
         )
     }
 }
