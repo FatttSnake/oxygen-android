@@ -38,6 +38,10 @@ class ToolStoreViewModel @Inject constructor(
         )
     }
 
+    fun onSearchValueChange(value: String) {
+        savedStateHandle[SEARCH_VALUE] = value
+    }
+
     fun changeInstallInfo(
         status: ToolStoreUiState.InstallInfo.Status = installInfo.value.status,
         type: ToolStoreUiState.InstallInfo.Type = installInfo.value.type

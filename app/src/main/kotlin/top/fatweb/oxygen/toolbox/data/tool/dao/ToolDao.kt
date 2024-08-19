@@ -20,12 +20,19 @@ interface ToolDao {
     @Delete
     suspend fun deleteTool(tool: ToolEntity)
 
-    @Query("SELECT * FROM tools WHERE id = :id")
+    @Query("SELECT * FROM tools " +
+            "WHERE id = :id")
     fun selectToolById(id: Long): Flow<ToolEntity?>
 
-    @Query("SELECT * FROM tools ORDER BY updateTime DESC")
-    fun selectAllTools(): Flow<List<ToolEntity>>
+    @Query("SELECT * FROM tools " +
+            "WHERE :searchValue = '' " +
+            "OR name LIKE '%' || :searchValue || '%' COLLATE NOCASE " +
+            "OR keywords LIKE '%\"%' || :searchValue || '%\"%' COLLATE NOCASE " +
+            "ORDER BY updateTime DESC")
+    fun selectAllTools(searchValue: String): Flow<List<ToolEntity>>
 
-    @Query("SELECT * FROM tools WHERE authorUsername = :username and toolId = :toolId LIMIT 1")
+    @Query("SELECT * FROM tools " +
+            "WHERE authorUsername = :username " +
+            "and toolId = :toolId LIMIT 1")
     fun selectToolByUsernameAndToolId(username: String, toolId: String): Flow<ToolEntity?>
 }

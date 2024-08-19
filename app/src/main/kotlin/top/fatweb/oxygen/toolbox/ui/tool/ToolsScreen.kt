@@ -36,6 +36,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -67,11 +68,16 @@ import top.fatweb.oxygen.toolbox.ui.util.ResourcesUtils
 internal fun ToolsRoute(
     modifier: Modifier = Modifier,
     viewModel: ToolsScreenViewModel = hiltViewModel(),
+    searchValue: String,
     onShowSnackbar: suspend (message: String, action: String?) -> Boolean,
     onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit,
     onNavigateToToolStore: () -> Unit
 ) {
     val toolsScreenUiStateState by viewModel.toolsScreenUiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(searchValue) {
+        viewModel.onSearchValueChange(searchValue)
+    }
 
     ToolsScreen(
         modifier = modifier,

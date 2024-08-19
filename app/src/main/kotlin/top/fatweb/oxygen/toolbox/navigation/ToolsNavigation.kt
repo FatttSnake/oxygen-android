@@ -16,6 +16,7 @@ fun NavController.navigateToTools(navOptions: NavOptions) = navigate(TOOLS_ROUTE
 
 fun NavGraphBuilder.toolsScreen(
     isVertical: Boolean,
+    searchValue: String,
     onShowSnackbar: suspend (message: String, action: String?) -> Boolean,
     onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit,
     onNavigateToToolStore: () -> Unit
@@ -50,6 +51,7 @@ fun NavGraphBuilder.toolsScreen(
         }
     ) {
         ToolsRoute(
+            searchValue = searchValue,
             onShowSnackbar = onShowSnackbar,
             onNavigateToToolView = onNavigateToToolView,
             onNavigateToToolStore = onNavigateToToolStore

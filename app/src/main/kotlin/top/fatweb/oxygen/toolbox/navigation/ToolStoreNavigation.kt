@@ -17,6 +17,8 @@ fun NavController.navigateToToolStore(navOptions: NavOptions? = null) =
 
 fun NavGraphBuilder.toolStoreScreen(
     isVertical: Boolean,
+    searchValue: String,
+    searchCount: Int,
     onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit
 ) {
     composable(
@@ -41,6 +43,8 @@ fun NavGraphBuilder.toolStoreScreen(
         }
     ) {
         ToolStoreRoute(
+            searchValue = searchValue,
+            searchCount = searchCount,
             onNavigateToToolView = onNavigateToToolView
         )
     }

@@ -4,8 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -19,24 +21,30 @@ import kotlin.time.Duration.Companion.seconds
 class ToolsScreenViewModel @Inject constructor(
     private val storeRepository: StoreRepository,
     private val toolRepository: ToolRepository,
-    savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val searchValue = savedStateHandle.getStateFlow(SEARCH_VALUE, "")
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     val toolsScreenUiState: StateFlow<ToolsScreenUiState> =
-        toolRepository.getAllToolsStream()
-            .map {
+        searchValue.flatMapLatest { searchValue ->
+            toolRepository.getAllToolsStream(searchValue).map {
                 if (it.isEmpty()) {
                     ToolsScreenUiState.Nothing
                 } else {
                     ToolsScreenUiState.Success(it)
                 }
             }
-            .stateIn(
-                scope = viewModelScope,
-                initialValue = ToolsScreenUiState.Loading,
-                started = SharingStarted.WhileSubscribed(5.seconds.inWholeMilliseconds)
-            )
+        }.stateIn(
+            scope = viewModelScope,
+            initialValue = ToolsScreenUiState.Loading,
+            started = SharingStarted.WhileSubscribed(5.seconds.inWholeMilliseconds)
+        )
+
+
+    fun onSearchValueChange(value: String) {
+        savedStateHandle[SEARCH_VALUE] = value
+    }
 
     fun uninstall(tool: ToolEntity) {
         viewModelScope.launch {

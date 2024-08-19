@@ -51,6 +51,7 @@ fun OxygenTopAppBar(
     actionIcon: ImageVector? = null,
     actionIconContentDescription: String? = null,
     activeSearch: Boolean = false,
+    searchButtonPosition: SearchButtonPosition = SearchButtonPosition.Action,
     query: String = "",
     colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
     onNavigationClick: () -> Unit = {},
@@ -122,7 +123,15 @@ fun OxygenTopAppBar(
             else title()
         },
         navigationIcon = {
-            navigationIcon?.let {
+            if (activeSearch && searchButtonPosition == SearchButtonPosition.Navigation) IconButton(
+                onClick = onCancelSearch
+            ) {
+                Icon(
+                    imageVector = OxygenIcons.Close,
+                    contentDescription = stringResource(R.string.core_close)
+                )
+            }
+            else navigationIcon?.let {
                 IconButton(onClick = onNavigationClick) {
                     Icon(
                         imageVector = navigationIcon,
@@ -133,7 +142,9 @@ fun OxygenTopAppBar(
             }
         },
         actions = {
-            if (activeSearch) IconButton(onClick = onCancelSearch) {
+            if (activeSearch && searchButtonPosition == SearchButtonPosition.Action) IconButton(
+                onClick = onCancelSearch
+            ) {
                 Icon(
                     imageVector = OxygenIcons.Close,
                     contentDescription = stringResource(R.string.core_close)
@@ -152,6 +163,10 @@ fun OxygenTopAppBar(
         colors = colors,
         windowInsets = WindowInsets(top = topInset)
     )
+}
+
+enum class SearchButtonPosition {
+    Navigation, Action
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

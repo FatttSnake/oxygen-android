@@ -37,6 +37,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -64,10 +65,16 @@ import top.fatweb.oxygen.toolbox.ui.component.scrollbar.scrollbarState
 internal fun ToolStoreRoute(
     modifier: Modifier = Modifier,
     viewModel: ToolStoreViewModel = hiltViewModel(),
+    searchValue: String,
+    searchCount: Int,
     onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit,
 ) {
     val toolStorePagingItems = viewModel.storeData.collectAsLazyPagingItems()
     val installInfo by viewModel.installInfo.collectAsState()
+
+    LaunchedEffect(searchCount) {
+        viewModel.onSearchValueChange(searchValue)
+    }
 
     ToolStoreScreen(
         modifier = modifier,

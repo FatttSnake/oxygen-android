@@ -26,7 +26,6 @@ import top.fatweb.oxygen.toolbox.navigation.TOOL_STORE_ROUTE
 import top.fatweb.oxygen.toolbox.navigation.TopLevelDestination
 import top.fatweb.oxygen.toolbox.navigation.navigateToAbout
 import top.fatweb.oxygen.toolbox.navigation.navigateToLibraries
-import top.fatweb.oxygen.toolbox.navigation.navigateToSearch
 import top.fatweb.oxygen.toolbox.navigation.navigateToStar
 import top.fatweb.oxygen.toolbox.navigation.navigateToToolStore
 import top.fatweb.oxygen.toolbox.navigation.navigateToTools
@@ -118,8 +117,6 @@ class OxygenAppState(
             TopLevelDestination.Star -> navController.navigateToStar(topLevelNavOptions)
         }
     }
-
-    fun navigateToSearch() = navController.navigateToSearch()
 
     fun navigateToLibraries() = navController.navigateToLibraries()
 

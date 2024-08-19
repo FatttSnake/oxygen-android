@@ -27,6 +27,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -52,6 +53,7 @@ import top.fatweb.oxygen.toolbox.ui.component.OxygenNavigationBarItem
 import top.fatweb.oxygen.toolbox.ui.component.OxygenNavigationRail
 import top.fatweb.oxygen.toolbox.ui.component.OxygenNavigationRailItem
 import top.fatweb.oxygen.toolbox.ui.component.OxygenTopAppBar
+import top.fatweb.oxygen.toolbox.ui.component.SearchButtonPosition
 import top.fatweb.oxygen.toolbox.ui.settings.SettingsDialog
 import top.fatweb.oxygen.toolbox.ui.theme.GradientColors
 import top.fatweb.oxygen.toolbox.ui.theme.LocalGradientColors
@@ -78,6 +80,20 @@ fun OxygenApp(appState: OxygenAppState) {
             val noConnectMessage = stringResource(R.string.core_no_connect)
 
             val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
+            var activeSearch by remember { mutableStateOf(false) }
+            var searchValue by remember { mutableStateOf("") }
+            var searchCount by remember { mutableIntStateOf(0) }
+
+            LaunchedEffect(destination) {
+                activeSearch = false
+                searchValue = ""
+                if (searchCount == 0) {
+                    searchCount++
+                } else {
+                    searchCount = 0
+                }
+            }
 
             LaunchedEffect(isOffline) {
                 if (isOffline) {
@@ -152,12 +168,26 @@ fun OxygenApp(appState: OxygenAppState) {
                                 navigationIconContentDescription = stringResource(R.string.feature_settings_top_app_bar_navigation_icon_description),
                                 actionIcon = OxygenIcons.MoreVert,
                                 actionIconContentDescription = stringResource(R.string.feature_settings_top_app_bar_action_icon_description),
+                                activeSearch = activeSearch,
+                                searchButtonPosition = SearchButtonPosition.Navigation,
+                                query = searchValue,
                                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                                     containerColor = Color.Transparent,
                                     scrolledContainerColor = Color.Transparent
                                 ),
-                                onNavigationClick = { appState.navigateToSearch() },
-                                onActionClick = { showSettingsDialog = true }
+                                onNavigationClick = { activeSearch = true },
+                                onActionClick = { showSettingsDialog = true },
+                                onQueryChange = {
+                                    searchValue = it
+                                },
+                                onSearch = {
+                                    searchCount++
+                                },
+                                onCancelSearch = {
+                                    searchValue = ""
+                                    activeSearch = false
+                                    searchCount = 0
+                                }
                             )
                         }
 
@@ -174,7 +204,9 @@ fun OxygenApp(appState: OxygenAppState) {
                                 LaunchPageConfig.Tools -> TOOLS_ROUTE
                                 LaunchPageConfig.Star -> STAR_ROUTE
                             },
-                            isVertical = appState.shouldShowBottomBar
+                            isVertical = appState.shouldShowBottomBar,
+                            searchValue = searchValue,
+                            searchCount = searchCount
                         )
                     }
                 }
