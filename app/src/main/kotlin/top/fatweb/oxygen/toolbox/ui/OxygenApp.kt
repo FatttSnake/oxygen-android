@@ -42,6 +42,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
+import top.fatweb.oxygen.toolbox.navigation.ABOUT_ROUTE
 import top.fatweb.oxygen.toolbox.navigation.OxygenNavHost
 import top.fatweb.oxygen.toolbox.navigation.STAR_ROUTE
 import top.fatweb.oxygen.toolbox.navigation.TOOLS_ROUTE
@@ -62,7 +63,7 @@ import top.fatweb.oxygen.toolbox.ui.theme.LocalGradientColors
 @Composable
 fun OxygenApp(appState: OxygenAppState) {
     val shouldShowGradientBackground =
-        appState.currentTopLevelDestination == TopLevelDestination.Tools
+        appState.currentDestination?.route == ABOUT_ROUTE
     var showSettingsDialog by rememberSaveable {
         mutableStateOf(false)
     }
