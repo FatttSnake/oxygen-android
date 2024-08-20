@@ -9,15 +9,13 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
-
     override val descriptor: SerialDescriptor =
-        PrimitiveSerialDescriptor("LocalDateTime", PrimitiveKind.STRING)
+        PrimitiveSerialDescriptor(serialName = "LocalDateTime", kind = PrimitiveKind.STRING)
 
     override fun deserialize(decoder: Decoder): LocalDateTime =
-        LocalDateTime.parse(decoder.decodeString().removeSuffix("Z"))
+        LocalDateTime.parse(input = decoder.decodeString().removeSuffix("Z"))
 
     override fun serialize(encoder: Encoder, value: LocalDateTime) {
-        encoder.encodeString(value.toString().padEnd(24, 'Z'))
+        encoder.encodeString(value.toString().padEnd(length = 24, padChar = 'Z'))
     }
-
 }

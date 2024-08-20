@@ -80,7 +80,7 @@ fun DialogChooserRow(
             selected = selected,
             onClick = null
         )
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(Modifier.width(8.dp))
         Text(text)
     }
 }
@@ -102,7 +102,7 @@ fun DialogClickerRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(imageVector = icon ?: OxygenIcons.Reorder, contentDescription = null)
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(Modifier.width(8.dp))
         Text(text)
     }
 }

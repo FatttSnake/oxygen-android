@@ -27,16 +27,15 @@ fun RowScope.OxygenNavigationBarItem(
     label: @Composable (() -> Unit)? = null,
     icon: @Composable () -> Unit,
     selectedIcon: @Composable () -> Unit,
-    onClick: () -> Unit,
     enabled: Boolean = true,
-    alwaysShowLabel: Boolean = false
+    alwaysShowLabel: Boolean = false,
+    onClick: () -> Unit
 ) {
     NavigationBarItem(
         modifier = modifier,
         selected = selected,
         label = label,
         icon = if (selected) selectedIcon else icon,
-        onClick = onClick,
         enabled = enabled,
         alwaysShowLabel = alwaysShowLabel,
         colors = NavigationBarItemDefaults.colors(
@@ -45,7 +44,8 @@ fun RowScope.OxygenNavigationBarItem(
             selectedTextColor = OxygenNavigationDefaults.navigationSelectedItemColor(),
             unselectedTextColor = OxygenNavigationDefaults.navigationContentColor(),
             indicatorColor = OxygenNavigationDefaults.navigationIndicatorColor()
-        )
+        ),
+        onClick = onClick
     )
 }
 
@@ -69,16 +69,15 @@ fun OxygenNavigationRailItem(
     label: @Composable (() -> Unit)? = null,
     icon: @Composable () -> Unit,
     selectedIcon: @Composable () -> Unit,
-    onClick: () -> Unit,
     enabled: Boolean = true,
-    alwaysShowLabel: Boolean = true
+    alwaysShowLabel: Boolean = true,
+    onClick: () -> Unit
 ) {
     NavigationRailItem(
         modifier = modifier,
         selected = selected,
         label = label,
         icon = if (selected) selectedIcon else icon,
-        onClick = onClick,
         enabled = enabled,
         alwaysShowLabel = alwaysShowLabel,
         colors = NavigationRailItemDefaults.colors(
@@ -87,7 +86,8 @@ fun OxygenNavigationRailItem(
             selectedTextColor = OxygenNavigationDefaults.navigationSelectedItemColor(),
             unselectedTextColor = OxygenNavigationDefaults.navigationContentColor(),
             indicatorColor = OxygenNavigationDefaults.navigationIndicatorColor()
-        )
+        ),
+        onClick = onClick
     )
 }
 

@@ -44,7 +44,7 @@ class LibrariesScreenViewModel @Inject constructor(
             .stateIn(
                 scope = viewModelScope,
                 initialValue = LibrariesScreenUiState.Loading,
-                started = SharingStarted.WhileSubscribed(5.seconds.inWholeMilliseconds)
+                started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5.seconds.inWholeMilliseconds)
             )
 
     fun onSearchValueChange(value: String) {

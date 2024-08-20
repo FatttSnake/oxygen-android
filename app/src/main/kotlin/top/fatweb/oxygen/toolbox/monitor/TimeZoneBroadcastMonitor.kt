@@ -64,5 +64,9 @@ class TimeZoneBroadcastMonitor @Inject constructor(
         .distinctUntilChanged()
         .conflate()
         .flowOn(ioDispatcher)
-        .shareIn(appScope, SharingStarted.WhileSubscribed(5.seconds.inWholeMilliseconds), 1)
+        .shareIn(
+            scope = appScope,
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5.seconds.inWholeMilliseconds),
+            replay = 1
+        )
 }

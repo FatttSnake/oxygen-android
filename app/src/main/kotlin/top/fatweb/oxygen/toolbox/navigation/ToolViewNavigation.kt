@@ -19,7 +19,11 @@ internal const val TOOL_ID_ARG = "toolId"
 internal const val PREVIEW_ARG = "preview"
 const val TOOL_VIEW_ROUTE = "tool_view_route"
 
-internal class ToolViewArgs(val username: String, val toolId: String, val preview: Boolean) {
+internal class ToolViewArgs(
+    val username: String,
+    val toolId: String,
+    val preview: Boolean
+) {
     constructor(savedStateHandle: SavedStateHandle) :
             this(
                 URLDecoder.decode(

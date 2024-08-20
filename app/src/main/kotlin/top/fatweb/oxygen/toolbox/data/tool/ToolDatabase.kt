@@ -22,7 +22,11 @@ abstract class ToolDatabase : RoomDatabase() {
 
         fun getInstance(context: Context): ToolDatabase =
             INSTANCE ?: synchronized(this) {
-                Room.databaseBuilder(context, ToolDatabase::class.java, "tools.db")
+                Room.databaseBuilder(
+                    context = context,
+                    klass = ToolDatabase::class.java,
+                    name = "tools.db"
+                )
                     .build()
                     .also { INSTANCE = it }
             }

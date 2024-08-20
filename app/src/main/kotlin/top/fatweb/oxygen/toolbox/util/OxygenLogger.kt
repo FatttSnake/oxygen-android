@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter
 
 class HttpLogger : HttpLoggingInterceptor.Logger {
     override fun log(message: String) {
-        Timber.i(message)
+        Timber.i(message = message)
     }
 }
 
@@ -39,7 +39,7 @@ class OxygenLogTree(
             if (logFile.length() >= maxFileSize) {
                 rotateLogFile()
             }
-            logFile.appendText(format(priority, tag, message, t))
+            logFile.appendText(text = format(priority = priority, tag = tag, message = message, t = t))
         } catch (e: Exception) {
             Log.e("OxygenLogTree", "Error writing log message to file", e)
         }

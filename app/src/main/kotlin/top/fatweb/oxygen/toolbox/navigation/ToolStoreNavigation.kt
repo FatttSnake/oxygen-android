@@ -13,7 +13,7 @@ import top.fatweb.oxygen.toolbox.ui.store.ToolStoreRoute
 const val TOOL_STORE_ROUTE = "tool_store_route"
 
 fun NavController.navigateToToolStore(navOptions: NavOptions? = null) =
-    navigate(TOOL_STORE_ROUTE, navOptions)
+    navigate(route = TOOL_STORE_ROUTE, navOptions = navOptions)
 
 fun NavGraphBuilder.toolStoreScreen(
     isVertical: Boolean,

@@ -68,8 +68,20 @@ data class ToolEntity(
                 keywords = emptyList(),
                 categories = emptyList(),
                 entryPoint = "",
-                createTime = LocalDateTime(1970, 1, 1, 0, 0),
-                updateTime = LocalDateTime(1970, 1, 1, 0, 0),
+                createTime = LocalDateTime(
+                    year = 1970,
+                    monthNumber = 1,
+                    dayOfMonth = 1,
+                    hour = 0,
+                    minute = 0
+                ),
+                updateTime = LocalDateTime(
+                    year = 1970,
+                    monthNumber = 1,
+                    dayOfMonth = 1,
+                    hour = 0,
+                    minute = 0
+                ),
                 upgrade = upgrade
             )
 

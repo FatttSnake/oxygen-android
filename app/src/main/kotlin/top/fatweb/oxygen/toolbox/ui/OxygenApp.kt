@@ -121,11 +121,11 @@ fun OxygenApp(appState: OxygenAppState) {
 
             Scaffold(
                 modifier = Modifier
-                    .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
+                    .nestedScroll(connection = topAppBarScrollBehavior.nestedScrollConnection),
                 containerColor = Color.Transparent,
                 contentColor = MaterialTheme.colorScheme.onBackground,
-                contentWindowInsets = WindowInsets(0, 0, 0, 0),
-                snackbarHost = { SnackbarHost(snackbarHostState) },
+                contentWindowInsets = WindowInsets(left = 0, top = 0, right = 0, bottom = 0),
+                snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
                 bottomBar = {
                     AnimatedVisibility(
                         visible = appState.shouldShowBottomBar && destination != null,
@@ -135,8 +135,8 @@ fun OxygenApp(appState: OxygenAppState) {
                         ) {
                             OxygenBottomBar(
                                 destinations = appState.topLevelDestinations,
-                                onNavigateToDestination = appState::navigateToTopLevelDestination,
-                                currentDestination = appState.currentDestination
+                                currentDestination = appState.currentDestination,
+                                onNavigateToDestination = appState::navigateToTopLevelDestination
                             )
                         }
                     }
@@ -153,12 +153,12 @@ fun OxygenApp(appState: OxygenAppState) {
                             )
                         )
                 ) {
-                    AnimatedVisibility(appState.shouldShowNavRail && destination != null) {
+                    AnimatedVisibility(visible = appState.shouldShowNavRail && destination != null) {
                         OxygenNavRail(
                             modifier = Modifier.safeDrawingPadding(),
                             destinations = appState.topLevelDestinations,
-                            onNavigateToDestination = appState::navigateToTopLevelDestination,
-                            currentDestination = appState.currentDestination
+                            currentDestination = appState.currentDestination,
+                            onNavigateToDestination = appState::navigateToTopLevelDestination
                         )
                     }
 
@@ -169,7 +169,7 @@ fun OxygenApp(appState: OxygenAppState) {
                             OxygenTopAppBar(
                                 scrollBehavior = topAppBarScrollBehavior,
                                 title = {
-                                    Text(text = stringResource(id = destination.titleTextId))
+                                    Text(text = stringResource(destination.titleTextId))
                                 },
                                 navigationIcon = OxygenIcons.Search,
                                 navigationIconContentDescription = stringResource(R.string.feature_settings_top_app_bar_navigation_icon_description),
@@ -226,8 +226,8 @@ fun OxygenApp(appState: OxygenAppState) {
 private fun OxygenBottomBar(
     modifier: Modifier = Modifier,
     destinations: List<TopLevelDestination>,
-    onNavigateToDestination: (TopLevelDestination) -> Unit,
-    currentDestination: NavDestination?
+    currentDestination: NavDestination?,
+    onNavigateToDestination: (TopLevelDestination) -> Unit
 ) {
     OxygenNavigationBar(
         modifier = modifier
@@ -260,8 +260,8 @@ private fun OxygenBottomBar(
 private fun OxygenNavRail(
     modifier: Modifier = Modifier,
     destinations: List<TopLevelDestination>,
-    onNavigateToDestination: (TopLevelDestination) -> Unit,
-    currentDestination: NavDestination?
+    currentDestination: NavDestination?,
+    onNavigateToDestination: (TopLevelDestination) -> Unit
 ) {
     OxygenNavigationRail(
         modifier = modifier

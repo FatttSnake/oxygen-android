@@ -23,6 +23,8 @@ internal object CoroutineScopesModule {
     @Singleton
     @ApplicationScope
     fun providesCoroutineScope(
-        @Dispatcher(OxygenDispatchers.Default) dispatcher: CoroutineDispatcher
-    ): CoroutineScope = CoroutineScope(SupervisorJob() + dispatcher)
+        @Dispatcher(OxygenDispatchers.Default)
+        dispatcher: CoroutineDispatcher
+    ): CoroutineScope =
+        CoroutineScope(SupervisorJob() + dispatcher)
 }

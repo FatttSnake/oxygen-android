@@ -43,8 +43,8 @@ import top.fatweb.oxygen.toolbox.ui.util.ResourcesUtils
 @Composable
 internal fun AboutRoute(
     modifier: Modifier = Modifier,
-    onNavigateToLibraries: () -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onNavigateToLibraries: () -> Unit
 ) {
     AboutScreen(
         modifier = modifier.safeDrawingPadding(),
@@ -57,8 +57,8 @@ internal fun AboutRoute(
 @Composable
 internal fun AboutScreen(
     modifier: Modifier = Modifier,
-    onNavigateToLibraries: () -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onNavigateToLibraries: () -> Unit
 ) {
     val scrollState = rememberScrollState()
     val topAppBarScrollBehavior =
@@ -66,9 +66,9 @@ internal fun AboutScreen(
 
     Scaffold(
         modifier = Modifier
-            .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
+            .nestedScroll(connection = topAppBarScrollBehavior.nestedScrollConnection),
         containerColor = Color.Transparent,
-        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        contentWindowInsets = WindowInsets(left = 0, top = 0, right = 0, bottom = 0),
     ) { padding ->
         Column(
             modifier = modifier
@@ -80,12 +80,13 @@ internal fun AboutScreen(
                         WindowInsetsSides.Horizontal
                     )
                 )
-                .verticalScroll(scrollState), horizontalAlignment = Alignment.CenterHorizontally
+                .verticalScroll(state = scrollState),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             OxygenTopAppBar(
                 scrollBehavior = topAppBarScrollBehavior,
                 title = {
-                    Text(text = stringResource(id = R.string.feature_settings_more_about))
+                    Text(text = stringResource(R.string.feature_settings_more_about))
                 },
                 navigationIcon = OxygenIcons.Back,
                 navigationIconContentDescription = stringResource(R.string.core_back),
@@ -95,13 +96,9 @@ internal fun AboutScreen(
                 ),
                 onNavigationClick = onBackClick
             )
-            Spacer(
-                modifier = Modifier.height(64.dp)
-            )
+            Spacer(Modifier.height(64.dp))
             AboutAppInfo()
-            Spacer(
-                modifier = Modifier.weight(1f)
-            )
+            Spacer(Modifier.weight(1f))
             AboutFooter(
                 onNavigateToLibraries = onNavigateToLibraries
             )
@@ -114,26 +111,27 @@ private fun AboutAppInfo(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
             imageVector = ImageVector.vectorResource(R.drawable.ic_oxygen),
             contentDescription = stringResource(R.string.app_full_name)
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(Modifier.height(16.dp))
         Text(
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             text = stringResource(R.string.app_name)
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(Modifier.height(8.dp))
         Text(
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.outline,
             text = stringResource(R.string.app_description)
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(Modifier.height(8.dp))
         Text(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.outline,

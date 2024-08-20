@@ -85,9 +85,9 @@ fun ToolGroupTitle(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(modifier = Modifier.size(18.dp), imageVector = icon, contentDescription = title)
-            Spacer(modifier = Modifier.width(10.dp))
+            Spacer(Modifier.width(10.dp))
             Text(text = title, style = MaterialTheme.typography.titleMedium)
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(Modifier.weight(1f))
             SwitchableIcon(icon = OxygenIcons.ArrowDown, switched = !isExpanded)
         }
     }
@@ -128,7 +128,7 @@ fun ToolGroupItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(modifier = Modifier.size(16.dp), imageVector = icon, contentDescription = null)
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(Modifier.width(4.dp))
                 Text(text = title, style = MaterialTheme.typography.bodyMedium)
             }
         }
@@ -163,7 +163,7 @@ private fun ToolGroupCardPreview() {
         LazyColumn {
             itemsIndexed(groups) { index, item ->
                 if (index != 0) {
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(Modifier.height(10.dp))
                 }
                 ToolGroupCard(
                     toolGroup = item

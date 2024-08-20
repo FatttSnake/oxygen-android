@@ -41,5 +41,6 @@ internal object NetworkModule {
     fun providesOxygenNetworkDataSource(
         networkJson: Json,
         okhttpCallFactory: dagger.Lazy<Call.Factory>
-    ): OxygenNetworkDataSource = RetrofitOxygenNetwork(networkJson, okhttpCallFactory)
+    ): OxygenNetworkDataSource =
+        RetrofitOxygenNetwork(networkJson, okhttpCallFactory)
 }

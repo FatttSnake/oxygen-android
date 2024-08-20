@@ -92,8 +92,8 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(darkTheme) {
                 enableEdgeToEdge(
                     statusBarStyle = SystemBarStyle.auto(
-                        android.graphics.Color.TRANSPARENT,
-                        android.graphics.Color.TRANSPARENT
+                        lightScrim = android.graphics.Color.TRANSPARENT,
+                        darkScrim = android.graphics.Color.TRANSPARENT
                     ) { darkTheme },
                     navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
                 )
@@ -108,9 +108,7 @@ class MainActivity : ComponentActivity() {
 
             val currentTimeZone by appState.currentTimeZone.collectAsStateWithLifecycle()
 
-            CompositionLocalProvider(
-                LocalTimeZone provides currentTimeZone
-            ) {
+            CompositionLocalProvider(LocalTimeZone provides currentTimeZone) {
                 OxygenTheme(
                     darkTheme = darkTheme,
                     androidTheme = shouldUseAndroidTheme(uiState),
@@ -125,7 +123,11 @@ class MainActivity : ComponentActivity() {
                     val pathSegments = pathSegments
                     val preview = getBooleanQueryParameter(PREVIEW_ARG, false)
                     if (pathSegments.size == 2) {
-                        appState.navController.navigateToToolView(pathSegments[0], pathSegments[1], preview)
+                        appState.navController.navigateToToolView(
+                            username = pathSegments[0],
+                            toolId = pathSegments[1],
+                            preview = preview
+                        )
                     }
                 }
             }
@@ -141,55 +143,57 @@ class MainActivity : ComponentActivity() {
     override fun attachBaseContext(newBase: Context) {
         val userDataRepository =
             EntryPointAccessors.fromApplication<UserDataRepositoryEntryPoint>(newBase).userDataRepository
-        super.attachBaseContext(LocaleUtils.attachBaseContext(newBase, runBlocking {
-            userDataRepository.userData.first().languageConfig
-        }))
+        super.attachBaseContext(
+            LocaleUtils.attachBaseContext(
+                context = newBase,
+                languageConfig = runBlocking {
+                    userDataRepository.userData.first().languageConfig
+                }
+            )
+        )
     }
 }
 
 @Composable
-private fun shouldUseDarkTheme(
-    uiState: MainActivityUiState
-): Boolean = when (uiState) {
-    MainActivityUiState.Loading -> isSystemInDarkTheme()
-    is MainActivityUiState.Success -> when (uiState.userData.darkThemeConfig) {
-        DarkThemeConfig.FollowSystem -> isSystemInDarkTheme()
-        DarkThemeConfig.Light -> false
-        DarkThemeConfig.Dark -> true
+private fun shouldUseDarkTheme(uiState: MainActivityUiState): Boolean =
+    when (uiState) {
+        MainActivityUiState.Loading -> isSystemInDarkTheme()
+        is MainActivityUiState.Success ->
+            when (uiState.userData.darkThemeConfig) {
+                DarkThemeConfig.FollowSystem -> isSystemInDarkTheme()
+                DarkThemeConfig.Light -> false
+                DarkThemeConfig.Dark -> true
+            }
     }
-}
 
 @Composable
-private fun shouldUseAndroidTheme(
-    uiState: MainActivityUiState
-): Boolean = when (uiState) {
-    MainActivityUiState.Loading -> false
-    is MainActivityUiState.Success -> when (uiState.userData.themeBrandConfig) {
-        ThemeBrandConfig.Default -> false
-        ThemeBrandConfig.Android -> true
+private fun shouldUseAndroidTheme(uiState: MainActivityUiState): Boolean =
+    when (uiState) {
+        MainActivityUiState.Loading -> false
+        is MainActivityUiState.Success ->
+            when (uiState.userData.themeBrandConfig) {
+                ThemeBrandConfig.Default -> false
+                ThemeBrandConfig.Android -> true
+            }
     }
-}
 
 @Composable
-private fun shouldUseDynamicColor(
-    uiState: MainActivityUiState
-): Boolean = when (uiState) {
-    MainActivityUiState.Loading -> true
-    is MainActivityUiState.Success -> uiState.userData.useDynamicColor
-}
+private fun shouldUseDynamicColor(uiState: MainActivityUiState): Boolean =
+    when (uiState) {
+        MainActivityUiState.Loading -> true
+        is MainActivityUiState.Success -> uiState.userData.useDynamicColor
+    }
 
 @Composable
-private fun whatLocale(
-    uiState: MainActivityUiState
-): LanguageConfig = when (uiState) {
-    MainActivityUiState.Loading -> LanguageConfig.FollowSystem
-    is MainActivityUiState.Success -> uiState.userData.languageConfig
-}
+private fun whatLocale(uiState: MainActivityUiState): LanguageConfig =
+    when (uiState) {
+        MainActivityUiState.Loading -> LanguageConfig.FollowSystem
+        is MainActivityUiState.Success -> uiState.userData.languageConfig
+    }
 
 @Composable
-private fun whatLaunchPage(
-    uiState: MainActivityUiState
-): LaunchPageConfig = when (uiState) {
-    MainActivityUiState.Loading -> LaunchPageConfig.Tools
-    is MainActivityUiState.Success -> uiState.userData.launchPageConfig
-}
+private fun whatLaunchPage(uiState: MainActivityUiState): LaunchPageConfig =
+    when (uiState) {
+        MainActivityUiState.Loading -> LaunchPageConfig.Tools
+        is MainActivityUiState.Success -> uiState.userData.launchPageConfig
+    }

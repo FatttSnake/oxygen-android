@@ -36,7 +36,7 @@ class ToolsScreenViewModel @Inject constructor(
         }.stateIn(
             scope = viewModelScope,
             initialValue = ToolsScreenUiState.Loading,
-            started = SharingStarted.WhileSubscribed(5.seconds.inWholeMilliseconds)
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5.seconds.inWholeMilliseconds)
         )
 
 

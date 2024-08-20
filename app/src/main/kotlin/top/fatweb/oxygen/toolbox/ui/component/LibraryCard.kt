@@ -59,13 +59,13 @@ fun LibraryCard(
                 version = artifactVersion ?: stringResource(R.string.core_unknown)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
 
             LibraryContent(
                 text = description ?: ""
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
 
             LibraryFooter(
                 licenses = licenses,

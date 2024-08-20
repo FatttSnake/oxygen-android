@@ -65,15 +65,15 @@ fun ToolCard(
                 actionIconContentDescription = actionIconContentDescription,
                 onAction = onAction
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
             ToolIcon(icon = tool.icon)
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
             ToolInfo(
                 toolName = tool.name,
                 toolId = tool.toolId,
                 toolDesc = tool.description
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
             AuthorInfo(
                 avatar = tool.authorAvatar,
                 nickname = tool.authorNickname
@@ -95,7 +95,7 @@ private fun ToolHeader(
             .height(28.dp)
     ) {
         ToolVer(ver = ver)
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(Modifier.weight(1f))
         actionIcon?.let {
             ToolAction(
                 actionIcon = actionIcon,

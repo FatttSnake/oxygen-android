@@ -11,7 +11,7 @@ import top.fatweb.oxygen.toolbox.ui.about.AboutRoute
 const val ABOUT_ROUTE = "about_route"
 
 fun NavController.navigateToAbout(navOptions: NavOptions? = null) =
-    navigate(ABOUT_ROUTE, navOptions)
+    navigate(route = ABOUT_ROUTE, navOptions = navOptions)
 
 fun NavGraphBuilder.aboutScreen(
     onNavigateToLibraries: () -> Unit,

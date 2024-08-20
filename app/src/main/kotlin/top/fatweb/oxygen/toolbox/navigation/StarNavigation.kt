@@ -12,7 +12,8 @@ import top.fatweb.oxygen.toolbox.ui.star.StarRoute
 
 const val STAR_ROUTE = "star_route"
 
-fun NavController.navigateToStar(navOptions: NavOptions) = navigate(STAR_ROUTE, navOptions)
+fun NavController.navigateToStar(navOptions: NavOptions) =
+    navigate(route = STAR_ROUTE, navOptions = navOptions)
 
 fun NavGraphBuilder.starScreen(
     isVertical: Boolean,

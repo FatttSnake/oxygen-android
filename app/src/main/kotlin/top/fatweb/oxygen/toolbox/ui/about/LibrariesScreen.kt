@@ -123,9 +123,9 @@ internal fun LibrariesScreen(
 
     Scaffold(
         modifier = Modifier
-            .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
+            .nestedScroll(connection = topAppBarScrollBehavior.nestedScrollConnection),
         containerColor = Color.Transparent,
-        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        contentWindowInsets = WindowInsets(left = 0, top = 0, right = 0, bottom = 0),
     ) { padding ->
         Column(
             modifier
@@ -141,7 +141,7 @@ internal fun LibrariesScreen(
             OxygenTopAppBar(
                 scrollBehavior = topAppBarScrollBehavior,
                 title = {
-                    Text(text = stringResource(id = R.string.feature_settings_open_source_license))
+                    Text(text = stringResource(R.string.feature_settings_open_source_license))
                 },
                 navigationIcon = OxygenIcons.Back,
                 navigationIconContentDescription = stringResource(R.string.core_back),
@@ -180,14 +180,14 @@ internal fun LibrariesScreen(
                                 initialValue = 0F,
                                 targetValue = 360F,
                                 animationSpec = infiniteRepeatable(
-                                    animation = tween(800, easing = Ease),
+                                    animation = tween(durationMillis = 800, easing = Ease),
                                 ), label = "angle"
                             )
                             Icon(
                                 modifier = Modifier
                                     .size(32.dp)
                                     .graphicsLayer { rotationZ = angle },
-                                imageVector = OxygenIcons.Loading,
+                                imageVector = Loading,
                                 contentDescription = ""
                             )
                         }
@@ -255,7 +255,7 @@ internal fun LibrariesScreen(
             },
             text = {
                 Column(
-                    modifier = Modifier.verticalScroll(rememberScrollState())
+                    modifier = Modifier.verticalScroll(state = rememberScrollState())
                 ) {
                     Text(
                         modifier = Modifier,

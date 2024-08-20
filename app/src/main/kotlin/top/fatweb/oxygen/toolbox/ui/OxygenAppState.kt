@@ -91,14 +91,14 @@ class OxygenAppState(
         .stateIn(
             scope = coroutineScope,
             initialValue = false,
-            started = SharingStarted.WhileSubscribed(5.seconds.inWholeMilliseconds)
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5.seconds.inWholeMilliseconds)
         )
 
     val currentTimeZone = timeZoneMonitor.currentTimeZone
         .stateIn(
             scope = coroutineScope,
             initialValue = TimeZone.currentSystemDefault(),
-            started = SharingStarted.WhileSubscribed(5.seconds.inWholeMilliseconds)
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5.seconds.inWholeMilliseconds)
         )
 
     fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestination) {

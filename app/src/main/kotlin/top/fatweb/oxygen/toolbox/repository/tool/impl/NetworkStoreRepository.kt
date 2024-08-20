@@ -22,18 +22,17 @@ internal class NetworkStoreRepository @Inject constructor(
     private val oxygenNetworkDataSource: OxygenNetworkDataSource,
     private val toolDao: ToolDao
 ) : StoreRepository {
-
     override suspend fun getStore(
         searchValue: String,
         currentPage: Int
     ): Flow<PagingData<ToolEntity>> =
         Pager(
-            config = PagingConfig(PAGE_SIZE),
+            config = PagingConfig(pageSize = PAGE_SIZE),
             pagingSourceFactory = {
                 ToolStorePagingSource(
-                    oxygenNetworkDataSource,
-                    toolDao,
-                    searchValue
+                    oxygenNetworkDataSource = oxygenNetworkDataSource,
+                    toolDao = toolDao,
+                    searchValue = searchValue
                 )
             }
         ).flow
@@ -44,9 +43,9 @@ internal class NetworkStoreRepository @Inject constructor(
         ver: String
     ): Flow<Result<ToolEntity>> =
         oxygenNetworkDataSource.detail(
-            username,
-            toolId,
-            ver
+            username = username,
+            toolId = toolId,
+            ver = ver
         ).map {
             it.asExternalModel(ToolVo::asExternalModel)
         }

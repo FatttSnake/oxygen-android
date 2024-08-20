@@ -63,14 +63,15 @@ internal class RetrofitOxygenNetwork @Inject constructor(
         toolId: String,
         ver: String,
         platform: ToolBaseVo.Platform
-    ): Flow<Result<ToolVo>> = flow {
-        emit(
-            networkApi.detail(
-                username = username,
-                toolId = toolId,
-                ver = ver,
-                platform = platform
+    ): Flow<Result<ToolVo>> =
+        flow {
+            emit(
+                networkApi.detail(
+                    username = username,
+                    toolId = toolId,
+                    ver = ver,
+                    platform = platform
+                )
             )
-        )
-    }.asResult()
+        }.asResult()
 }

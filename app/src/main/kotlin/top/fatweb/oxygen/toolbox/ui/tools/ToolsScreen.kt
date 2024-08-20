@@ -69,9 +69,9 @@ internal fun ToolsRoute(
     modifier: Modifier = Modifier,
     viewModel: ToolsScreenViewModel = hiltViewModel(),
     searchValue: String,
-    onShowSnackbar: suspend (message: String, action: String?) -> Boolean,
     onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit,
-    onNavigateToToolStore: () -> Unit
+    onNavigateToToolStore: () -> Unit,
+    onShowSnackbar: suspend (message: String, action: String?) -> Boolean
 ) {
     val toolsScreenUiStateState by viewModel.toolsScreenUiState.collectAsStateWithLifecycle()
 
@@ -81,10 +81,10 @@ internal fun ToolsRoute(
 
     ToolsScreen(
         modifier = modifier,
-        onShowSnackbar = onShowSnackbar,
+        toolsScreenUiState = toolsScreenUiStateState,
         onNavigateToToolView = onNavigateToToolView,
         onNavigateToToolStore = onNavigateToToolStore,
-        toolsScreenUiState = toolsScreenUiStateState,
+        onShowSnackbar = onShowSnackbar,
         onUninstall = viewModel::uninstall,
         onUndo = viewModel::undo,
         onChangeStar = viewModel::changeStar
@@ -95,9 +95,9 @@ internal fun ToolsRoute(
 internal fun ToolsScreen(
     modifier: Modifier = Modifier,
     toolsScreenUiState: ToolsScreenUiState,
-    onShowSnackbar: suspend (message: String, action: String?) -> Boolean,
     onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit,
     onNavigateToToolStore: () -> Unit,
+    onShowSnackbar: suspend (message: String, action: String?) -> Boolean,
     onUninstall: (ToolEntity) -> Unit,
     onUndo: (ToolEntity) -> Unit,
     onChangeStar: (ToolEntity, Boolean) -> Unit
@@ -131,14 +131,14 @@ internal fun ToolsScreen(
                 ) {
                     val angle by infiniteTransition.animateFloat(
                         initialValue = 0F, targetValue = 360F, animationSpec = infiniteRepeatable(
-                            animation = tween(800, easing = Ease),
+                            animation = tween(durationMillis = 800, easing = Ease),
                         ), label = "angle"
                     )
                     Icon(
                         modifier = Modifier
                             .size(32.dp)
                             .graphicsLayer { rotationZ = angle },
-                        imageVector = OxygenIcons.Loading,
+                        imageVector = Loading,
                         contentDescription = ""
                     )
                 }
@@ -176,8 +176,8 @@ internal fun ToolsScreen(
                     )
 
                     item(span = StaggeredGridItemSpan.FullLine) {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+                        Spacer(Modifier.height(8.dp))
+                        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
                     }
                 }
             }
@@ -255,7 +255,7 @@ private fun ToolMenu(
         ) {
             DialogTitle(text = selectedTool.name)
             HorizontalDivider()
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(Modifier.height(4.dp))
             DialogSectionGroup {
                 DialogClickerRow(
                     icon = OxygenIcons.Delete,

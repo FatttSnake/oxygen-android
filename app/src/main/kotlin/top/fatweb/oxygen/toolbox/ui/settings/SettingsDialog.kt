@@ -52,22 +52,22 @@ import top.fatweb.oxygen.toolbox.ui.theme.supportsDynamicTheming
 fun SettingsDialog(
     modifier: Modifier = Modifier,
     viewModel: SettingsViewModel = hiltViewModel(),
-    onDismiss: () -> Unit,
     onNavigateToLibraries: () -> Unit,
-    onNavigateToAbout: () -> Unit
+    onNavigateToAbout: () -> Unit,
+    onDismiss: () -> Unit
 ) {
     val settingsUiState by viewModel.settingsUiState.collectAsStateWithLifecycle()
     SettingsDialog(
         modifier = modifier,
         settingsUiState = settingsUiState,
+        onNavigateToLibraries = onNavigateToLibraries,
+        onNavigateToAbout = onNavigateToAbout,
         onDismiss = onDismiss,
         onChangeLanguageConfig = viewModel::updateLanguageConfig,
         onChangeLaunchPageConfig = viewModel::updateLaunchPageConfig,
         onchangeThemeBrandConfig = viewModel::updateThemeBrandConfig,
         onChangeDarkThemeConfig = viewModel::updateDarkThemeConfig,
-        onchangeUseDynamicColor = viewModel::updateUseDynamicColor,
-        onNavigateToLibraries = onNavigateToLibraries,
-        onNavigateToAbout = onNavigateToAbout
+        onchangeUseDynamicColor = viewModel::updateUseDynamicColor
     )
 }
 
@@ -75,15 +75,15 @@ fun SettingsDialog(
 fun SettingsDialog(
     modifier: Modifier = Modifier,
     settingsUiState: SettingsUiState,
+    onNavigateToLibraries: () -> Unit,
+    onNavigateToAbout: () -> Unit,
     onDismiss: () -> Unit,
     supportDynamicColor: Boolean = supportsDynamicTheming(),
     onChangeLanguageConfig: (languageConfig: LanguageConfig) -> Unit,
     onChangeLaunchPageConfig: (launchPageConfig: LaunchPageConfig) -> Unit,
     onchangeThemeBrandConfig: (themeBrandConfig: ThemeBrandConfig) -> Unit,
     onChangeDarkThemeConfig: (darkThemeConfig: DarkThemeConfig) -> Unit,
-    onchangeUseDynamicColor: (useDynamicColor: Boolean) -> Unit,
-    onNavigateToLibraries: () -> Unit,
-    onNavigateToAbout: () -> Unit
+    onchangeUseDynamicColor: (useDynamicColor: Boolean) -> Unit
 ) {
     val configuration = LocalConfiguration.current
     val infiniteTransition = rememberInfiniteTransition(label = "infiniteTransition")
@@ -122,7 +122,7 @@ fun SettingsDialog(
                                 modifier = Modifier
                                     .size(32.dp)
                                     .graphicsLayer { rotationZ = angle },
-                                imageVector = OxygenIcons.Loading,
+                                imageVector = Loading,
                                 contentDescription = ""
                             )
                         }
@@ -132,14 +132,14 @@ fun SettingsDialog(
                         SettingsPanel(
                             settings = settingsUiState.settings,
                             supportDynamicColor = supportDynamicColor,
+                            onNavigateToLibraries = onNavigateToLibraries,
+                            onNavigateToAbout = onNavigateToAbout,
                             onDismiss = onDismiss,
                             onChangeLanguageConfig = onChangeLanguageConfig,
                             onChangeLaunchPageConfig = onChangeLaunchPageConfig,
                             onchangeThemeBrandConfig = onchangeThemeBrandConfig,
                             onChangeDarkThemeConfig = onChangeDarkThemeConfig,
-                            onchangeUseDynamicColor = onchangeUseDynamicColor,
-                            onNavigateToLibraries = onNavigateToLibraries,
-                            onNavigateToAbout = onNavigateToAbout
+                            onchangeUseDynamicColor = onchangeUseDynamicColor
                         )
                     }
                 }
@@ -162,14 +162,14 @@ fun SettingsDialog(
 private fun ColumnScope.SettingsPanel(
     settings: UserData,
     supportDynamicColor: Boolean,
+    onNavigateToLibraries: () -> Unit,
+    onNavigateToAbout: () -> Unit,
     onDismiss: () -> Unit,
     onChangeLanguageConfig: (languageConfig: LanguageConfig) -> Unit,
     onChangeLaunchPageConfig: (launchPageConfig: LaunchPageConfig) -> Unit,
     onchangeThemeBrandConfig: (themeBrandConfig: ThemeBrandConfig) -> Unit,
     onChangeDarkThemeConfig: (darkThemeConfig: DarkThemeConfig) -> Unit,
-    onchangeUseDynamicColor: (useDynamicColor: Boolean) -> Unit,
-    onNavigateToLibraries: () -> Unit,
-    onNavigateToAbout: () -> Unit
+    onchangeUseDynamicColor: (useDynamicColor: Boolean) -> Unit
 ) {
     DialogSectionTitle(text = stringResource(R.string.feature_settings_language))
     DialogSectionGroup {
@@ -275,15 +275,15 @@ private fun ColumnScope.SettingsPanel(
 private fun SettingsDialogLoadingPreview() {
     OxygenTheme {
         SettingsDialog(
+            onNavigateToLibraries = {},
+            onNavigateToAbout = {},
             onDismiss = { },
             settingsUiState = SettingsUiState.Loading,
             onChangeLanguageConfig = {},
             onChangeLaunchPageConfig = {},
             onchangeThemeBrandConfig = {},
             onChangeDarkThemeConfig = {},
-            onchangeUseDynamicColor = {},
-            onNavigateToLibraries = {},
-            onNavigateToAbout = {}
+            onchangeUseDynamicColor = {}
         )
     }
 }
@@ -293,6 +293,8 @@ private fun SettingsDialogLoadingPreview() {
 private fun SettingDialogPreview() {
     OxygenTheme {
         SettingsDialog(
+            onNavigateToLibraries = {},
+            onNavigateToAbout = {},
             onDismiss = {},
             settingsUiState = SettingsUiState.Success(
                 UserData(
@@ -307,9 +309,7 @@ private fun SettingDialogPreview() {
             onChangeLaunchPageConfig = {},
             onchangeThemeBrandConfig = {},
             onChangeDarkThemeConfig = {},
-            onchangeUseDynamicColor = {},
-            onNavigateToLibraries = {},
-            onNavigateToAbout = {}
+            onchangeUseDynamicColor = {}
         )
     }
 }

@@ -12,14 +12,15 @@ import top.fatweb.oxygen.toolbox.ui.tools.ToolsRoute
 
 const val TOOLS_ROUTE = "tools_route"
 
-fun NavController.navigateToTools(navOptions: NavOptions) = navigate(TOOLS_ROUTE, navOptions)
+fun NavController.navigateToTools(navOptions: NavOptions) =
+    navigate(route = TOOLS_ROUTE, navOptions = navOptions)
 
 fun NavGraphBuilder.toolsScreen(
     isVertical: Boolean,
     searchValue: String,
-    onShowSnackbar: suspend (message: String, action: String?) -> Boolean,
     onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit,
-    onNavigateToToolStore: () -> Unit
+    onNavigateToToolStore: () -> Unit,
+    onShowSnackbar: suspend (message: String, action: String?) -> Boolean
 ) {
     composable(
         route = TOOLS_ROUTE,
@@ -52,9 +53,9 @@ fun NavGraphBuilder.toolsScreen(
     ) {
         ToolsRoute(
             searchValue = searchValue,
-            onShowSnackbar = onShowSnackbar,
             onNavigateToToolView = onNavigateToToolView,
-            onNavigateToToolStore = onNavigateToToolStore
+            onNavigateToToolStore = onNavigateToToolStore,
+            onShowSnackbar = onShowSnackbar
         )
     }
 }

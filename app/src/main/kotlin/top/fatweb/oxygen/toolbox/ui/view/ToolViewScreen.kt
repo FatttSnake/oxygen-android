@@ -52,9 +52,9 @@ internal fun ToolViewRoute(
 
     ToolViewScreen(
         modifier = modifier,
+        toolViewUiState = toolViewUiState,
         isPreview = isPreview,
-        onBackClick = onBackClick,
-        toolViewUiState = toolViewUiState
+        onBackClick = onBackClick
     )
 }
 
@@ -63,9 +63,9 @@ internal fun ToolViewRoute(
 @Composable
 internal fun ToolViewScreen(
     modifier: Modifier = Modifier,
+    toolViewUiState: ToolViewUiState,
     isPreview: Boolean,
-    onBackClick: () -> Unit,
-    toolViewUiState: ToolViewUiState
+    onBackClick: () -> Unit
 ) {
 
     val infiniteTransition = rememberInfiniteTransition(label = "infiniteTransition")
@@ -73,7 +73,7 @@ internal fun ToolViewScreen(
     Scaffold(
         modifier = Modifier,
         containerColor = Color.Transparent,
-        contentWindowInsets = WindowInsets(0, 0, 0, 0)
+        contentWindowInsets = WindowInsets(left = 0, top = 0, right = 0, bottom = 0)
     ) { padding ->
         Column(
             modifier
@@ -119,14 +119,14 @@ internal fun ToolViewScreen(
                             initialValue = 0F,
                             targetValue = 360F,
                             animationSpec = infiniteRepeatable(
-                                animation = tween(800, easing = Ease),
+                                animation = tween(durationMillis = 800, easing = Ease),
                             ), label = "angle"
                         )
                         Icon(
                             modifier = Modifier
                                 .size(32.dp)
                                 .graphicsLayer { rotationZ = angle },
-                            imageVector = OxygenIcons.Loading,
+                            imageVector = Loading,
                             contentDescription = ""
                         )
                     }

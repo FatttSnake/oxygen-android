@@ -78,26 +78,26 @@ internal fun ToolStoreRoute(
 
     ToolStoreScreen(
         modifier = modifier,
-        onNavigateToToolView = onNavigateToToolView,
         toolStorePagingItems = toolStorePagingItems,
+        installInfo = installInfo,
+        onNavigateToToolView = onNavigateToToolView,
         onChangeInstallStatus = viewModel::changeInstallInfo,
         onChangeInstallType = {
             viewModel.changeInstallInfo(type = it)
         },
-        onInstallTool = viewModel::installTool,
-        installInfo = installInfo
+        onInstallTool = viewModel::installTool
     )
 }
 
 @Composable
 internal fun ToolStoreScreen(
     modifier: Modifier = Modifier,
-    onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit,
     toolStorePagingItems: LazyPagingItems<ToolEntity>,
+    installInfo: ToolStoreUiState.InstallInfo,
+    onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit,
     onChangeInstallStatus: (status: ToolStoreUiState.InstallInfo.Status) -> Unit,
     onChangeInstallType: (type: ToolStoreUiState.InstallInfo.Type) -> Unit,
-    onInstallTool: (installTool: ToolEntity) -> Unit,
-    installInfo: ToolStoreUiState.InstallInfo
+    onInstallTool: (installTool: ToolEntity) -> Unit
 ) {
     val isToolLoading =
         toolStorePagingItems.loadState.refresh is LoadState.Loading
@@ -112,7 +112,11 @@ internal fun ToolStoreScreen(
 
     val infiniteTransition = rememberInfiniteTransition(label = "infiniteTransition")
 
-    var installTool by remember { mutableStateOf(ToolEntity("Unknown", "Unknown", "Unknown")) }
+    var installTool by remember { mutableStateOf(ToolEntity(
+        toolId = "Unknown",
+        authorUsername = "Unknown",
+        ver = "Unknown"
+    )) }
 
     Box(
         modifier.fillMaxSize()
@@ -137,7 +141,7 @@ internal fun ToolStoreScreen(
             )
 
             item(span = StaggeredGridItemSpan.FullLine) {
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(Modifier.height(8.dp))
                 Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
             }
         }
@@ -152,14 +156,14 @@ internal fun ToolStoreScreen(
                     initialValue = 0F,
                     targetValue = 360F,
                     animationSpec = infiniteRepeatable(
-                        animation = tween(800, easing = Ease),
+                        animation = tween(durationMillis = 800, easing = Ease),
                     ), label = "angle"
                 )
                 Icon(
                     modifier = Modifier
                         .size(32.dp)
                         .graphicsLayer { rotationZ = angle },
-                    imageVector = OxygenIcons.Loading,
+                    imageVector = Loading,
                     contentDescription = ""
                 )
             }
@@ -171,7 +175,8 @@ internal fun ToolStoreScreen(
                 .windowInsetsPadding(WindowInsets.systemBars)
                 .padding(horizontal = 2.dp)
                 .align(Alignment.CenterEnd),
-            state = scrollbarState, orientation = Orientation.Vertical,
+            state = scrollbarState,
+            orientation = Orientation.Vertical,
             onThumbMoved = state.rememberDraggableScroller(itemsAvailable = itemsAvailable)
         )
     }
@@ -242,7 +247,7 @@ private fun InstallAlertDialog(
                             }
                         )
                     )
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Spacer(Modifier.width(4.dp))
                     Text(
                         text = stringResource(
                             when (type) {
@@ -296,7 +301,7 @@ private fun InstallAlertDialog(
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 CircularProgressIndicator()
-                                Spacer(modifier = Modifier.height(16.dp))
+                                Spacer(Modifier.height(16.dp))
                                 Text(
                                     text = stringResource(
                                         when (type) {

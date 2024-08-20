@@ -11,7 +11,7 @@ import top.fatweb.oxygen.toolbox.ui.about.LibrariesRoute
 const val LIBRARIES_ROUTE = "libraries_route"
 
 fun NavController.navigateToLibraries(navOptions: NavOptions? = null) =
-    navigate(LIBRARIES_ROUTE, navOptions)
+    navigate(route = LIBRARIES_ROUTE, navOptions = navOptions)
 
 fun NavGraphBuilder.librariesScreen(
     onBackClick: () -> Unit

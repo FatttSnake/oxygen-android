@@ -23,7 +23,10 @@ internal class ToolStorePagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ToolEntity> {
         return try {
             val currentPage = params.key ?: 1
-            val (_, success, msg, data) = oxygenNetworkDataSource.getStore(searchValue, currentPage)
+            val (_, success, msg, data) = oxygenNetworkDataSource.getStore(
+                searchValue = searchValue,
+                currentPage = currentPage
+            )
 
             if (!success) {
                 return LoadResult.Error(RuntimeException(msg))
@@ -33,8 +36,8 @@ internal class ToolStorePagingSource(
             LoadResult.Page(
                 data = records.map(ToolVo::asExternalModel).map { toolEntity ->
                     toolDao.selectToolByUsernameAndToolId(
-                        toolEntity.authorUsername,
-                        toolEntity.toolId
+                        username = toolEntity.authorUsername,
+                        toolId = toolEntity.toolId
                     ).first()?.let {
                         if (it.id == toolEntity.id) {
                             it
@@ -52,5 +55,4 @@ internal class ToolStorePagingSource(
             LoadResult.Error(e)
         }
     }
-
 }

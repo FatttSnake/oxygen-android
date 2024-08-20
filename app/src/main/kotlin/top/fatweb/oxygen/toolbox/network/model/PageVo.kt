@@ -16,10 +16,11 @@ data class PageVo<T>(
     val records: List<T>
 )
 
-fun <T, R> PageVo<T>.asExternalModel(block: (T) -> R): Page<R> = Page(
-    total = total,
-    pages = pages,
-    size = size,
-    current = current,
-    records = records.map(block)
-)
+fun <T, R> PageVo<T>.asExternalModel(block: (T) -> R): Page<R> =
+    Page(
+        total = total,
+        pages = pages,
+        size = size,
+        current = current,
+        records = records.map(block)
+    )

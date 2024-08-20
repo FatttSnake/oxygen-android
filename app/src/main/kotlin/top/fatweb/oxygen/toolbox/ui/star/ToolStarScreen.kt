@@ -118,7 +118,7 @@ internal fun StarScreen(
                         modifier = Modifier
                             .size(32.dp)
                             .graphicsLayer { rotationZ = angle },
-                        imageVector = OxygenIcons.Loading,
+                        imageVector = Loading,
                         contentDescription = ""
                     )
                 }
@@ -152,8 +152,8 @@ internal fun StarScreen(
                     )
 
                     item(span = StaggeredGridItemSpan.FullLine) {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+                        Spacer(Modifier.height(8.dp))
+                        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
                     }
                 }
             }
@@ -173,8 +173,8 @@ internal fun StarScreen(
 
     if (isShowMenu && selectedTool != null) {
         ToolMenu(
-            onDismiss = { isShowMenu = false },
             selectedTool = selectedTool!!,
+            onDismiss = { isShowMenu = false },
             onUnstar = {
                 isShowMenu = false
                 onUnstar(selectedTool!!)
@@ -207,8 +207,8 @@ private fun LazyStaggeredGridScope.toolsPanel(
 @Composable
 private fun ToolMenu(
     modifier: Modifier = Modifier,
-    onDismiss: () -> Unit,
     selectedTool: ToolEntity,
+    onDismiss: () -> Unit,
     onUnstar: () -> Unit
 ) {
     ModalBottomSheet(onDismissRequest = onDismiss, dragHandle = {}) {
@@ -217,7 +217,7 @@ private fun ToolMenu(
         ){
             DialogTitle(text = selectedTool.name)
             HorizontalDivider()
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(Modifier.height(4.dp))
             DialogSectionGroup {
                 DialogClickerRow(
                     icon = OxygenIcons.StarBorder,
