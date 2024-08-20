@@ -1,4 +1,4 @@
-package top.fatweb.oxygen.toolbox.ui.tool
+package top.fatweb.oxygen.toolbox.ui.tools
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

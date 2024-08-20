@@ -1,4 +1,4 @@
-package top.fatweb.oxygen.toolbox.ui.tool
+package top.fatweb.oxygen.toolbox.ui.view
 
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
+import timber.log.Timber
 import top.fatweb.oxygen.toolbox.model.Result
 import top.fatweb.oxygen.toolbox.navigation.ToolViewArgs
 import top.fatweb.oxygen.toolbox.repository.tool.StoreRepository
@@ -85,7 +86,7 @@ private fun toolViewUiState(
 
                             is Result.Loading -> ToolViewUiState.Loading
                             is Result.Error -> {
-                                Log.e("TAG", "toolViewUiState: can not load tool", it.exception)
+                                Timber.e("Can not load tool", it.exception)
 
                                 ToolViewUiState.Error
                             }

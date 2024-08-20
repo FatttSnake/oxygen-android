@@ -1,4 +1,4 @@
-package top.fatweb.oxygen.toolbox.ui.tool
+package top.fatweb.oxygen.toolbox.ui.store
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle

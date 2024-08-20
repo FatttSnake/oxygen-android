@@ -8,7 +8,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import top.fatweb.oxygen.toolbox.ui.tool.ToolStoreRoute
+import top.fatweb.oxygen.toolbox.ui.store.ToolStoreRoute
 
 const val TOOL_STORE_ROUTE = "tool_store_route"
 

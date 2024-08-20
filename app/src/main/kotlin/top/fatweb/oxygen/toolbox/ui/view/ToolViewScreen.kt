@@ -1,4 +1,4 @@
-package top.fatweb.oxygen.toolbox.ui.tool
+package top.fatweb.oxygen.toolbox.ui.view
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.core.Ease

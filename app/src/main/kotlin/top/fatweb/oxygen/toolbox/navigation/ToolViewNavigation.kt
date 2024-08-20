@@ -7,7 +7,7 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import top.fatweb.oxygen.toolbox.ui.tool.ToolViewRoute
+import top.fatweb.oxygen.toolbox.ui.view.ToolViewRoute
 import java.net.URLDecoder
 import java.net.URLEncoder
 import kotlin.text.Charsets.UTF_8

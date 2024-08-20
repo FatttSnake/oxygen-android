@@ -1,4 +1,4 @@
-package top.fatweb.oxygen.toolbox.ui.tool
+package top.fatweb.oxygen.toolbox.ui.tools
 
 import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.animation.core.Ease
