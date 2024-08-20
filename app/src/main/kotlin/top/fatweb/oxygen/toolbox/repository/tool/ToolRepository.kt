@@ -8,6 +8,8 @@ interface ToolRepository {
 
     fun getAllToolsStream(searchValue: String): Flow<List<ToolEntity>>
 
+    fun getStarToolsStream(searchValue: String): Flow<List<ToolEntity>>
+
     fun getToolById(id: Long): Flow<ToolEntity?>
 
     fun getToolByUsernameAndToolId(username: String, toolId: String): Flow<ToolEntity?>

@@ -32,6 +32,15 @@ interface ToolDao {
     fun selectAllTools(searchValue: String): Flow<List<ToolEntity>>
 
     @Query("SELECT * FROM tools " +
+            "WHERE isStar = 1 " +
+            "AND (:searchValue = '' " +
+            "OR name LIKE '%' || :searchValue || '%' COLLATE NOCASE " +
+            "OR keywords LIKE '%\"%' || :searchValue || '%\"%' COLLATE NOCASE" +
+            ") " +
+            "ORDER BY updateTime DESC")
+    fun selectStarTools(searchValue: String): Flow<List<ToolEntity>>
+
+    @Query("SELECT * FROM tools " +
             "WHERE authorUsername = :username " +
             "and toolId = :toolId LIMIT 1")
     fun selectToolByUsernameAndToolId(username: String, toolId: String): Flow<ToolEntity?>

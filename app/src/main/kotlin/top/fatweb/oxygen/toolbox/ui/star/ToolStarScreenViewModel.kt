@@ -1,4 +1,4 @@
-package top.fatweb.oxygen.toolbox.ui.tools
+package top.fatweb.oxygen.toolbox.ui.star
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -17,56 +17,43 @@ import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
-class ToolsScreenViewModel @Inject constructor(
+class StarScreenViewModel @Inject constructor(
     private val toolRepository: ToolRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val searchValue = savedStateHandle.getStateFlow(SEARCH_VALUE, "")
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val toolsScreenUiState: StateFlow<ToolsScreenUiState> =
+    val starScreenUiState: StateFlow<StarScreenUiState> =
         searchValue.flatMapLatest { searchValue ->
-            toolRepository.getAllToolsStream(searchValue).map {
+            toolRepository.getStarToolsStream(searchValue).map {
                 if (it.isEmpty()) {
-                    ToolsScreenUiState.Nothing
+                    StarScreenUiState.Nothing
                 } else {
-                    ToolsScreenUiState.Success(it)
+                    StarScreenUiState.Success(it)
                 }
             }
         }.stateIn(
             scope = viewModelScope,
-            initialValue = ToolsScreenUiState.Loading,
+            initialValue = StarScreenUiState.Loading,
             started = SharingStarted.WhileSubscribed(5.seconds.inWholeMilliseconds)
         )
-
 
     fun onSearchValueChange(value: String) {
         savedStateHandle[SEARCH_VALUE] = value
     }
 
-    fun uninstall(tool: ToolEntity) {
+    fun unstar(tool: ToolEntity) {
         viewModelScope.launch {
-            toolRepository.removeTool(tool)
-        }
-    }
-
-    fun undo(tool: ToolEntity) {
-        viewModelScope.launch {
-            toolRepository.saveTool(tool)
-        }
-    }
-
-    fun changeStar(tool: ToolEntity, star: Boolean) {
-        viewModelScope.launch {
-            toolRepository.updateTool(tool.copy(isStar = star))
+            toolRepository.updateTool(tool.copy(isStar = false))
         }
     }
 }
 
-sealed interface ToolsScreenUiState {
-    data object Loading : ToolsScreenUiState
-    data object Nothing : ToolsScreenUiState
-    data class Success(val tools: List<ToolEntity>) : ToolsScreenUiState
+sealed interface StarScreenUiState {
+    data object Loading : StarScreenUiState
+    data object Nothing : StarScreenUiState
+    data class Success(val tools: List<ToolEntity>) : StarScreenUiState
 }
 
 private const val SEARCH_VALUE = "searchValue"

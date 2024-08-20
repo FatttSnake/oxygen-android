@@ -1,4 +1,4 @@
-package top.fatweb.oxygen.toolbox.ui.tools
+package top.fatweb.oxygen.toolbox.ui.star
 
 import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.animation.core.Ease
@@ -34,23 +34,19 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.coroutines.launch
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.Loading
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
@@ -62,53 +58,38 @@ import top.fatweb.oxygen.toolbox.ui.component.ToolCard
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.DraggableScrollbar
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.rememberDraggableScroller
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.scrollbarState
-import top.fatweb.oxygen.toolbox.ui.util.ResourcesUtils
 
 @Composable
-internal fun ToolsRoute(
+internal fun StarRoute(
     modifier: Modifier = Modifier,
-    viewModel: ToolsScreenViewModel = hiltViewModel(),
+    viewModel: StarScreenViewModel = hiltViewModel(),
     searchValue: String,
-    onShowSnackbar: suspend (message: String, action: String?) -> Boolean,
-    onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit,
-    onNavigateToToolStore: () -> Unit
+    onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit
 ) {
-    val toolsScreenUiStateState by viewModel.toolsScreenUiState.collectAsStateWithLifecycle()
+    val starScreenUiState by viewModel.starScreenUiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(searchValue) {
         viewModel.onSearchValueChange(searchValue)
     }
 
-    ToolsScreen(
+    StarScreen(
         modifier = modifier,
-        onShowSnackbar = onShowSnackbar,
+        starScreenUiState = starScreenUiState,
         onNavigateToToolView = onNavigateToToolView,
-        onNavigateToToolStore = onNavigateToToolStore,
-        toolsScreenUiState = toolsScreenUiStateState,
-        onUninstall = viewModel::uninstall,
-        onUndo = viewModel::undo,
-        onChangeStar = viewModel::changeStar
+        onUnstar = viewModel::unstar
     )
 }
 
 @Composable
-internal fun ToolsScreen(
+internal fun StarScreen(
     modifier: Modifier = Modifier,
-    toolsScreenUiState: ToolsScreenUiState,
-    onShowSnackbar: suspend (message: String, action: String?) -> Boolean,
+    starScreenUiState: StarScreenUiState,
     onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit,
-    onNavigateToToolStore: () -> Unit,
-    onUninstall: (ToolEntity) -> Unit,
-    onUndo: (ToolEntity) -> Unit,
-    onChangeStar: (ToolEntity, Boolean) -> Unit
+    onUnstar: (ToolEntity) -> Unit
 ) {
-    val localContext = LocalContext.current
+    ReportDrawnWhen { starScreenUiState !is StarScreenUiState.Loading }
 
-    val scope = rememberCoroutineScope()
-
-    ReportDrawnWhen { toolsScreenUiState !is ToolsScreenUiState.Loading }
-
-    val itemsAvailable = howManyTools(toolsScreenUiState)
+    val itemsAvailable = howManyTools(starScreenUiState)
 
     val state = rememberLazyStaggeredGridState()
     val scrollbarState = state.scrollbarState(itemsAvailable = itemsAvailable)
@@ -121,9 +102,8 @@ internal fun ToolsScreen(
     Box(
         modifier.fillMaxSize()
     ) {
-
-        when (toolsScreenUiState) {
-            ToolsScreenUiState.Loading -> {
+        when (starScreenUiState) {
+            StarScreenUiState.Loading -> {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -131,7 +111,7 @@ internal fun ToolsScreen(
                 ) {
                     val angle by infiniteTransition.animateFloat(
                         initialValue = 0F, targetValue = 360F, animationSpec = infiniteRepeatable(
-                            animation = tween(800, easing = Ease),
+                            animation = tween(800, easing = Ease)
                         ), label = "angle"
                     )
                     Icon(
@@ -144,20 +124,17 @@ internal fun ToolsScreen(
                 }
             }
 
-            ToolsScreenUiState.Nothing -> {
+            StarScreenUiState.Nothing -> {
                 Column(
                     modifier = Modifier.fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Text(text = stringResource(R.string.feature_tools_no_tools_installed))
-                    TextButton(onClick = onNavigateToToolStore) {
-                        Text(text = stringResource(R.string.feature_tools_go_to_store))
-                    }
+                    Text(text = stringResource(R.string.feature_star_no_tools_starred))
                 }
             }
 
-            is ToolsScreenUiState.Success -> {
+            is StarScreenUiState.Success -> {
                 LazyVerticalStaggeredGrid(
                     columns = StaggeredGridCells.Adaptive(160.dp),
                     contentPadding = PaddingValues(16.dp),
@@ -165,9 +142,8 @@ internal fun ToolsScreen(
                     verticalItemSpacing = 24.dp,
                     state = state
                 ) {
-
                     toolsPanel(
-                        toolItems = toolsScreenUiState.tools,
+                        toolItems = starScreenUiState.tools,
                         onClick = onNavigateToToolView,
                         onLongClick = {
                             selectedTool = it
@@ -199,22 +175,9 @@ internal fun ToolsScreen(
         ToolMenu(
             onDismiss = { isShowMenu = false },
             selectedTool = selectedTool!!,
-            onUninstall = {
+            onUnstar = {
                 isShowMenu = false
-                onUninstall(selectedTool!!)
-                scope.launch {
-                    if (onShowSnackbar(
-                            ResourcesUtils.getString(localContext, R.string.core_uninstall_success),
-                            ResourcesUtils.getString(localContext, R.string.core_undo)
-                        )
-                    ) {
-                        onUndo(selectedTool!!)
-                    }
-                }
-            },
-            onChangeStar = {
-                isShowMenu = false
-                onChangeStar(selectedTool!!, it)
+                onUnstar(selectedTool!!)
             }
         )
     }
@@ -246,36 +209,29 @@ private fun ToolMenu(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
     selectedTool: ToolEntity,
-    onUninstall: () -> Unit,
-    onChangeStar: (Boolean) -> Unit
+    onUnstar: () -> Unit
 ) {
     ModalBottomSheet(onDismissRequest = onDismiss, dragHandle = {}) {
         Column(
             modifier = modifier.padding(16.dp)
-        ) {
+        ){
             DialogTitle(text = selectedTool.name)
             HorizontalDivider()
             Spacer(modifier = Modifier.height(4.dp))
             DialogSectionGroup {
                 DialogClickerRow(
-                    icon = OxygenIcons.Delete,
-                    text = stringResource(R.string.core_uninstall),
-                    onClick = onUninstall
-                )
-                DialogClickerRow(
-                    icon = if (selectedTool.isStar) OxygenIcons.StarBorder else OxygenIcons.Star,
-                    text = stringResource(if (selectedTool.isStar) R.string.core_unstar else R.string.core_star),
-                    onClick = { onChangeStar(!selectedTool.isStar) }
+                    icon = OxygenIcons.StarBorder,
+                    text = stringResource(R.string.core_unstar),
+                    onClick = onUnstar
                 )
             }
         }
     }
 }
 
-
 @Composable
-private fun howManyTools(toolsScreenUiState: ToolsScreenUiState) =
-    when (toolsScreenUiState) {
-        ToolsScreenUiState.Loading, ToolsScreenUiState.Nothing -> 0
-        is ToolsScreenUiState.Success -> toolsScreenUiState.tools.size
+private fun howManyTools(starScreenUiState: StarScreenUiState) =
+    when (starScreenUiState) {
+        StarScreenUiState.Loading, StarScreenUiState.Nothing -> 0
+        is StarScreenUiState.Success -> starScreenUiState.tools.size
     }

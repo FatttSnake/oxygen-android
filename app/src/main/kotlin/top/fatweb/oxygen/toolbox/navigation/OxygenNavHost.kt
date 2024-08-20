@@ -45,7 +45,9 @@ fun OxygenNavHost(
             onBackClick = navController::popBackStack
         )
         starScreen(
-            isVertical = isVertical
+            isVertical = isVertical,
+            searchValue = searchValue,
+            onNavigateToToolView = navController::navigateToToolView
         )
     }
 }

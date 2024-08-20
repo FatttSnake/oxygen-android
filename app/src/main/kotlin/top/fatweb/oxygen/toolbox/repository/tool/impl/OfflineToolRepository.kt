@@ -17,6 +17,9 @@ class OfflineToolRepository @Inject constructor(
     override fun getAllToolsStream(searchValue: String): Flow<List<ToolEntity>> =
         toolDao.selectAllTools(searchValue)
 
+    override fun getStarToolsStream(searchValue: String): Flow<List<ToolEntity>> =
+        toolDao.selectStarTools(searchValue)
+
     override fun getToolById(id: Long): Flow<ToolEntity?> =
         toolDao.selectToolById(id)
 

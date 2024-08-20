@@ -18,6 +18,8 @@
     <string name="core_upgrading">更新中……</string>
     <string name="core_uninstall">卸载</string>
     <string name="core_uninstall_success">卸载成功</string>
+    <string name="core_star">收藏</string>
+    <string name="core_unstar">取消收藏</string>
     <string name="core_cancel">取消</string>
     <string name="core_undo">撤消</string>
 
@@ -44,6 +46,7 @@
     <string name="feature_tool_view_preview_suffix">%1$s （预览）</string>
 
     <string name="feature_star_title">收藏</string>
+    <string name="feature_star_no_tools_starred">暂无工具已收藏</string>
 
     <string name="feature_settings_title">设置</string>
     <string name="feature_settings_language">语言</string>

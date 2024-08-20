@@ -15,7 +15,9 @@ const val STAR_ROUTE = "star_route"
 fun NavController.navigateToStar(navOptions: NavOptions) = navigate(STAR_ROUTE, navOptions)
 
 fun NavGraphBuilder.starScreen(
-    isVertical: Boolean
+    isVertical: Boolean,
+    searchValue: String,
+    onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit
 ) {
     composable(
         route = STAR_ROUTE,
@@ -38,6 +40,9 @@ fun NavGraphBuilder.starScreen(
             }
         }
     ) {
-        StarRoute()
+        StarRoute(
+            searchValue = searchValue,
+            onNavigateToToolView = onNavigateToToolView
+        )
     }
 }

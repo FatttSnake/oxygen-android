@@ -17,6 +17,8 @@
     <string name="core_upgrading">Upgrading…</string>
     <string name="core_uninstall">Uninstall</string>
     <string name="core_uninstall_success">Uninstalled successfully</string>
+    <string name="core_star">Star</string>
+    <string name="core_unstar">Unstar</string>
     <string name="core_cancel">Cancel</string>
     <string name="core_undo">Undo</string>
 
@@ -43,6 +45,7 @@
     <string name="feature_tool_view_preview_suffix">%1$s (Preview)</string>
 
     <string name="feature_star_title">Star</string>
+    <string name="feature_star_no_tools_starred">No tools starred yet</string>
 
     <string name="feature_settings_title">Settings</string>
     <string name="feature_settings_language">Language</string>
