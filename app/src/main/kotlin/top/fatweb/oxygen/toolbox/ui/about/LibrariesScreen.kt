@@ -41,6 +41,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -107,12 +108,18 @@ internal fun LibrariesScreen(
     var dialogContent by remember { mutableStateOf("") }
     var dialogUrl by remember { mutableStateOf("") }
 
-    val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    var canScroll by remember { mutableStateOf(true) }
+    val topAppBarScrollBehavior =
+        if (canScroll) TopAppBarDefaults.enterAlwaysScrollBehavior() else TopAppBarDefaults.pinnedScrollBehavior()
 
     val infiniteTransition = rememberInfiniteTransition(label = "infiniteTransition")
 
     var activeSearch by remember { mutableStateOf(false) }
     var searchValue by remember { mutableStateOf("") }
+
+    LaunchedEffect(activeSearch) {
+        canScroll = !activeSearch
+    }
 
     Scaffold(
         modifier = Modifier

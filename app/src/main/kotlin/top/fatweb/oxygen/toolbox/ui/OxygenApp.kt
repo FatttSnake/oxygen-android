@@ -80,11 +80,17 @@ fun OxygenApp(appState: OxygenAppState) {
 
             val noConnectMessage = stringResource(R.string.core_no_connect)
 
-            val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+            var canScroll by remember { mutableStateOf(true) }
+            val topAppBarScrollBehavior =
+                if (canScroll) TopAppBarDefaults.enterAlwaysScrollBehavior() else TopAppBarDefaults.pinnedScrollBehavior()
 
             var activeSearch by remember { mutableStateOf(false) }
             var searchValue by remember { mutableStateOf("") }
             var searchCount by remember { mutableIntStateOf(0) }
+
+            LaunchedEffect(activeSearch) {
+                canScroll = !activeSearch
+            }
 
             LaunchedEffect(destination) {
                 activeSearch = false
@@ -194,20 +200,20 @@ fun OxygenApp(appState: OxygenAppState) {
 
                         OxygenNavHost(
                             appState = appState,
-                            onShowSnackbar = { message, action ->
-                                snackbarHostState.showSnackbar(
-                                    message = message,
-                                    actionLabel = action,
-                                    duration = SnackbarDuration.Short
-                                ) == SnackbarResult.ActionPerformed
-                            },
                             startDestination = when (appState.launchPageConfig) {
                                 LaunchPageConfig.Tools -> TOOLS_ROUTE
                                 LaunchPageConfig.Star -> STAR_ROUTE
                             },
                             isVertical = appState.shouldShowBottomBar,
                             searchValue = searchValue,
-                            searchCount = searchCount
+                            searchCount = searchCount,
+                            onShowSnackbar = { message, action ->
+                                snackbarHostState.showSnackbar(
+                                    message = message,
+                                    actionLabel = action,
+                                    duration = SnackbarDuration.Short
+                                ) == SnackbarResult.ActionPerformed
+                            }
                         )
                     }
                 }
