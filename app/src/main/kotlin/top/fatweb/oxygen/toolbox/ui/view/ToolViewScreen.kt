@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -31,7 +32,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kevinnzou.web.WebView
@@ -87,7 +87,6 @@ internal fun ToolViewScreen(
                 )
         ) {
             OxygenTopAppBar(
-                modifier = Modifier.zIndex(100f),
                 title = {
                     Text(
                         text = when (toolViewUiState) {
@@ -147,11 +146,14 @@ internal fun ToolViewScreen(
                         data = toolViewUiState.htmlData,
                     )
                     WebView(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .imePadding(),
                         state = webViewState,
                         onCreated = {
                             it.settings.javaScriptEnabled = true
-                        })
+                        }
+                    )
                 }
             }
         }
