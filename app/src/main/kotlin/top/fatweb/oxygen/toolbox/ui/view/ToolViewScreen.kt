@@ -1,6 +1,8 @@
 package top.fatweb.oxygen.toolbox.ui.view
 
 import android.annotation.SuppressLint
+import android.util.Log
+import android.webkit.ConsoleMessage
 import androidx.compose.animation.core.Ease
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -26,20 +28,25 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.kevinnzou.web.AccompanistWebChromeClient
 import com.kevinnzou.web.WebView
 import com.kevinnzou.web.rememberWebViewStateWithHTMLData
+import timber.log.Timber
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.Loading
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 import top.fatweb.oxygen.toolbox.ui.component.OxygenTopAppBar
+import top.fatweb.oxygen.toolbox.util.NativeWebApi
 
 @Composable
 internal fun ToolViewRoute(
@@ -67,6 +74,7 @@ internal fun ToolViewScreen(
     isPreview: Boolean,
     onBackClick: () -> Unit
 ) {
+    val context = LocalContext.current
 
     val infiniteTransition = rememberInfiniteTransition(label = "infiniteTransition")
 
@@ -150,8 +158,33 @@ internal fun ToolViewScreen(
                             .fillMaxSize()
                             .imePadding(),
                         state = webViewState,
+                        chromeClient = remember {
+                            object : AccompanistWebChromeClient() {
+                                override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
+                                    consoleMessage?.let {
+                                        Timber.tag("WebView").log(
+                                            priority = when (it.messageLevel()) {
+                                                ConsoleMessage.MessageLevel.TIP -> Log.VERBOSE
+                                                ConsoleMessage.MessageLevel.LOG -> Log.INFO
+                                                ConsoleMessage.MessageLevel.WARNING -> Log.WARN
+                                                ConsoleMessage.MessageLevel.ERROR -> Log.ERROR
+                                                else -> Log.DEBUG
+                                            },
+                                            message = "${it.message()} (${it.lineNumber()})"
+                                        )
+                                        return true
+                                    }
+                                    return false
+                                }
+                            }
+                        },
                         onCreated = {
                             it.settings.javaScriptEnabled = true
+                            it.settings.domStorageEnabled = true
+                            it.addJavascriptInterface(
+                                NativeWebApi(context = context, webView = it),
+                                "NativeApi"
+                            )
                         }
                     )
                 }
