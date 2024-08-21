@@ -21,6 +21,8 @@
     <string name="core_unstar">Unstar</string>
     <string name="core_cancel">Cancel</string>
     <string name="core_undo">Undo</string>
+    <string name="core_nothing">Nothing</string>
+    <string name="core_nothing_found">Nothing found</string>
 
     <string name="feature_store_title">Store</string>
     <string name="feature_store_install_tool">Install Tool</string>

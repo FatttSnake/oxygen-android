@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.only
@@ -194,11 +195,25 @@ internal fun LibrariesScreen(
                     }
 
                     LibrariesScreenUiState.Nothing -> {
-                        Text(text = "Nothing")
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(text = stringResource(R.string.core_nothing))
+                        }
                     }
 
                     LibrariesScreenUiState.NotFound -> {
-                        Text(text = "Not Found")
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(text = stringResource(R.string.core_nothing_found))
+                        }
                     }
 
                     is LibrariesScreenUiState.Success -> {

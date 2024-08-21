@@ -22,6 +22,8 @@
     <string name="core_unstar">取消收藏</string>
     <string name="core_cancel">取消</string>
     <string name="core_undo">撤消</string>
+    <string name="core_nothing">空空如也</string>
+    <string name="core_nothing_found">未找到相关内容</string>
 
     <string name="feature_store_title">商店</string>
     <string name="feature_store_install_tool">安装工具</string>
