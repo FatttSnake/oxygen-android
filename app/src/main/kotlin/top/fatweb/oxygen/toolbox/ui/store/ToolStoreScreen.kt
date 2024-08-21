@@ -80,6 +80,7 @@ internal fun ToolStoreRoute(
         modifier = modifier,
         toolStorePagingItems = toolStorePagingItems,
         installInfo = installInfo,
+        searchValue = searchValue,
         onNavigateToToolView = onNavigateToToolView,
         onChangeInstallStatus = viewModel::changeInstallInfo,
         onChangeInstallType = {
@@ -94,6 +95,7 @@ internal fun ToolStoreScreen(
     modifier: Modifier = Modifier,
     toolStorePagingItems: LazyPagingItems<ToolEntity>,
     installInfo: ToolStoreUiState.InstallInfo,
+    searchValue: String,
     onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit,
     onChangeInstallStatus: (status: ToolStoreUiState.InstallInfo.Status) -> Unit,
     onChangeInstallType: (type: ToolStoreUiState.InstallInfo.Type) -> Unit,
@@ -112,11 +114,15 @@ internal fun ToolStoreScreen(
 
     val infiniteTransition = rememberInfiniteTransition(label = "infiniteTransition")
 
-    var installTool by remember { mutableStateOf(ToolEntity(
-        toolId = "Unknown",
-        authorUsername = "Unknown",
-        ver = "Unknown"
-    )) }
+    var installTool by remember {
+        mutableStateOf(
+            ToolEntity(
+                toolId = "Unknown",
+                authorUsername = "Unknown",
+                ver = "Unknown"
+            )
+        )
+    }
 
     Box(
         modifier.fillMaxSize()
@@ -146,7 +152,7 @@ internal fun ToolStoreScreen(
             }
         }
 
-        if (toolStorePagingItems.loadState.refresh is LoadState.Loading || toolStorePagingItems.loadState.append is LoadState.Loading) {
+        if (toolStorePagingItems.loadState.refresh is LoadState.Loading) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -165,6 +171,21 @@ internal fun ToolStoreScreen(
                         .graphicsLayer { rotationZ = angle },
                     imageVector = Loading,
                     contentDescription = ""
+                )
+            }
+        }
+
+        if (itemsAvailable == 0 && !isToolLoading) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = stringResource(
+                        if (searchValue.isEmpty()) R.string.core_nothing
+                        else R.string.core_nothing_found
+                    )
                 )
             }
         }
@@ -349,11 +370,14 @@ private fun InstallAlertDialog(
                 when (status) {
                     ToolStoreUiState.InstallInfo.Status.Pending ->
                         TextButton(onClick = onInstallTool) {
-                            Text(text = stringResource(
-                                when (type) {
-                                    ToolStoreUiState.InstallInfo.Type.Install -> R.string.core_install
-                                    ToolStoreUiState.InstallInfo.Type.Upgrade -> R.string.core_upgrade
-                                }))
+                            Text(
+                                text = stringResource(
+                                    when (type) {
+                                        ToolStoreUiState.InstallInfo.Type.Install -> R.string.core_install
+                                        ToolStoreUiState.InstallInfo.Type.Upgrade -> R.string.core_upgrade
+                                    }
+                                )
+                            )
                         }
 
                     ToolStoreUiState.InstallInfo.Status.Success,
