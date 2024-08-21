@@ -19,11 +19,11 @@ fun NavGraphBuilder.librariesScreen(
     composable(
         route = LIBRARIES_ROUTE,
         enterTransition = {
-            slideInHorizontally(initialOffsetX = { fullWidth -> fullWidth })
+            slideInHorizontally { it }
         },
         popEnterTransition = null,
         popExitTransition = {
-            slideOutHorizontally(targetOffsetX = { fullWidth -> fullWidth })
+            slideOutHorizontally { it }
         }
     ) {
         LibrariesRoute(onBackClick = onBackClick)

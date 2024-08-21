@@ -26,8 +26,8 @@ fun NavGraphBuilder.toolStoreScreen(
         enterTransition = {
             when (initialState.destination.route) {
                 TOOLS_ROUTE, STAR_ROUTE ->
-                    if (isVertical) slideInHorizontally(initialOffsetX = { fullWidth -> -fullWidth })
-                    else slideInVertically(initialOffsetY = { fullHeight -> -fullHeight })
+                    if (isVertical) slideInHorizontally { -it }
+                    else slideInVertically { -it }
 
                 else -> null
             }
@@ -35,8 +35,8 @@ fun NavGraphBuilder.toolStoreScreen(
         exitTransition = {
             when (targetState.destination.route) {
                 TOOLS_ROUTE, STAR_ROUTE ->
-                    if (isVertical) slideOutHorizontally(targetOffsetX = { fullWidth -> -fullWidth })
-                    else slideOutVertically(targetOffsetY = { fullHeight -> -fullHeight })
+                    if (isVertical) slideOutHorizontally { -it }
+                    else slideOutVertically { -it }
 
                 else -> null
             }

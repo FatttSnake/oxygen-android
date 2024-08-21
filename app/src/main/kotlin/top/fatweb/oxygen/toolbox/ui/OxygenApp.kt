@@ -1,7 +1,6 @@
 package top.fatweb.oxygen.toolbox.ui
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -128,8 +127,8 @@ fun OxygenApp(appState: OxygenAppState) {
                 snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
                 bottomBar = {
                     AnimatedVisibility(
-                        visible = appState.shouldShowBottomBar && destination != null,
-                        enter = slideInVertically { it }) {
+                        visible = appState.shouldShowBottomBar && destination != null
+                    ) {
                         BottomAppBar(
                             windowInsets = WindowInsets(0)
                         ) {
@@ -153,7 +152,9 @@ fun OxygenApp(appState: OxygenAppState) {
                             )
                         )
                 ) {
-                    AnimatedVisibility(visible = appState.shouldShowNavRail && destination != null) {
+                    AnimatedVisibility(
+                        visible = appState.shouldShowNavRail && destination != null
+                    ) {
                         OxygenNavRail(
                             modifier = Modifier.safeDrawingPadding(),
                             destinations = appState.topLevelDestinations,
@@ -165,11 +166,13 @@ fun OxygenApp(appState: OxygenAppState) {
                     Column(
                         Modifier.fillMaxSize()
                     ) {
-                        if (destination != null) {
+                        AnimatedVisibility(
+                            visible = destination != null
+                        ) {
                             OxygenTopAppBar(
                                 scrollBehavior = topAppBarScrollBehavior,
                                 title = {
-                                    Text(text = stringResource(destination.titleTextId))
+                                    destination?.let { Text(text = stringResource(destination.titleTextId)) }
                                 },
                                 navigationIcon = OxygenIcons.Search,
                                 navigationIconContentDescription = stringResource(R.string.feature_settings_top_app_bar_navigation_icon_description),

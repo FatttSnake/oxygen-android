@@ -27,12 +27,12 @@ fun NavGraphBuilder.toolsScreen(
         enterTransition = {
             when (initialState.destination.route) {
                 TOOL_STORE_ROUTE ->
-                    if (isVertical) slideInHorizontally(initialOffsetX = { fullWidth -> fullWidth })
-                    else slideInVertically(initialOffsetY = { fullHeight -> fullHeight })
+                    if (isVertical) slideInHorizontally { it }
+                    else slideInVertically { it }
 
                 STAR_ROUTE ->
-                    if (isVertical) slideInHorizontally(initialOffsetX = { fullWidth -> -fullWidth })
-                    else slideInVertically(initialOffsetY = { fullHeight -> -fullHeight })
+                    if (isVertical) slideInHorizontally { -it }
+                    else slideInVertically { -it }
 
                 else -> null
             }
@@ -40,12 +40,12 @@ fun NavGraphBuilder.toolsScreen(
         exitTransition = {
             when (targetState.destination.route) {
                 TOOL_STORE_ROUTE ->
-                    if (isVertical) slideOutHorizontally(targetOffsetX = { fullWidth -> fullWidth })
-                    else slideOutVertically(targetOffsetY = { fullHeight -> fullHeight })
+                    if (isVertical) slideOutHorizontally { it }
+                    else slideOutVertically { it }
 
                 STAR_ROUTE ->
-                    if (isVertical) slideOutHorizontally(targetOffsetX = { fullWidth -> -fullWidth })
-                    else slideOutVertically(targetOffsetY = { fullHeight -> -fullHeight })
+                    if (isVertical) slideOutHorizontally { -it }
+                    else slideOutVertically { -it }
 
                 else -> null
             }

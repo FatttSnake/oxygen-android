@@ -20,11 +20,11 @@ fun NavGraphBuilder.aboutScreen(
     composable(
         route = ABOUT_ROUTE,
         enterTransition = {
-            slideInHorizontally(initialOffsetX = { fullWidth -> fullWidth })
+            slideInHorizontally { it }
         },
         popEnterTransition = null,
         popExitTransition = {
-            slideOutHorizontally(targetOffsetX = { fullWidth -> fullWidth })
+            slideOutHorizontally { it }
         }
     ) {
         AboutRoute(
