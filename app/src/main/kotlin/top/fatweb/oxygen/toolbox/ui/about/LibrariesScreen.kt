@@ -197,7 +197,8 @@ internal fun LibrariesScreen(
                     LibrariesScreenUiState.Nothing -> {
                         Column(
                             modifier = Modifier
-                                .fillMaxSize(),
+                                .fillMaxSize()
+                                .verticalScroll(state = rememberScrollState()),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
@@ -208,7 +209,8 @@ internal fun LibrariesScreen(
                     LibrariesScreenUiState.NotFound -> {
                         Column(
                             modifier = Modifier
-                                .fillMaxSize(),
+                                .fillMaxSize()
+                                .verticalScroll(state = rememberScrollState()),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
@@ -228,6 +230,8 @@ internal fun LibrariesScreen(
                         }
 
                         LazyVerticalStaggeredGrid(
+                            modifier = Modifier
+                                .fillMaxSize(),
                             columns = StaggeredGridCells.Adaptive(300.dp),
                             contentPadding = PaddingValues(16.dp),
                             horizontalArrangement = Arrangement.spacedBy(16.dp),

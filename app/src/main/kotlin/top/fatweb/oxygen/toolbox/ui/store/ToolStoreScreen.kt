@@ -128,6 +128,8 @@ internal fun ToolStoreScreen(
         modifier.fillMaxSize()
     ) {
         LazyVerticalStaggeredGrid(
+            modifier = Modifier
+                .fillMaxSize(),
             columns = StaggeredGridCells.Adaptive(160.dp),
             contentPadding = PaddingValues(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -177,7 +179,9 @@ internal fun ToolStoreScreen(
 
         if (itemsAvailable == 0 && !isToolLoading) {
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(state = rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {

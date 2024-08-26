@@ -33,9 +33,9 @@ class ToolStoreViewModel @Inject constructor(
     val storeData: Flow<PagingData<ToolEntity>> = combine(
         searchValue, currentPage, ::Pair
     ).flatMapLatest { (searchValue, currentPage) ->
-        storeRepository.getStore(searchValue, currentPage).cachedIn(
-            scope = viewModelScope
-        )
+        storeRepository
+            .getStore(searchValue, currentPage)
+            .cachedIn(viewModelScope)
     }
 
     fun onSearchValueChange(value: String) {

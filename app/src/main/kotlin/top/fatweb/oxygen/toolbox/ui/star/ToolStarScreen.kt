@@ -126,7 +126,9 @@ internal fun StarScreen(
 
             StarScreenUiState.Nothing -> {
                 Column(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(state = rememberScrollState()),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -136,6 +138,8 @@ internal fun StarScreen(
 
             is StarScreenUiState.Success -> {
                 LazyVerticalStaggeredGrid(
+                    modifier = Modifier
+                        .fillMaxSize(),
                     columns = StaggeredGridCells.Adaptive(160.dp),
                     contentPadding = PaddingValues(16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -214,7 +218,7 @@ private fun ToolMenu(
     ModalBottomSheet(onDismissRequest = onDismiss, dragHandle = {}) {
         Column(
             modifier = modifier.padding(16.dp)
-        ){
+        ) {
             DialogTitle(text = selectedTool.name)
             HorizontalDivider()
             Spacer(Modifier.height(4.dp))
