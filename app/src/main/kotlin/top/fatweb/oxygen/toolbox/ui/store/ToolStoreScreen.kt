@@ -1,11 +1,6 @@
 package top.fatweb.oxygen.toolbox.ui.store
 
 import androidx.activity.compose.ReportDrawnWhen
-import androidx.compose.animation.core.Ease
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
@@ -31,11 +25,16 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -45,7 +44,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -53,7 +53,6 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import top.fatweb.oxygen.toolbox.R
-import top.fatweb.oxygen.toolbox.icon.Loading
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
 import top.fatweb.oxygen.toolbox.ui.component.ToolCard
@@ -90,6 +89,7 @@ internal fun ToolStoreRoute(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ToolStoreScreen(
     modifier: Modifier = Modifier,
@@ -107,12 +107,24 @@ internal fun ToolStoreScreen(
 
     ReportDrawnWhen { !isToolLoading }
 
+    val pullToRefreshState = rememberPullToRefreshState()
+    LaunchedEffect(pullToRefreshState.isRefreshing) {
+        if (pullToRefreshState.isRefreshing) {
+            toolStorePagingItems.refresh()
+        }
+    }
+    LaunchedEffect(toolStorePagingItems.loadState.refresh) {
+        if (toolStorePagingItems.loadState.refresh is LoadState.Loading) {
+            pullToRefreshState.startRefresh()
+        } else {
+            pullToRefreshState.endRefresh()
+        }
+    }
+
     val itemsAvailable = toolStorePagingItems.itemCount
 
     val state = rememberLazyStaggeredGridState()
     val scrollbarState = state.scrollbarState(itemsAvailable = itemsAvailable)
-
-    val infiniteTransition = rememberInfiniteTransition(label = "infiniteTransition")
 
     var installTool by remember {
         mutableStateOf(
@@ -125,7 +137,10 @@ internal fun ToolStoreScreen(
     }
 
     Box(
-        modifier.fillMaxSize()
+        modifier
+            .fillMaxSize()
+            .clipToBounds()
+            .nestedScroll(pullToRefreshState.nestedScrollConnection)
     ) {
         LazyVerticalStaggeredGrid(
             modifier = Modifier
@@ -154,28 +169,11 @@ internal fun ToolStoreScreen(
             }
         }
 
-        if (toolStorePagingItems.loadState.refresh is LoadState.Loading) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                val angle by infiniteTransition.animateFloat(
-                    initialValue = 0F,
-                    targetValue = 360F,
-                    animationSpec = infiniteRepeatable(
-                        animation = tween(durationMillis = 800, easing = Ease),
-                    ), label = "angle"
-                )
-                Icon(
-                    modifier = Modifier
-                        .size(32.dp)
-                        .graphicsLayer { rotationZ = angle },
-                    imageVector = Loading,
-                    contentDescription = ""
-                )
-            }
-        }
+        PullToRefreshContainer(
+            modifier = Modifier
+                .align(Alignment.TopCenter),
+            state = pullToRefreshState,
+        )
 
         if (itemsAvailable == 0 && !isToolLoading) {
             Column(
