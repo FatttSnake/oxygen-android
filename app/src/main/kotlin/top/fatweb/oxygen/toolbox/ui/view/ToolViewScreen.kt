@@ -3,11 +3,6 @@ package top.fatweb.oxygen.toolbox.ui.view
 import android.annotation.SuppressLint
 import android.util.Log
 import android.webkit.ConsoleMessage
-import androidx.compose.animation.core.Ease
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -19,10 +14,8 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -32,10 +25,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kevinnzou.web.AccompanistWebChromeClient
@@ -43,8 +34,8 @@ import com.kevinnzou.web.WebView
 import com.kevinnzou.web.rememberWebViewStateWithHTMLData
 import timber.log.Timber
 import top.fatweb.oxygen.toolbox.R
-import top.fatweb.oxygen.toolbox.icon.Loading
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
+import top.fatweb.oxygen.toolbox.ui.component.Indicator
 import top.fatweb.oxygen.toolbox.ui.component.OxygenTopAppBar
 import top.fatweb.oxygen.toolbox.util.NativeWebApi
 
@@ -75,8 +66,6 @@ internal fun ToolViewScreen(
     onBackClick: () -> Unit
 ) {
     val context = LocalContext.current
-
-    val infiniteTransition = rememberInfiniteTransition(label = "infiniteTransition")
 
     Scaffold(
         modifier = Modifier,
@@ -117,26 +106,7 @@ internal fun ToolViewScreen(
             )
             when (toolViewUiState) {
                 ToolViewUiState.Loading -> {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        val angle by infiniteTransition.animateFloat(
-                            initialValue = 0F,
-                            targetValue = 360F,
-                            animationSpec = infiniteRepeatable(
-                                animation = tween(durationMillis = 800, easing = Ease),
-                            ), label = "angle"
-                        )
-                        Icon(
-                            modifier = Modifier
-                                .size(32.dp)
-                                .graphicsLayer { rotationZ = angle },
-                            imageVector = Loading,
-                            contentDescription = ""
-                        )
-                    }
+                    Indicator()
                 }
 
                 ToolViewUiState.Error -> {

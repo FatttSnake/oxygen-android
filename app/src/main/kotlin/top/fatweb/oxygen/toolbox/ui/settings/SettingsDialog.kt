@@ -1,39 +1,27 @@
 package top.fatweb.oxygen.toolbox.ui.settings
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Ease
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import top.fatweb.oxygen.toolbox.R
-import top.fatweb.oxygen.toolbox.icon.Loading
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 import top.fatweb.oxygen.toolbox.model.userdata.DarkThemeConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
@@ -44,6 +32,7 @@ import top.fatweb.oxygen.toolbox.ui.component.DialogChooserRow
 import top.fatweb.oxygen.toolbox.ui.component.DialogClickerRow
 import top.fatweb.oxygen.toolbox.ui.component.DialogSectionGroup
 import top.fatweb.oxygen.toolbox.ui.component.DialogSectionTitle
+import top.fatweb.oxygen.toolbox.ui.component.Indicator
 import top.fatweb.oxygen.toolbox.ui.theme.OxygenPreviews
 import top.fatweb.oxygen.toolbox.ui.theme.OxygenTheme
 import top.fatweb.oxygen.toolbox.ui.theme.supportsDynamicTheming
@@ -86,7 +75,6 @@ fun SettingsDialog(
     onchangeUseDynamicColor: (useDynamicColor: Boolean) -> Unit
 ) {
     val configuration = LocalConfiguration.current
-    val infiniteTransition = rememberInfiniteTransition(label = "infiniteTransition")
 
     AlertDialog(
         modifier = modifier
@@ -106,26 +94,7 @@ fun SettingsDialog(
             ) {
                 when (settingsUiState) {
                     SettingsUiState.Loading -> {
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            val angle by infiniteTransition.animateFloat(
-                                initialValue = 0F,
-                                targetValue = 360F,
-                                animationSpec = infiniteRepeatable(
-                                    animation = tween(800, easing = Ease),
-                                ), label = "angle"
-                            )
-                            Icon(
-                                modifier = Modifier
-                                    .size(32.dp)
-                                    .graphicsLayer { rotationZ = angle },
-                                imageVector = Loading,
-                                contentDescription = ""
-                            )
-                        }
+                        Indicator()
                     }
 
                     is SettingsUiState.Success -> {
