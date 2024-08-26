@@ -23,8 +23,7 @@ internal class NetworkStoreRepository @Inject constructor(
     private val toolDao: ToolDao
 ) : StoreRepository {
     override suspend fun getStore(
-        searchValue: String,
-        currentPage: Int
+        searchValue: String
     ): Flow<PagingData<ToolEntity>> =
         Pager(
             config = PagingConfig(pageSize = PAGE_SIZE),

@@ -9,8 +9,9 @@ import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import top.fatweb.oxygen.toolbox.model.Result
@@ -18,6 +19,7 @@ import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
 import top.fatweb.oxygen.toolbox.repository.tool.StoreRepository
 import top.fatweb.oxygen.toolbox.repository.tool.ToolRepository
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class ToolStoreViewModel @Inject constructor(
@@ -26,17 +28,20 @@ class ToolStoreViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val searchValue = savedStateHandle.getStateFlow(SEARCH_VALUE, "")
-    private val currentPage = savedStateHandle.getStateFlow(CURRENT_PAGE, 1)
     val installInfo = savedStateHandle.getStateFlow(INSTALL_INFO, ToolStoreUiState.InstallInfo())
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val storeData: Flow<PagingData<ToolEntity>> = combine(
-        searchValue, currentPage, ::Pair
-    ).flatMapLatest { (searchValue, currentPage) ->
-        storeRepository
-            .getStore(searchValue, currentPage)
-            .cachedIn(viewModelScope)
-    }
+    val storeData: Flow<PagingData<ToolEntity>> =
+        searchValue.flatMapLatest { searchValue ->
+            storeRepository
+                .getStore(searchValue)
+                .cachedIn(viewModelScope)
+        }
+            .stateIn(
+                scope = viewModelScope,
+                initialValue = PagingData.empty(),
+                started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5.seconds.inWholeMilliseconds)
+            )
 
     fun onSearchValueChange(value: String) {
         savedStateHandle[SEARCH_VALUE] = value
@@ -103,5 +108,4 @@ data class ToolStoreUiState(
 }
 
 private const val SEARCH_VALUE = "searchValue"
-private const val CURRENT_PAGE = "currentPage"
 private const val INSTALL_INFO = "installInfo"
