@@ -380,4 +380,4 @@ fun ToolCardSkeleton(
     }
 }
 
-const val DEFAULT_TOOL_CARD_SKELETON_COUNT = 8
+const val DEFAULT_TOOL_CARD_SKELETON_COUNT = 20

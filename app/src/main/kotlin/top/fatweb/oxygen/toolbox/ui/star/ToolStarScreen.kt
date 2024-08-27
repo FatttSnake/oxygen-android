@@ -47,7 +47,6 @@ import top.fatweb.oxygen.toolbox.ui.component.DEFAULT_TOOL_CARD_SKELETON_COUNT
 import top.fatweb.oxygen.toolbox.ui.component.DialogClickerRow
 import top.fatweb.oxygen.toolbox.ui.component.DialogSectionGroup
 import top.fatweb.oxygen.toolbox.ui.component.DialogTitle
-import top.fatweb.oxygen.toolbox.ui.component.Indicator
 import top.fatweb.oxygen.toolbox.ui.component.ToolCard
 import top.fatweb.oxygen.toolbox.ui.component.ToolCardSkeleton
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.DraggableScrollbar
@@ -97,7 +96,6 @@ internal fun StarScreen(
     ) {
         when (starScreenUiState) {
             StarScreenUiState.Loading -> {
-                Indicator()
                 LazyVerticalStaggeredGrid(
                     modifier = Modifier
                         .fillMaxSize(),
