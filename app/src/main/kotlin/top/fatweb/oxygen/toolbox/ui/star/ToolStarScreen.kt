@@ -43,11 +43,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
+import top.fatweb.oxygen.toolbox.ui.component.DEFAULT_TOOL_CARD_SKELETON_COUNT
 import top.fatweb.oxygen.toolbox.ui.component.DialogClickerRow
 import top.fatweb.oxygen.toolbox.ui.component.DialogSectionGroup
 import top.fatweb.oxygen.toolbox.ui.component.DialogTitle
 import top.fatweb.oxygen.toolbox.ui.component.Indicator
 import top.fatweb.oxygen.toolbox.ui.component.ToolCard
+import top.fatweb.oxygen.toolbox.ui.component.ToolCardSkeleton
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.DraggableScrollbar
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.rememberDraggableScroller
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.scrollbarState
@@ -96,6 +98,24 @@ internal fun StarScreen(
         when (starScreenUiState) {
             StarScreenUiState.Loading -> {
                 Indicator()
+                LazyVerticalStaggeredGrid(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    columns = StaggeredGridCells.Adaptive(160.dp),
+                    contentPadding = PaddingValues(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalItemSpacing = 24.dp,
+                    state = state
+                ) {
+                    items(count = DEFAULT_TOOL_CARD_SKELETON_COUNT) {
+                        ToolCardSkeleton()
+                    }
+
+                    item(span = StaggeredGridItemSpan.FullLine) {
+                        Spacer(Modifier.height(8.dp))
+                        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+                    }
+                }
             }
 
             StarScreenUiState.Nothing -> {
@@ -210,6 +230,7 @@ private fun ToolMenu(
 @Composable
 private fun howManyTools(starScreenUiState: StarScreenUiState) =
     when (starScreenUiState) {
-        StarScreenUiState.Loading, StarScreenUiState.Nothing -> 0
+        StarScreenUiState.Loading -> DEFAULT_TOOL_CARD_SKELETON_COUNT
+        StarScreenUiState.Nothing -> 0
         is StarScreenUiState.Success -> starScreenUiState.tools.size
     }
