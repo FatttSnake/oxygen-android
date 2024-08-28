@@ -33,6 +33,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.valentinilk.shimmer.LocalShimmerTheme
 import com.valentinilk.shimmer.ShimmerBounds
@@ -207,10 +208,12 @@ private fun ToolInfo(
         Text(
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.ExtraBold,
+            textAlign = TextAlign.Center,
             text = toolName
         )
         Text(
             style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center,
             text = "ID: $toolId"
         )
         toolDesc?.let {
