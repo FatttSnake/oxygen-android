@@ -26,6 +26,10 @@
     <string name="core_nothing_found">未找到相关内容</string>
 
     <string name="feature_store_title">商店</string>
+    <string name="feature_store_retry">重试</string>
+    <string name="feature_store_load_error">⚠️ 无法加载商店内容，请稍后%1$s……</string>
+    <string name="feature_store_reload_error">⚠️ 重载失败，请稍后重试……</string>
+    <string name="feature_store_load_more_error">⚠️ 无法载入更多内容，请稍后%1$s……</string>
     <string name="feature_store_install_tool">安装工具</string>
     <string name="feature_store_ask_install">确定安装由用户 %1$s 提供的工具 %2$s 吗？</string>
     <string name="feature_store_install_success">安装成功</string>

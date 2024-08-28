@@ -48,7 +48,7 @@ internal class ToolStorePagingSource(
                         }
                     } ?: toolEntity
                 },
-                prevKey = if (currentPage == 0) null else currentPage - 1,
+                prevKey = if (currentPage == 1) null else currentPage - 1,
                 nextKey = if (currentPage < pages) currentPage + 1 else null
             )
         } catch (e: Throwable) {

@@ -1,5 +1,6 @@
 package top.fatweb.oxygen.toolbox.ui.store
 
+import android.widget.Toast
 import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
@@ -23,7 +24,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridScope
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
-import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -46,6 +46,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -55,10 +56,14 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
+import top.fatweb.oxygen.toolbox.ui.component.ClickableText
+import top.fatweb.oxygen.toolbox.ui.component.DEFAULT_TOOL_CARD_SKELETON_COUNT
 import top.fatweb.oxygen.toolbox.ui.component.ToolCard
+import top.fatweb.oxygen.toolbox.ui.component.ToolCardSkeleton
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.DraggableScrollbar
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.rememberDraggableScroller
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.scrollbarState
+import top.fatweb.oxygen.toolbox.ui.util.ResourcesUtils
 
 @Composable
 internal fun ToolStoreRoute(
@@ -101,9 +106,11 @@ internal fun ToolStoreScreen(
     onChangeInstallType: (type: ToolStoreUiState.InstallInfo.Type) -> Unit,
     onInstallTool: (installTool: ToolEntity) -> Unit
 ) {
+    val context = LocalContext.current
+
     val isToolLoading =
-        toolStorePagingItems.loadState.refresh is LoadState.Loading
-                || toolStorePagingItems.loadState.append is LoadState.Loading
+        toolStorePagingItems.loadState.refresh == LoadState.Loading
+                || toolStorePagingItems.loadState.append == LoadState.Loading
 
     ReportDrawnWhen { !isToolLoading }
 
@@ -114,10 +121,18 @@ internal fun ToolStoreScreen(
         }
     }
     LaunchedEffect(toolStorePagingItems.loadState.refresh) {
-        if (toolStorePagingItems.loadState.refresh is LoadState.Loading) {
-            pullToRefreshState.startRefresh()
-        } else {
+        if (toolStorePagingItems.loadState.refresh != LoadState.Loading) {
             pullToRefreshState.endRefresh()
+        }
+        if (toolStorePagingItems.loadState.refresh is LoadState.Error) {
+            Toast.makeText(
+                context,
+                ResourcesUtils.getString(
+                    context = context,
+                    resId = R.string.feature_store_reload_error
+                ),
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -142,38 +157,54 @@ internal fun ToolStoreScreen(
             .clipToBounds()
             .nestedScroll(pullToRefreshState.nestedScrollConnection)
     ) {
-        LazyVerticalStaggeredGrid(
-            modifier = Modifier
-                .fillMaxSize(),
-            columns = StaggeredGridCells.Adaptive(160.dp),
-            contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalItemSpacing = 24.dp,
-            state = state
-        ) {
-            toolsPanel(
-                toolStorePagingItems = toolStorePagingItems,
-                onAction = { tool, installType ->
-                    installTool = tool
-                    onChangeInstallStatus(ToolStoreUiState.InstallInfo.Status.Pending)
-                    onChangeInstallType(installType)
-                },
-                onClick = {
-                    onNavigateToToolView(it.authorUsername, it.toolId, it.upgrade != null)
+        if (itemsAvailable > 0 || (toolStorePagingItems.loadState.refresh == LoadState.Loading && itemsAvailable == 0)) {
+            LazyVerticalStaggeredGrid(
+                modifier = Modifier
+                    .fillMaxSize(),
+                columns = StaggeredGridCells.Adaptive(160.dp),
+                contentPadding = PaddingValues(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalItemSpacing = 24.dp,
+                state = state
+            ) {
+                if (itemsAvailable > 0) {
+                    toolsPanel(
+                        toolStorePagingItems = toolStorePagingItems,
+                        onAction = { tool, installType ->
+                            installTool = tool
+                            onChangeInstallStatus(ToolStoreUiState.InstallInfo.Status.Pending)
+                            onChangeInstallType(installType)
+                        },
+                        onClick = {
+                            onNavigateToToolView(it.authorUsername, it.toolId, it.upgrade != null)
+                        }
+                    )
                 }
-            )
-
-            item(span = StaggeredGridItemSpan.FullLine) {
-                Spacer(Modifier.height(8.dp))
-                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+                if (itemsAvailable == 0 || toolStorePagingItems.loadState.append == LoadState.Loading) {
+                    items(count = DEFAULT_TOOL_CARD_SKELETON_COUNT) {
+                        ToolCardSkeleton()
+                    }
+                }
+                if (toolStorePagingItems.loadState.append is LoadState.Error) {
+                    item(span = StaggeredGridItemSpan.FullLine) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            ClickableText(
+                                text = R.string.feature_store_load_more_error,
+                                replaceText = R.string.feature_store_retry
+                            ) {
+                                toolStorePagingItems.retry()
+                            }
+                        }
+                    }
+                }
+                item(span = StaggeredGridItemSpan.FullLine) {
+                    Spacer(Modifier.height(8.dp))
+                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+                }
             }
         }
-
-        PullToRefreshContainer(
-            modifier = Modifier
-                .align(Alignment.TopCenter),
-            state = pullToRefreshState,
-        )
 
         if (itemsAvailable == 0 && !isToolLoading) {
             Column(
@@ -183,14 +214,29 @@ internal fun ToolStoreScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(
-                    text = stringResource(
-                        if (searchValue.isEmpty()) R.string.core_nothing
-                        else R.string.core_nothing_found
+                if (toolStorePagingItems.loadState.refresh is LoadState.Error) {
+                    ClickableText(
+                        text = R.string.feature_store_load_error,
+                        replaceText = R.string.feature_store_retry
+                    ) {
+                        toolStorePagingItems.refresh()
+                    }
+                } else {
+                    Text(
+                        text = stringResource(
+                            if (searchValue.isEmpty()) R.string.core_nothing
+                            else R.string.core_nothing_found
+                        )
                     )
-                )
+                }
             }
         }
+
+        PullToRefreshContainer(
+            modifier = Modifier
+                .align(Alignment.TopCenter),
+            state = pullToRefreshState,
+        )
 
         state.DraggableScrollbar(
             modifier = Modifier
@@ -218,21 +264,21 @@ private fun LazyStaggeredGridScope.toolsPanel(
     onClick: (ToolEntity) -> Unit
 ) {
     items(
-        items = toolStorePagingItems.itemSnapshotList,
-        key = { it!!.id },
+        count = toolStorePagingItems.itemCount
     ) {
+        val item = toolStorePagingItems[it]!!
         ToolCard(
-            tool = it!!,
-            specifyVer = it.upgrade,
-            actionIcon = if (it.upgrade != null) OxygenIcons.Upgrade else if (!it.isInstalled) OxygenIcons.Download else null,
+            tool = item,
+            specifyVer = item.upgrade,
+            actionIcon = if (item.upgrade != null) OxygenIcons.Upgrade else if (!item.isInstalled) OxygenIcons.Download else null,
             actionIconContentDescription = stringResource(R.string.core_install),
             onAction = {
                 onAction(
-                    it,
-                    if (it.upgrade != null) ToolStoreUiState.InstallInfo.Type.Upgrade else ToolStoreUiState.InstallInfo.Type.Install
+                    item,
+                    if (item.upgrade != null) ToolStoreUiState.InstallInfo.Type.Upgrade else ToolStoreUiState.InstallInfo.Type.Install
                 )
             },
-            onClick = { onClick(it) }
+            onClick = { onClick(item) }
         )
     }
 }

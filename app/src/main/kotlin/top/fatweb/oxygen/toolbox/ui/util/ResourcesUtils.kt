@@ -42,6 +42,6 @@ object ResourcesUtils {
             -1
         }
 
-    fun getString(context: Context, @StringRes resId: Int): String =
-        context.resources.getString(resId)
+    fun getString(context: Context, @StringRes resId: Int, vararg formatArgs: Any): String =
+        context.resources.getString(resId, *formatArgs)
 }
