@@ -1,5 +1,17 @@
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import com.mikepenz.aboutlibraries.plugin.AboutLibrariesTask
+import java.io.FileInputStream
+import java.util.Properties
+
+val keystoreProperties = rootProject.file("keystore.properties").run {
+    if (!exists()) {
+        null
+    } else {
+        Properties().apply {
+            load(FileInputStream(this@run))
+        }
+    }
+}
 
 plugins {
     alias(libs.plugins.androidApplication)
@@ -32,6 +44,17 @@ android {
         }
     }
 
+    signingConfigs {
+        keystoreProperties?.let {
+            create("release") {
+                storeFile = rootProject.file(it["storeFile"] as String)
+                storePassword = it["storePassword"] as String
+                keyAlias = it["keyAlias"] as String
+                keyPassword = it["keyPassword"] as String
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -40,13 +63,16 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.findByName("release")
         }
     }
 
-    android.applicationVariants.all {
+    applicationVariants.all {
         outputs.all {
-            (this as BaseVariantOutputImpl).outputFileName =
-                "${project.name}_${defaultConfig.versionName}-${defaultConfig.versionCode}_${buildType.name}.apk"
+            if (this is BaseVariantOutputImpl) {
+                outputFileName =
+                    "${applicationId}-v${defaultConfig.versionName}(${defaultConfig.versionCode})-${buildType.name}.${outputFile.extension}"
+            }
         }
     }
 
