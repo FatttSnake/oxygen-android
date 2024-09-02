@@ -4,6 +4,8 @@
     <string name="app_full_name">氧工具</string>
     <string name="app_description">All in One</string>
 
+    <string name="core_beta_version">测试版</string>
+    <string name="core_ga_version">正式版</string>
     <string name="core_ok">完成</string>
     <string name="core_back">返回</string>
     <string name="core_close">关闭</string>

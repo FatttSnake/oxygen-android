@@ -3,6 +3,8 @@
     <string name="app_full_name">Oxygen Toolbox</string>
     <string name="app_description">All in One</string>
 
+    <string name="core_beta_version">Beta</string>
+    <string name="core_ga_version">GA</string>
     <string name="core_ok">OK</string>
     <string name="core_back">Back</string>
     <string name="core_close">Close</string>

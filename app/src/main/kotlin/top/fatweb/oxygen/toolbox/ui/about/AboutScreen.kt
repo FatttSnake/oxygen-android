@@ -135,9 +135,12 @@ private fun AboutAppInfo(
         Text(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.outline,
-            text = "${ResourcesUtils.getAppVersionName(LocalContext.current)}(${
-                ResourcesUtils.getAppVersionCode(
-                    LocalContext.current
+            text = "${ResourcesUtils.getAppVersionName(LocalContext.current)} (${
+                stringResource(
+                    if (ResourcesUtils.getAppVersionCode(LocalContext.current) % 100 == 0L)
+                        R.string.core_ga_version
+                    else
+                        R.string.core_beta_version
                 )
             })"
         )
