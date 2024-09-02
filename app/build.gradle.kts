@@ -1,7 +1,13 @@
-import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import com.mikepenz.aboutlibraries.plugin.AboutLibrariesTask
 import java.io.FileInputStream
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.Properties
+
+val localDateTime: LocalDateTime = LocalDateTime.now(ZoneOffset.UTC)
+val baseVersionCode = 1
+val baseVersionName = "0.0.0"
 
 val keystoreProperties = rootProject.file("keystore.properties").run {
     if (!exists()) {
@@ -35,13 +41,21 @@ android {
         applicationId = "top.fatweb.oxygen.toolbox"
         minSdk = 21
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0.0-SNAPSHOT"
+        versionCode = baseVersionCode
+        versionName = "$baseVersionName${
+            if (baseVersionCode % 100 != 0) ".${
+                localDateTime.format(
+                    DateTimeFormatter.ofPattern("yyMMdd")
+                )
+            }" else ""
+        }"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        setProperty("archivesBaseName", "$applicationId-v$versionName($versionCode)")
     }
 
     signingConfigs {
@@ -64,15 +78,6 @@ android {
                 "proguard-rules.pro"
             )
             signingConfig = signingConfigs.findByName("release")
-        }
-    }
-
-    applicationVariants.all {
-        outputs.all {
-            if (this is BaseVariantOutputImpl) {
-                outputFileName =
-                    "${applicationId}-v${defaultConfig.versionName}(${defaultConfig.versionCode})-${buildType.name}.${outputFile.extension}"
-            }
         }
     }
 
