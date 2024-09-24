@@ -69,6 +69,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 material-icons-core = { group = "androidx.compose.material", name = "material-icons-core" }
 material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 material3-window-size = { group = "androidx.compose.material3", name = "material3-window-size-class" }
+animation-graphics = { group = "androidx.compose.animation", name = "animation-graphics" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
