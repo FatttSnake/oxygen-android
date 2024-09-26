@@ -4,7 +4,6 @@ import android.widget.Toast
 import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -33,7 +32,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,8 +43,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -114,15 +111,11 @@ internal fun ToolStoreScreen(
 
     ReportDrawnWhen { !isToolLoading }
 
-    val pullToRefreshState = rememberPullToRefreshState()
-    LaunchedEffect(pullToRefreshState.isRefreshing) {
-        if (pullToRefreshState.isRefreshing) {
-            toolStorePagingItems.refresh()
-        }
-    }
+    var isRefreshing by remember { mutableStateOf(false) }
+
     LaunchedEffect(toolStorePagingItems.loadState.refresh) {
-        if (toolStorePagingItems.loadState.refresh != LoadState.Loading) {
-            pullToRefreshState.endRefresh()
+        if (toolStorePagingItems.loadState.refresh != LoadState.Loading && isRefreshing) {
+            isRefreshing = false
         }
         if (toolStorePagingItems.loadState.refresh is LoadState.Error) {
             Toast.makeText(
@@ -133,6 +126,12 @@ internal fun ToolStoreScreen(
                 ),
                 Toast.LENGTH_LONG
             ).show()
+        }
+    }
+
+    LaunchedEffect(isRefreshing) {
+        if (isRefreshing) {
+            toolStorePagingItems.refresh()
         }
     }
 
@@ -151,11 +150,14 @@ internal fun ToolStoreScreen(
         )
     }
 
-    Box(
-        modifier
-            .fillMaxSize()
-            .clipToBounds()
-            .nestedScroll(pullToRefreshState.nestedScrollConnection)
+    PullToRefreshBox(
+        modifier = modifier
+            .fillMaxSize(),
+        state = rememberPullToRefreshState(),
+        isRefreshing = isRefreshing,
+        onRefresh = {
+            isRefreshing = true
+        }
     ) {
         if (itemsAvailable > 0 || (toolStorePagingItems.loadState.refresh == LoadState.Loading && itemsAvailable == 0)) {
             LazyVerticalStaggeredGrid(
@@ -231,12 +233,6 @@ internal fun ToolStoreScreen(
                 }
             }
         }
-
-        PullToRefreshContainer(
-            modifier = Modifier
-                .align(Alignment.TopCenter),
-            state = pullToRefreshState,
-        )
 
         state.DraggableScrollbar(
             modifier = Modifier
