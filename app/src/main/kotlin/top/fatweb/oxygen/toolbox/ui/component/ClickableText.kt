@@ -1,10 +1,11 @@
 package top.fatweb.oxygen.toolbox.ui.component
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
@@ -14,8 +15,8 @@ import top.fatweb.oxygen.toolbox.ui.util.ResourcesUtils
 fun ClickableText(
     @StringRes text: Int,
     @StringRes replaceText: Int,
-    onClick: (Int) -> Unit
-    ) {
+    onClick: () -> Unit
+) {
     val context = LocalContext.current
     val primaryColor = MaterialTheme.colorScheme.primary
 
@@ -30,7 +31,10 @@ fun ClickableText(
             clickablePart
         )
         append(mainText.substringBefore(clickablePart))
-        pushStringAnnotation(tag = "Click", annotation = clickablePart)
+        pushLink(LinkAnnotation.Clickable(
+            tag = "Click",
+            linkInteractionListener = { onClick() }
+        ))
         withStyle(style = SpanStyle(color = primaryColor)) {
             append(clickablePart)
         }
@@ -38,5 +42,5 @@ fun ClickableText(
         append(mainText.substringAfter(clickablePart))
     }
 
-    ClickableText(text = annotatedString, onClick = onClick)
+    Text(text = annotatedString)
 }
