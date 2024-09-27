@@ -2,6 +2,7 @@ package top.fatweb.oxygen.toolbox.ui.util
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
 import androidx.annotation.StringRes
@@ -10,9 +11,7 @@ import androidx.core.os.LocaleListCompat
 import java.util.Locale
 
 object ResourcesUtils {
-    fun getConfiguration(context: Context) = context.resources.configuration
-
-    fun getDisplayMetrics(context: Context) = context.resources.displayMetrics
+    private fun getConfiguration(context: Context): Configuration = context.resources.configuration
 
     @Suppress("DEPRECATION")
     fun getAppLocale(context: Context): Locale =
