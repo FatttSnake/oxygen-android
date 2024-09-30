@@ -129,9 +129,7 @@ fun OxygenApp(appState: OxygenAppState) {
                     AnimatedVisibility(
                         visible = appState.shouldShowBottomBar && destination != null
                     ) {
-                        BottomAppBar(
-                            windowInsets = WindowInsets(0)
-                        ) {
+                        BottomAppBar {
                             OxygenBottomBar(
                                 destinations = appState.topLevelDestinations,
                                 currentDestination = appState.currentDestination,
