@@ -25,6 +25,11 @@
     <string name="core_undo">Undo</string>
     <string name="core_nothing">Nothing</string>
     <string name="core_nothing_found">Nothing found</string>
+    <string name="core_file_select_one">Select a file</string>
+    <string name="core_file_select_multi">Select files</string>
+    <string name="core_file_select_one_text">Select a text file</string>
+    <string name="core_file_select_multi_text">Select text files</string>
+    <string name="core_can_only_download_http_https">Can only download HTTP/HTTPS URIs: %1$s</string>
 
     <string name="feature_store_title">Store</string>
     <string name="feature_store_retry">try again</string>

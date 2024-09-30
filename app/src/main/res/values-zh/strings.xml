@@ -26,6 +26,11 @@
     <string name="core_undo">撤消</string>
     <string name="core_nothing">空空如也</string>
     <string name="core_nothing_found">未找到相关内容</string>
+    <string name="core_file_select_one">选择一个文件</string>
+    <string name="core_file_select_multi">选择文件</string>
+    <string name="core_file_select_one_text">选择一个文本文件</string>
+    <string name="core_file_select_multi_text">选择文本文件</string>
+    <string name="core_can_only_download_http_https">只能下载 HTTP/HTTPS URI：%1$s</string>
 
     <string name="feature_store_title">商店</string>
     <string name="feature_store_retry">重试</string>

@@ -1,8 +1,17 @@
 package top.fatweb.oxygen.toolbox.ui.view
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.DownloadManager
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.webkit.ConsoleMessage
+import android.webkit.ValueCallback
+import android.webkit.WebView
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -21,7 +30,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,7 +48,10 @@ import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 import top.fatweb.oxygen.toolbox.ui.component.Indicator
 import top.fatweb.oxygen.toolbox.ui.component.OxygenTopAppBar
+import top.fatweb.oxygen.toolbox.ui.util.ResourcesUtils
 import top.fatweb.oxygen.toolbox.util.NativeWebApi
+import top.fatweb.oxygen.toolbox.util.Permissions
+import kotlin.coroutines.resume
 
 @Composable
 internal fun ToolViewRoute(
@@ -66,6 +80,25 @@ internal fun ToolViewScreen(
     onBackClick: () -> Unit
 ) {
     val context = LocalContext.current
+
+    var fileChooserCallback by remember { mutableStateOf<ValueCallback<Array<Uri>>?>(null) }
+
+    val fileChooserLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                it.data?.data?.let { uri ->
+                    fileChooserCallback?.onReceiveValue(arrayOf(uri))
+                } ?: {
+                    fileChooserCallback?.onReceiveValue(emptyArray())
+                }
+            } else {
+                fileChooserCallback?.onReceiveValue(emptyArray())
+            }
+        }
+
+    val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
+        Permissions.continuation?.resume(it)
+    }
 
     Scaffold(
         modifier = Modifier,
@@ -146,15 +179,60 @@ internal fun ToolViewScreen(
                                     }
                                     return false
                                 }
+
+                                override fun onShowFileChooser(
+                                    webView: WebView?,
+                                    filePathCallback: ValueCallback<Array<Uri>>?,
+                                    fileChooserParams: FileChooserParams?
+                                ): Boolean {
+                                    fileChooserCallback = filePathCallback
+                                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                                        addCategory(Intent.CATEGORY_OPENABLE)
+                                        type = "*/*"
+                                    }
+                                    fileChooserLauncher.launch(
+                                        Intent.createChooser(
+                                            intent,
+                                            ResourcesUtils.getString(
+                                                context = context,
+                                                resId = R.string.core_file_select_one_text
+                                            )
+                                        )
+                                    )
+
+                                    return true
+                                }
                             }
                         },
                         onCreated = {
                             it.settings.javaScriptEnabled = true
                             it.settings.domStorageEnabled = true
                             it.addJavascriptInterface(
-                                NativeWebApi(context = context, webView = it),
+                                NativeWebApi(context = context, webView = it, permissionLauncher),
                                 "NativeApi"
                             )
+                            it.setDownloadListener { url, userAgent, _, mimetype, _ ->
+                                if (!listOf("http://", "https://").any(url::startsWith)) {
+                                    it.evaluateJavascript(
+                                        "alert('${
+                                            ResourcesUtils.getString(
+                                                context = context,
+                                                resId = R.string.core_can_only_download_http_https,
+                                                url
+                                            )
+                                        }')"
+                                    ) {}
+                                    return@setDownloadListener
+                                }
+                                val request = DownloadManager.Request(Uri.parse(url)).apply {
+                                    addRequestHeader("User-Agent", userAgent)
+                                    setMimeType(mimetype)
+                                    setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                                }
+                                val downloadManager: DownloadManager =
+                                    context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+                                downloadManager.enqueue(request)
+                            }
                         }
                     )
                 }
