@@ -96,9 +96,10 @@ internal fun ToolViewScreen(
             }
         }
 
-    val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
-        Permissions.continuation?.resume(it)
-    }
+    val permissionLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
+            Permissions.continuation?.resume(it)
+        }
 
     Scaffold(
         modifier = Modifier,
@@ -186,14 +187,15 @@ internal fun ToolViewScreen(
                                     fileChooserParams: FileChooserParams?
                                 ): Boolean {
                                     fileChooserCallback = filePathCallback
-                                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                                        addCategory(Intent.CATEGORY_OPENABLE)
-                                        type = "*/*"
-                                    }
+                                    val intent = fileChooserParams?.createIntent()
+                                        ?: Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                                            addCategory(Intent.CATEGORY_OPENABLE)
+                                            type = "*/*"
+                                        }
                                     fileChooserLauncher.launch(
                                         Intent.createChooser(
                                             intent,
-                                            ResourcesUtils.getString(
+                                            fileChooserParams?.title ?: ResourcesUtils.getString(
                                                 context = context,
                                                 resId = R.string.core_file_select_one_text
                                             )
