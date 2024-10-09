@@ -8,6 +8,7 @@ import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Base64
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import androidx.activity.compose.ManagedActivityResultLauncher
@@ -39,7 +40,9 @@ class NativeWebApi(
     }
 
     @JavascriptInterface
-    fun saveToDownloads(data: ByteArray, fileName: String): Boolean {
+    fun saveToDownloads(dataBase64: String, fileName: String): Boolean {
+        val data = Base64.decode(dataBase64, Base64.DEFAULT)
+
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             saveFileToDownloads(data = data, fileName = fileName)
         } else {
