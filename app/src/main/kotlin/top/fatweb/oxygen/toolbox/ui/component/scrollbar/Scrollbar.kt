@@ -221,7 +221,7 @@ fun Scrollbar(
                             withTimeout(viewConfiguration.longPressTimeoutMillis) {
                                 tryAwaitRelease()
                             }
-                        } catch (e: TimeoutCancellationException) {
+                        } catch (_: TimeoutCancellationException) {
                             // Start the press triggered scroll
                             val initialPress = PressInteraction.Press(offset)
                             interactionSource?.tryEmit(initialPress)

@@ -35,12 +35,12 @@ plugins {
 
 android {
     namespace = "top.fatweb.oxygen.toolbox"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "top.fatweb.oxygen.toolbox"
-        minSdk = 21
-        targetSdk = 34
+        minSdk = 24
+        targetSdk = 35
         versionCode = baseVersionCode
         versionName = "$baseVersionName${
             if (baseVersionCode % 100 != 0) ".${

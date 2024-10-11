@@ -13,10 +13,7 @@ import java.util.Locale
 object ResourcesUtils {
     private fun getConfiguration(context: Context): Configuration = context.resources.configuration
 
-    @Suppress("DEPRECATION")
-    fun getAppLocale(context: Context): Locale =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) getConfiguration(context).locales.get(0)
-        else getConfiguration(context).locale
+    fun getAppLocale(context: Context): Locale = getConfiguration(context).locales.get(0)
 
     fun getSystemLocale(): LocaleListCompat =
         ConfigurationCompat.getLocales(Resources.getSystem().configuration)
@@ -24,7 +21,7 @@ object ResourcesUtils {
     fun getAppVersionName(context: Context): String =
         try {
             context.packageManager.getPackageInfo(context.packageName, 0)?.versionName ?: "Unknown"
-        } catch (e: PackageManager.NameNotFoundException) {
+        } catch (_: PackageManager.NameNotFoundException) {
             "Unknown"
         }
 
@@ -37,7 +34,7 @@ object ResourcesUtils {
                 context.packageName,
                 0
             )?.versionCode?.toLong() ?: -1
-        } catch (e: PackageManager.NameNotFoundException) {
+        } catch (_: PackageManager.NameNotFoundException) {
             -1
         }
 

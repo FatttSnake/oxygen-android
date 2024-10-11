@@ -121,7 +121,7 @@ private suspend fun FlowCollector<ToolViewUiState>.emitResult(
 
             is Result.Loading -> ToolViewUiState.Loading
             is Result.Error -> {
-                Timber.e("Can not load tool", result.exception)
+                Timber.e(result.exception, "Can not load tool")
                 ToolViewUiState.Error
             }
 

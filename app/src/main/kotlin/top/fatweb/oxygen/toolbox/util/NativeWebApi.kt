@@ -30,7 +30,7 @@ class NativeWebApi(
         return clipboardManager?.let {
             it.setPrimaryClip(ClipData.newPlainText("copy", text))
             true
-        } ?: false
+        } == true
     }
 
     @JavascriptInterface
@@ -95,7 +95,7 @@ class NativeWebApi(
             }
             true
         } catch (e: IOException) {
-            Timber.e("Could not save file $fileName to ${file.absolutePath}", e)
+            Timber.e(e, "Could not save file $fileName to ${file.absolutePath}")
             false
         }
     }

@@ -17,7 +17,7 @@ object Permissions {
         context: Context,
         permissionLauncher: ManagedActivityResultLauncher<String, Boolean>
     ): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             return true
         }
 
