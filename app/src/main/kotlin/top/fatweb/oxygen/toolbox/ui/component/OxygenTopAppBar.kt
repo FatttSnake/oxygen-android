@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
@@ -81,6 +82,7 @@ fun OxygenTopAppBar(
     CenterAlignedTopAppBar(
         modifier = modifier,
         scrollBehavior = scrollBehavior,
+        expandedHeight = 48.dp,
         title = {
             if (activeSearch) TextField(
                 modifier = Modifier
@@ -116,6 +118,7 @@ fun OxygenTopAppBar(
                 },
                 maxLines = 1,
                 singleLine = true,
+                textStyle = MaterialTheme.typography.titleSmall,
                 onValueChange = {
                     if ("\n" !in it) onQueryChange(it)
                 }
@@ -175,7 +178,13 @@ enum class SearchButtonPosition {
 private fun OxygenTopAppBarPreview() {
     OxygenTheme {
         OxygenTopAppBar(
-            title = { Text(text = stringResource(androidR.string.untitled)) },
+            title = {
+                Text(
+                    text = stringResource(androidR.string.untitled),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            },
             navigationIcon = OxygenIcons.Search,
             navigationIconContentDescription = "Navigation icon",
             actionIcon = OxygenIcons.MoreVert,

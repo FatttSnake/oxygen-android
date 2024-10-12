@@ -7,12 +7,12 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -35,6 +35,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -129,13 +131,11 @@ fun OxygenApp(appState: OxygenAppState) {
                     AnimatedVisibility(
                         visible = appState.shouldShowBottomBar && destination != null
                     ) {
-                        BottomAppBar {
-                            OxygenBottomBar(
-                                destinations = appState.topLevelDestinations,
-                                currentDestination = appState.currentDestination,
-                                onNavigateToDestination = appState::navigateToTopLevelDestination
-                            )
-                        }
+                        OxygenBottomBar(
+                            destinations = appState.topLevelDestinations,
+                            currentDestination = appState.currentDestination,
+                            onNavigateToDestination = appState::navigateToTopLevelDestination
+                        )
                     }
                 }
             ) { padding ->
@@ -170,7 +170,13 @@ fun OxygenApp(appState: OxygenAppState) {
                             OxygenTopAppBar(
                                 scrollBehavior = topAppBarScrollBehavior,
                                 title = {
-                                    destination?.let { Text(text = stringResource(destination.titleTextId)) }
+                                    destination?.let {
+                                        Text(
+                                            text = stringResource(destination.titleTextId),
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
+                                        )
+                                    }
                                 },
                                 navigationIcon = OxygenIcons.Search,
                                 navigationIconContentDescription = stringResource(R.string.feature_settings_top_app_bar_navigation_icon_description),

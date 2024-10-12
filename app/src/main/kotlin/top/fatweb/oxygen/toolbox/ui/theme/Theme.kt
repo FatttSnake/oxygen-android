@@ -204,7 +204,7 @@ fun supportsDynamicTheming() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
 )
 @Preview(
-    name = "Api 21 Light", group = "ApiLevelPreviews", apiLevel = 21,
+    name = "Api 24 Light", group = "ApiLevelPreviews", apiLevel = 24,
     uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL
 )
 annotation class OxygenPreviews

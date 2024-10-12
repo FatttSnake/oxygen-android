@@ -47,6 +47,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -132,7 +133,11 @@ internal fun LibrariesScreen(
             OxygenTopAppBar(
                 scrollBehavior = topAppBarScrollBehavior,
                 title = {
-                    Text(text = stringResource(R.string.feature_settings_open_source_license))
+                    Text(
+                        text = stringResource(R.string.feature_settings_open_source_license),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 },
                 navigationIcon = OxygenIcons.Back,
                 navigationIconContentDescription = stringResource(R.string.core_back),

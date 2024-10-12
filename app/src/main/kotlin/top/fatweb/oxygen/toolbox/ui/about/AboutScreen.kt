@@ -41,6 +41,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import top.fatweb.oxygen.toolbox.R
@@ -96,7 +97,11 @@ internal fun AboutScreen(
             OxygenTopAppBar(
                 scrollBehavior = topAppBarScrollBehavior,
                 title = {
-                    Text(text = stringResource(R.string.feature_settings_more_about))
+                    Text(
+                        text = stringResource(R.string.feature_settings_more_about),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 },
                 navigationIcon = OxygenIcons.Back,
                 navigationIconContentDescription = stringResource(R.string.core_back),
