@@ -225,7 +225,7 @@ private fun initWebView(
     webview.settings.javaScriptEnabled = true
     webview.settings.domStorageEnabled = true
     webview.addJavascriptInterface(
-        NativeWebApi(context = context, webView = webview, permissionLauncher),
+        NativeWebApi(context = context, permissionLauncher = permissionLauncher),
         "NativeApi"
     )
     webview.setDownloadListener { url, userAgent, _, mimetype, _ ->
