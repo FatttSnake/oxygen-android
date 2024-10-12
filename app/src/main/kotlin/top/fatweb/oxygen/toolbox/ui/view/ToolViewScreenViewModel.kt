@@ -1,9 +1,12 @@
 package top.fatweb.oxygen.toolbox.ui.view
 
+import android.content.Context
+import android.webkit.WebView
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,6 +30,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class ToolViewScreenViewModel @Inject constructor(
+    @ApplicationContext context: Context,
     storeRepository: StoreRepository,
     toolRepository: ToolRepository,
     savedStateHandle: SavedStateHandle
@@ -55,6 +59,15 @@ class ToolViewScreenViewModel @Inject constructor(
             initialValue = ToolViewUiState.Loading,
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5.seconds.inWholeMilliseconds)
         )
+
+    val webviewInstance = flow<WebViewInstanceState> {
+        val webviewInstance = WebView(context)
+        emit(WebViewInstanceState.Success(webviewInstance))
+    }.stateIn(
+        viewModelScope,
+        initialValue = WebViewInstanceState.Loading,
+        started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5.seconds.inWholeMilliseconds)
+    )
 }
 
 private fun toolViewUiState(
@@ -141,12 +154,22 @@ sealed interface ToolViewUiState {
     data object Loading : ToolViewUiState
 }
 
+sealed interface WebViewInstanceState {
+    data class Success(
+        val webView: WebView
+    ) : WebViewInstanceState
+
+    data object Loading : WebViewInstanceState
+}
+
 @OptIn(ExperimentalEncodingApi::class)
 private fun processHtml(toolViewTemplate: String, distBase64: String, baseBase64: String): String {
     val dist = Base64.decodeToStringWithZip(distBase64)
     val base = Base64.decodeToStringWithZip(baseBase64)
 
-    return toolViewTemplate.replace("{{replace_code}}", "$dist\n$base")
+    return toolViewTemplate
+        .replace(oldValue = "{{replace_dict_code}}", newValue = dist)
+        .replace(oldValue = "{{replace_base_code}}", newValue = base)
 }
 
 private const val IS_PREVIEW = "IS_PREVIEW"
