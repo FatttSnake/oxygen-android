@@ -167,7 +167,6 @@ private fun ToolAction(
                 .padding(horizontal = 6.dp, vertical = 6.dp)
         ) {
             Icon(
-                modifier = Modifier,
                 imageVector = actionIcon,
                 contentDescription = actionIconContentDescription
             )

@@ -164,7 +164,7 @@ internal fun LibrariesScreen(
                     onSearch("")
                 }
             )
-            Box(modifier = Modifier) {
+            Box {
                 when (librariesScreenUiState) {
                     LibrariesScreenUiState.Loading -> {
                         Indicator()
@@ -252,10 +252,7 @@ internal fun LibrariesScreen(
                 Column(
                     modifier = Modifier.verticalScroll(state = rememberScrollState())
                 ) {
-                    Text(
-                        modifier = Modifier,
-                        text = dialogContent
-                    )
+                    Text(text = dialogContent)
                 }
             },
             confirmButton = {

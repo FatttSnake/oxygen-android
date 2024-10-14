@@ -8,6 +8,8 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.webkit.ConsoleMessage
+import android.webkit.JsPromptResult
+import android.webkit.JsResult
 import android.webkit.ValueCallback
 import android.webkit.WebView
 import androidx.activity.compose.ManagedActivityResultLauncher
@@ -16,18 +18,30 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,9 +49,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kevinnzou.web.AccompanistWebChromeClient
@@ -139,13 +155,20 @@ private fun Content(
     toolViewUiState: ToolViewUiState,
     webViewInstanceState: WebViewInstanceState
 ) {
+    val configuration = LocalConfiguration.current
     val context = LocalContext.current
 
     var fileChooserCallback by remember { mutableStateOf<ValueCallback<Array<Uri>>?>(null) }
-
     val fileChooserLauncher = rememberFileChooserLauncher(fileChooserCallback)
-
     val permissionLauncher = rememberPermissionLauncher()
+
+    var isShowDialog = remember { mutableStateOf(false) }
+    var dialogType = remember { mutableStateOf(DialogType.Alert) }
+    var dialogTitle by remember { mutableStateOf("") }
+    var dialogText = remember { mutableStateOf("") }
+    var dialogInputValue = remember { mutableStateOf("") }
+    var onDialogConfirm = remember { mutableStateOf<((String) -> Unit)?>(null) }
+    var onDialogCancel = remember { mutableStateOf<(() -> Unit)?>(null) }
 
     when (webViewInstanceState) {
         WebViewInstanceState.Loading -> {
@@ -169,6 +192,7 @@ private fun Content(
                 }
 
                 is ToolViewUiState.Success -> {
+                    dialogTitle = toolViewUiState.toolName
                     val webViewState = rememberWebViewStateWithHTMLData(
                         data = toolViewUiState.htmlData,
                     )
@@ -179,7 +203,13 @@ private fun Content(
                         state = webViewState,
                         chromeClient = rememberChromeClient(
                             context = context,
-                            fileChooserLauncher = fileChooserLauncher
+                            fileChooserLauncher = fileChooserLauncher,
+                            isShowDialog = isShowDialog,
+                            dialogType = dialogType,
+                            dialogText = dialogText,
+                            dialogInputValue = dialogInputValue,
+                            onDialogConfirm = onDialogConfirm,
+                            onDialogCancel = onDialogCancel
                         ) {
                             fileChooserCallback = it
                         },
@@ -194,6 +224,60 @@ private fun Content(
                 }
             }
         }
+    }
+
+    if (isShowDialog.value) {
+        AlertDialog(
+            modifier = Modifier
+                .widthIn(max = configuration.screenWidthDp.dp - 80.dp)
+                .heightIn(max = configuration.screenHeightDp.dp - 40.dp),
+            onDismissRequest = {},
+            title = {
+                Text(
+                    text = dialogTitle,
+                    style = MaterialTheme.typography.titleLarge
+                )
+            },
+            text = {
+                Column {
+                    Column(
+                        modifier = Modifier.verticalScroll(state = rememberScrollState())
+                    ) {
+                        Text(text = dialogText.value)
+                    }
+                    if (dialogType.value == DialogType.Prompt) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TextField(
+                            value = dialogInputValue.value,
+                            onValueChange = {
+                                dialogInputValue.value = it
+                            },
+                            textStyle = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    TextButton(onClick = {
+                        isShowDialog.value = false
+                        onDialogConfirm.value?.invoke(dialogInputValue.value)
+                    }) {
+                        Text(text = stringResource(R.string.core_ok))
+                    }
+                    if (dialogType.value != DialogType.Alert) {
+                        TextButton(onClick = {
+                            isShowDialog.value = false
+                            onDialogCancel.value?.invoke()
+                        }) {
+                            Text(text = stringResource(R.string.core_cancel))
+                        }
+                    }
+                }
+            }
+        )
     }
 }
 
@@ -256,6 +340,12 @@ private fun initWebView(
 private fun rememberChromeClient(
     context: Context,
     fileChooserLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>,
+    isShowDialog: MutableState<Boolean>,
+    dialogType: MutableState<DialogType>,
+    dialogText: MutableState<String>,
+    dialogInputValue: MutableState<String>,
+    onDialogConfirm: MutableState<((String) -> Unit)?>,
+    onDialogCancel: MutableState<(() -> Unit)?>,
     processCallback: (ValueCallback<Array<Uri>>?) -> Unit
 ) = remember {
     object : AccompanistWebChromeClient() {
@@ -299,5 +389,65 @@ private fun rememberChromeClient(
 
             return true
         }
+
+        override fun onJsAlert(
+            view: WebView?,
+            url: String?,
+            message: String?,
+            result: JsResult?
+        ): Boolean {
+            isShowDialog.value = true
+            dialogType.value = DialogType.Alert
+            dialogText.value = message ?: ""
+            onDialogConfirm.value = {
+                result?.confirm()
+            }
+
+            return true
+        }
+
+        override fun onJsConfirm(
+            view: WebView?,
+            url: String?,
+            message: String?,
+            result: JsResult?
+        ): Boolean {
+            isShowDialog.value = true
+            dialogType.value = DialogType.Confirm
+            dialogText.value = message ?: ""
+            onDialogConfirm.value = {
+                result?.confirm()
+            }
+            onDialogCancel.value = {
+                result?.cancel()
+            }
+
+            return true
+        }
+
+        override fun onJsPrompt(
+            view: WebView?,
+            url: String?,
+            message: String?,
+            defaultValue: String?,
+            result: JsPromptResult?
+        ): Boolean {
+            isShowDialog.value = true
+            dialogType.value = DialogType.Prompt
+            dialogText.value = message ?: ""
+            dialogInputValue.value = defaultValue ?: ""
+            onDialogConfirm.value = {
+                result?.confirm(dialogInputValue.value)
+            }
+            onDialogCancel.value = {
+                result?.cancel()
+            }
+
+            return true
+        }
     }
+}
+
+private enum class DialogType {
+    Alert, Confirm, Prompt
 }
