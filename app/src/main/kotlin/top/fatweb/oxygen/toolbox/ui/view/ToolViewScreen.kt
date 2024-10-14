@@ -64,6 +64,7 @@ import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 import top.fatweb.oxygen.toolbox.ui.component.Indicator
 import top.fatweb.oxygen.toolbox.ui.component.OxygenTopAppBar
+import top.fatweb.oxygen.toolbox.ui.util.LocalFullScreen
 import top.fatweb.oxygen.toolbox.ui.util.ResourcesUtils
 import top.fatweb.oxygen.toolbox.util.NativeWebApi
 import top.fatweb.oxygen.toolbox.util.Permissions
@@ -98,6 +99,7 @@ internal fun ToolViewScreen(
     isPreview: Boolean,
     onBackClick: () -> Unit
 ) {
+    val (isFullScreen, onFullScreenStateChange) = LocalFullScreen.current
 
     Column(
         modifier
@@ -111,7 +113,9 @@ internal fun ToolViewScreen(
         TopBar(
             toolViewUiState = toolViewUiState,
             isPreview = isPreview,
-            onBackClick = onBackClick
+            isFullScreen = isFullScreen,
+            onBackClick = onBackClick,
+            onFullScreenChange = onFullScreenStateChange
         )
         Content(
             toolViewUiState = toolViewUiState,
@@ -125,7 +129,9 @@ internal fun ToolViewScreen(
 private fun TopBar(
     toolViewUiState: ToolViewUiState,
     isPreview: Boolean,
-    onBackClick: () -> Unit
+    isFullScreen: Boolean,
+    onBackClick: () -> Unit,
+    onFullScreenChange: (Boolean) -> Unit
 ) = OxygenTopAppBar(
     title = {
         Text(
@@ -143,11 +149,16 @@ private fun TopBar(
     },
     navigationIcon = OxygenIcons.Back,
     navigationIconContentDescription = stringResource(R.string.core_back),
+    actionIcon = if (isFullScreen) OxygenIcons.FullScreenExit else OxygenIcons.FullScreen,
+    actionIconContentDescription = stringResource(if (isFullScreen) R.string.core_exit_full_screen else R.string.core_full_screen),
     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
         containerColor = Color.Transparent,
         scrolledContainerColor = Color.Transparent
     ),
-    onNavigationClick = onBackClick
+    onNavigationClick = onBackClick,
+    onActionClick = {
+        onFullScreenChange(!isFullScreen)
+    }
 )
 
 @Composable

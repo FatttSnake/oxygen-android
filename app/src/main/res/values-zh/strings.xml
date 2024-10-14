@@ -14,6 +14,8 @@
     <string name="core_search">搜索</string>
     <string name="core_loading">加载中…</string>
     <string name="core_no_connect">⚠️ 无法连接至互联网</string>
+    <string name="core_full_screen">全屏</string>
+    <string name="core_exit_full_screen">退出全屏</string>
     <string name="core_install">安装</string>
     <string name="core_installing">安装中……</string>
     <string name="core_upgrade">更新</string>

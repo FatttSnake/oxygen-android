@@ -10,6 +10,8 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.Fullscreen
+import androidx.compose.material.icons.filled.FullscreenExit
 import androidx.compose.material.icons.filled.Inbox
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Reorder
@@ -43,6 +45,8 @@ object OxygenIcons {
     val Delete = Icons.Default.Delete
     val Download = Icons.Default.Download
     val Error = Icons.Default.Cancel
+    val FullScreen = Icons.Default.Fullscreen
+    val FullScreenExit = Icons.Default.FullscreenExit
     val Home = Icons.Rounded.Home
     val HomeBorder = Icons.Outlined.Home
     val Info = Icons.Outlined.Info

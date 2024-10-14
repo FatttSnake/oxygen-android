@@ -13,6 +13,8 @@
     <string name="core_search">Search</string>
     <string name="core_loading">Loading…</string>
     <string name="core_no_connect">⚠️ Unable to connect to the internet</string>
+    <string name="core_full_screen">Full Screen</string>
+    <string name="core_exit_full_screen">Exit Full Screen</string>
     <string name="core_install">Install</string>
     <string name="core_installing">Installing…</string>
     <string name="core_upgrade">Upgrade</string>
