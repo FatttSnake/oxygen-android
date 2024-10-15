@@ -25,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -86,9 +87,16 @@ fun OxygenApp(appState: OxygenAppState) {
         }
     )
 
-    LaunchedEffect(Unit) {
+    DisposableEffect(Unit) {
         windowInsetsController.systemBarsBehavior =
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        val listener = WindowInsetsControllerCompat.OnControllableInsetsChangedListener { _, _ ->
+            isFullScreen = false
+        }
+        windowInsetsController.addOnControllableInsetsChangedListener(listener)
+        onDispose {
+            windowInsetsController.removeOnControllableInsetsChangedListener(listener)
+        }
     }
 
     LaunchedEffect(isFullScreen) {
