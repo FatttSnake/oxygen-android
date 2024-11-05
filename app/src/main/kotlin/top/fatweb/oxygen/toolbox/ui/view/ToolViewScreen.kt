@@ -220,7 +220,8 @@ private fun Content(
                         ),
                         factory = {
                             webViewInstanceState.webView
-                        }
+                        },
+                        captureBackPresses = false
                     )
                 }
             }

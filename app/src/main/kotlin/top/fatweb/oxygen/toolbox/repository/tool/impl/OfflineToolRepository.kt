@@ -14,6 +14,12 @@ class OfflineToolRepository @Inject constructor(
     override val toolViewTemplate: Flow<String>
         get() = toolDataSource.toolViewTemplate
 
+    override fun getGlobalJsVariables(isDarkMode: Boolean): Flow<String> =
+        toolDataSource.getGlobalJsVariables(isDarkMode)
+
+    override fun getGlobalCssVariables(isDarkMode: Boolean): Flow<String> =
+        toolDataSource.getGlobalCssVariables(isDarkMode)
+
     override fun getAllToolsStream(searchValue: String): Flow<List<ToolEntity>> =
         toolDao.selectAllTools(searchValue)
 

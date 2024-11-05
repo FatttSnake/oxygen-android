@@ -4,7 +4,12 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Preview</title>
-    <!-- es-module-shims -->
+    <script id="global-js-variables">
+        {{replace_global_js_variables}}
+    </script>
+    <style id="global-css-variables">
+        {{replace_global_css_variables}}
+    </style>
 </head>
 <body>
 <script type="module" id="appDictSrc">{{replace_dict_code}}</script>

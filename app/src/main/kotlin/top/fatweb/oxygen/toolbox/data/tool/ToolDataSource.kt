@@ -22,4 +22,30 @@ class ToolDataSource @Inject constructor(
                 }
         )
     }.flowOn(ioDispatcher)
+
+    fun getGlobalJsVariables(isDarkMode: Boolean) = flow {
+        emit(
+            context.assets.open(
+                if (isDarkMode) "template/global-variables-dark.js"
+                else "template/global-variables-light.js"
+            )
+                .bufferedReader()
+                .use {
+                    it.readText()
+                }
+        )
+    }.flowOn(ioDispatcher)
+
+    fun getGlobalCssVariables(isDarkMode: Boolean) = flow {
+        emit(
+            context.assets.open(
+                if (isDarkMode) "template/global-variables-dark.css"
+                else "template/global-variables-light.css"
+            )
+                .bufferedReader()
+                .use {
+                    it.readText()
+                }
+        )
+    }.flowOn(ioDispatcher)
 }

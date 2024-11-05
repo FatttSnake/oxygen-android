@@ -11,7 +11,7 @@ import androidx.core.os.LocaleListCompat
 import java.util.Locale
 
 object ResourcesUtils {
-    private fun getConfiguration(context: Context): Configuration = context.resources.configuration
+    fun getConfiguration(context: Context): Configuration = context.resources.configuration
 
     fun getAppLocale(context: Context): Locale = getConfiguration(context).locales.get(0)
 

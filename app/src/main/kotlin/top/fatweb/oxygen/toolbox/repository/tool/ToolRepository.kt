@@ -6,6 +6,10 @@ import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
 interface ToolRepository {
     val toolViewTemplate: Flow<String>
 
+    fun getGlobalJsVariables(isDarkMode: Boolean): Flow<String>
+
+    fun getGlobalCssVariables(isDarkMode: Boolean): Flow<String>
+
     fun getAllToolsStream(searchValue: String): Flow<List<ToolEntity>>
 
     fun getStarToolsStream(searchValue: String): Flow<List<ToolEntity>>
