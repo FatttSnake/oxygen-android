@@ -45,6 +45,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -308,6 +309,7 @@ private fun initWebView(
     context: Context,
     permissionLauncher: ManagedActivityResultLauncher<String, Boolean>
 ) = { webview: WebView ->
+    webview.setBackgroundColor(Color.Transparent.toArgb())
     webview.settings.javaScriptEnabled = true
     webview.settings.domStorageEnabled = true
     webview.addJavascriptInterface(
