@@ -34,6 +34,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
@@ -45,6 +46,7 @@ import android.R as androidR
 @Composable
 fun OxygenTopAppBar(
     modifier: Modifier = Modifier,
+    expandedHeight: Dp = 48.dp,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     title: @Composable () -> Unit = {},
     navigationIcon: ImageVector? = null,
@@ -62,8 +64,12 @@ fun OxygenTopAppBar(
     onCancelSearch: () -> Unit = {}
 ) {
     val topInset by animateIntAsState(
-        if (scrollBehavior != null && -scrollBehavior.state.heightOffset >= with(LocalDensity.current) { 64.0.dp.toPx() }) 0
-        else TopAppBarDefaults.windowInsets.getTop(LocalDensity.current), label = ""
+        targetValue = if (scrollBehavior != null && -scrollBehavior.state.heightOffset >= with(
+                LocalDensity.current
+            ) { expandedHeight.toPx() }
+        ) 0
+        else TopAppBarDefaults.windowInsets.getTop(LocalDensity.current),
+        label = ""
     )
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
@@ -82,7 +88,7 @@ fun OxygenTopAppBar(
     CenterAlignedTopAppBar(
         modifier = modifier,
         scrollBehavior = scrollBehavior,
-        expandedHeight = 48.dp,
+        expandedHeight = expandedHeight,
         title = {
             if (activeSearch) TextField(
                 modifier = Modifier
