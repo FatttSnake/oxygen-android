@@ -1,5 +1,6 @@
 const globalVariables = {
     OxygenTheme: {
+        isDarkMode: true,
         blue: '#1677FF',
         purple: '#722ED1',
         cyan: '#13C2C2',
