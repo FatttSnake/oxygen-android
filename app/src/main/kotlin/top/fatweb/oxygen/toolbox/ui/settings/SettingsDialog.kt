@@ -271,7 +271,8 @@ private fun SettingDialogPreview() {
                     launchPageConfig = LaunchPageConfig.Tools,
                     themeBrandConfig = ThemeBrandConfig.Default,
                     darkThemeConfig = DarkThemeConfig.FollowSystem,
-                    useDynamicColor = true
+                    useDynamicColor = true,
+                    isNotFirstLaunch = true
                 )
             ),
             onChangeLanguageConfig = {},

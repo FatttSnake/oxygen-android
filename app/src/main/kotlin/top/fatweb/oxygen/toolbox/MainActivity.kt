@@ -8,6 +8,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
@@ -16,11 +19,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.webkit.WebViewCompat
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
@@ -85,6 +91,9 @@ class MainActivity : ComponentActivity() {
             if (uiState != MainActivityUiState.Loading) {
                 LaunchedEffect(locale) {
                     LocaleUtils.switchLocale(this@MainActivity, locale)
+                }
+                UseIsFirstLaunch(viewModel) {
+                    CheckWebView(it)
                 }
             }
 
@@ -151,6 +160,57 @@ class MainActivity : ComponentActivity() {
                 }
             )
         )
+    }
+}
+
+@Composable
+private fun UseIsFirstLaunch(viewModel: MainActivityViewModel, callback: @Composable (ondDismiss: () -> Unit) -> Unit) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    if (!whatIsFirstLaunch(uiState)) {
+        return
+    }
+
+    callback {
+        viewModel.updateIsNotFirstLaunch()
+    }
+}
+
+@Composable
+private fun whatIsFirstLaunch(uiState: MainActivityUiState): Boolean =
+    when (uiState) {
+        MainActivityUiState.Loading -> false
+        is MainActivityUiState.Success ->
+            !uiState.userData.isNotFirstLaunch
+    }
+
+@Composable
+private fun CheckWebView(onDismiss: () -> Unit) {
+    val versionName = WebViewCompat.getCurrentWebViewPackage(LocalContext.current)?.versionName
+    if (versionName == null) {
+        AlertDialog(
+            onDismissRequest = onDismiss,
+            title = {Text(text = stringResource(R.string.core_web_view_warning))},
+            text = { Text(text = stringResource(R.string.core_cannot_load_web_view_version)) },
+            confirmButton = {
+                TextButton(onClick = onDismiss) {
+                    Text(text = stringResource(R.string.core_dismiss))
+                }
+            }
+        )
+        return
+    }
+    if (versionName.split(".").first().toInt() < 80) {
+        AlertDialog(
+            onDismissRequest = onDismiss,
+            title = {Text(text = stringResource(R.string.core_web_view_warning))},
+            text = { Text(text = stringResource(R.string.core_web_view_version_too_low)) },
+            confirmButton = {
+                TextButton(onClick = onDismiss) {
+                    Text(text = stringResource(R.string.core_dismiss))
+                }
+            }
+        )
+        return
     }
 }
 

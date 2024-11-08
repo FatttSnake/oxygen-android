@@ -35,4 +35,8 @@ internal class LocalUserDataRepository @Inject constructor(
     override suspend fun setUseDynamicColor(useDynamicColor: Boolean) {
         oxygenPreferencesDataSource.setUseDynamicColor(useDynamicColor)
     }
+
+    override suspend fun updateIsNotFirstLaunch() {
+        oxygenPreferencesDataSource.updateIsNotFirstLaunch()
+    }
 }

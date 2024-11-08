@@ -5,5 +5,6 @@ data class UserData(
     val launchPageConfig: LaunchPageConfig,
     val themeBrandConfig: ThemeBrandConfig,
     val darkThemeConfig: DarkThemeConfig,
-    val useDynamicColor: Boolean
+    val useDynamicColor: Boolean,
+    val isNotFirstLaunch: Boolean
 )

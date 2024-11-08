@@ -192,6 +192,7 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.hilt.android)
+    implementation(libs.androidx.web.kit)
     ksp(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.coil.kt)

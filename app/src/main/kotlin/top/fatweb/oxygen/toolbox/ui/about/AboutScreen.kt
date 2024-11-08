@@ -43,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.webkit.WebViewCompat
 import kotlinx.coroutines.delay
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
@@ -126,6 +127,7 @@ internal fun AboutScreen(
 private fun AboutAppInfo(
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     val logo = AnimatedImageVector.animatedVectorResource(R.drawable.ic_launcher)
     var atEnd by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
@@ -168,6 +170,15 @@ private fun AboutAppInfo(
                         R.string.core_beta_version
                 )
             })"
+        )
+        Text(
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.outline,
+            text = "WebView: ${
+                WebViewCompat.getCurrentWebViewPackage(context)?.versionName ?: stringResource(
+                    R.string.core_unknown
+                )
+            }"
         )
     }
 }

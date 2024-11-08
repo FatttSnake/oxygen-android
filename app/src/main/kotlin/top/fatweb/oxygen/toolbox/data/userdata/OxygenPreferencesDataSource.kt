@@ -69,7 +69,8 @@ class OxygenPreferencesDataSource @Inject constructor(
                     DarkThemeConfigProto.DARK_THEME_CONFIG_DARK
                     -> DarkThemeConfig.Dark
                 },
-                useDynamicColor = it.useDynamicColor
+                useDynamicColor = it.useDynamicColor,
+                isNotFirstLaunch = it.isNotFirstLaunch
             )
         }
 
@@ -123,6 +124,14 @@ class OxygenPreferencesDataSource @Inject constructor(
         userPreferences.updateData {
             it.copy {
                 this.useDynamicColor = useDynamicColor
+            }
+        }
+    }
+
+    suspend fun updateIsNotFirstLaunch() {
+        userPreferences.updateData {
+            it.copy {
+                this.isNotFirstLaunch = true
             }
         }
     }

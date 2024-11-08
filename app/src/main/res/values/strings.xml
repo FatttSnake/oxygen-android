@@ -25,6 +25,7 @@
     <string name="core_unstar">Unstar</string>
     <string name="core_cancel">Cancel</string>
     <string name="core_undo">Undo</string>
+    <string name="core_dismiss">Dismiss</string>
     <string name="core_nothing">Nothing</string>
     <string name="core_nothing_found">Nothing found</string>
     <string name="core_file_select_one">Select a file</string>
@@ -32,6 +33,9 @@
     <string name="core_file_select_one_text">Select a text file</string>
     <string name="core_file_select_multi_text">Select text files</string>
     <string name="core_can_only_download_http_https">Can only download HTTP/HTTPS URIs: %1$s</string>
+    <string name="core_web_view_warning">⚠️ WebView warning ⚠️</string>
+    <string name="core_cannot_load_web_view_version">The WebView version information cannot be obtained. If the WebView version is too low, it may cause abnormal tool usage. Please be informed.</string>
+    <string name="core_web_view_version_too_low">The current WebView version is too low, which may cause abnormal use of the tool. Please be informed.</string>
 
     <string name="feature_store_title">Store</string>
     <string name="feature_store_retry">try again</string>
