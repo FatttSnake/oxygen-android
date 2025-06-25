@@ -20,8 +20,8 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toKotlinTimeZone
 import top.fatweb.oxygen.toolbox.di.ApplicationScope
-import top.fatweb.oxygen.toolbox.network.Dispatcher
-import top.fatweb.oxygen.toolbox.network.OxygenDispatchers
+import top.fatweb.oxygen.toolbox.di.Dispatcher
+import top.fatweb.oxygen.toolbox.di.OxygenDispatchers
 import java.time.ZoneId
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -30,7 +30,7 @@ import kotlin.time.Duration.Companion.seconds
 @Singleton
 class TimeZoneBroadcastMonitor @Inject constructor(
     @ApplicationContext private val context: Context,
-    @ApplicationScope appScope: CoroutineScope,
+    @ApplicationScope applicationScope: CoroutineScope,
     @Dispatcher(OxygenDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : TimeZoneMonitor {
     override val currentTimeZone: SharedFlow<TimeZone> = callbackFlow {
@@ -40,7 +40,7 @@ class TimeZoneBroadcastMonitor @Inject constructor(
             override fun onReceive(context: Context, intent: Intent) {
                 if (intent.action != Intent.ACTION_TIMEZONE_CHANGED) return
 
-                val zonIdFromIntent = if (Build.VERSION.SDK_INT < VERSION_CODES.R) {
+                val zoneIdFromIntent = if (Build.VERSION.SDK_INT < VERSION_CODES.R) {
                     null
                 } else {
                     intent.getStringExtra(Intent.EXTRA_TIMEZONE)?.run {
@@ -49,13 +49,11 @@ class TimeZoneBroadcastMonitor @Inject constructor(
                     }
                 }
 
-                trySend(zonIdFromIntent ?: TimeZone.currentSystemDefault())
+                trySend(zoneIdFromIntent ?: TimeZone.currentSystemDefault())
             }
         }
 
         context.registerReceiver(receiver, IntentFilter(Intent.ACTION_TIMEZONE_CHANGED))
-
-        trySend(TimeZone.currentSystemDefault())
 
         awaitClose {
             context.unregisterReceiver(receiver)
@@ -65,7 +63,7 @@ class TimeZoneBroadcastMonitor @Inject constructor(
         .conflate()
         .flowOn(ioDispatcher)
         .shareIn(
-            scope = appScope,
+            scope = applicationScope,
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5.seconds.inWholeMilliseconds),
             replay = 1
         )

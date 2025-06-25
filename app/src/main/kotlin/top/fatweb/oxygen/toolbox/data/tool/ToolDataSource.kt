@@ -5,8 +5,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import top.fatweb.oxygen.toolbox.network.Dispatcher
-import top.fatweb.oxygen.toolbox.network.OxygenDispatchers
+import top.fatweb.oxygen.toolbox.di.Dispatcher
+import top.fatweb.oxygen.toolbox.di.OxygenDispatchers
 import javax.inject.Inject
 
 class ToolDataSource @Inject constructor(

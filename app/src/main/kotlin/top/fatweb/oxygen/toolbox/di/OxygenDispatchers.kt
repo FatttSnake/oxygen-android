@@ -1,4 +1,4 @@
-package top.fatweb.oxygen.toolbox.network
+package top.fatweb.oxygen.toolbox.di
 
 import javax.inject.Qualifier
 

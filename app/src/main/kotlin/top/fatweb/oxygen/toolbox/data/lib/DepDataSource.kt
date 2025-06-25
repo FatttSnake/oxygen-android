@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.serialization.json.Json
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.model.lib.Dependencies
-import top.fatweb.oxygen.toolbox.network.Dispatcher
-import top.fatweb.oxygen.toolbox.network.OxygenDispatchers
+import top.fatweb.oxygen.toolbox.di.Dispatcher
+import top.fatweb.oxygen.toolbox.di.OxygenDispatchers
 import javax.inject.Inject
 
 class DepDataSource @Inject constructor(

@@ -14,8 +14,6 @@ import kotlinx.coroutines.CoroutineScope
 import top.fatweb.oxygen.toolbox.data.UserPreferences
 import top.fatweb.oxygen.toolbox.data.userdata.IntToStringIdsMigration
 import top.fatweb.oxygen.toolbox.data.userdata.UserPreferencesSerializer
-import top.fatweb.oxygen.toolbox.network.Dispatcher
-import top.fatweb.oxygen.toolbox.network.OxygenDispatchers
 import javax.inject.Singleton
 
 @Module
