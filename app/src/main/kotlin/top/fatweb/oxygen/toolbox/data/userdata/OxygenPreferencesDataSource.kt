@@ -2,13 +2,13 @@ package top.fatweb.oxygen.toolbox.data.userdata
 
 import androidx.datastore.core.DataStore
 import kotlinx.coroutines.flow.map
-import top.fatweb.oxygen.toolbox.data.DarkThemeConfigProto
+import top.fatweb.oxygen.toolbox.data.ThemeTypeConfigProto
 import top.fatweb.oxygen.toolbox.data.LanguageConfigProto
 import top.fatweb.oxygen.toolbox.data.LaunchPageConfigProto
 import top.fatweb.oxygen.toolbox.data.ThemeBrandConfigProto
 import top.fatweb.oxygen.toolbox.data.UserPreferences
 import top.fatweb.oxygen.toolbox.data.copy
-import top.fatweb.oxygen.toolbox.model.userdata.DarkThemeConfig
+import top.fatweb.oxygen.toolbox.model.userdata.ThemeTypeConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
@@ -55,19 +55,19 @@ class OxygenPreferencesDataSource @Inject constructor(
                     ThemeBrandConfigProto.THEME_BRAND_CONFIG_ANDROID
                     -> ThemeBrandConfig.Android
                 },
-                darkThemeConfig = when (it.darkThemeConfig) {
+                themeTypeConfig = when (it.themeTypeConfig) {
                     null,
-                    DarkThemeConfigProto.UNRECOGNIZED,
-                    DarkThemeConfigProto.DARK_THEME_CONFIG_UNSPECIFIED,
-                    DarkThemeConfigProto.DARK_THEME_CONFIG_FOLLOW_SYSTEM
+                    ThemeTypeConfigProto.UNRECOGNIZED,
+                    ThemeTypeConfigProto.THEME_TYPE_CONFIG_UNSPECIFIED,
+                    ThemeTypeConfigProto.THEME_TYPE_CONFIG_FOLLOW_SYSTEM
                     ->
-                        DarkThemeConfig.FollowSystem
+                        ThemeTypeConfig.FollowSystem
 
-                    DarkThemeConfigProto.DARK_THEME_CONFIG_LIGHT
-                    -> DarkThemeConfig.Light
+                    ThemeTypeConfigProto.THEME_TYPE_CONFIG_LIGHT
+                    -> ThemeTypeConfig.Light
 
-                    DarkThemeConfigProto.DARK_THEME_CONFIG_DARK
-                    -> DarkThemeConfig.Dark
+                    ThemeTypeConfigProto.THEME_TYPE_CONFIG_DARK
+                    -> ThemeTypeConfig.Dark
                 },
                 useDynamicColor = it.useDynamicColor,
                 isNotFirstLaunch = it.isNotFirstLaunch
@@ -108,13 +108,13 @@ class OxygenPreferencesDataSource @Inject constructor(
         }
     }
 
-    suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
+    suspend fun setThemeTypeConfig(themeTypeConfig: ThemeTypeConfig) {
         userPreferences.updateData {
             it.copy {
-                this.darkThemeConfig = when (darkThemeConfig) {
-                    DarkThemeConfig.FollowSystem -> DarkThemeConfigProto.DARK_THEME_CONFIG_FOLLOW_SYSTEM
-                    DarkThemeConfig.Light -> DarkThemeConfigProto.DARK_THEME_CONFIG_LIGHT
-                    DarkThemeConfig.Dark -> DarkThemeConfigProto.DARK_THEME_CONFIG_DARK
+                this.themeTypeConfig = when (themeTypeConfig) {
+                    ThemeTypeConfig.FollowSystem -> ThemeTypeConfigProto.THEME_TYPE_CONFIG_FOLLOW_SYSTEM
+                    ThemeTypeConfig.Light -> ThemeTypeConfigProto.THEME_TYPE_CONFIG_LIGHT
+                    ThemeTypeConfig.Dark -> ThemeTypeConfigProto.THEME_TYPE_CONFIG_DARK
                 }
             }
         }

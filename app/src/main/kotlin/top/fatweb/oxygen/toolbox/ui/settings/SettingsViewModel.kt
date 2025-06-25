@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import top.fatweb.oxygen.toolbox.model.userdata.DarkThemeConfig
+import top.fatweb.oxygen.toolbox.model.userdata.ThemeTypeConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
@@ -50,9 +50,9 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun updateDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
+    fun updateThemeTypeConfig(themeTypeConfig: ThemeTypeConfig) {
         viewModelScope.launch {
-            userDataRepository.setDarkThemeConfig(darkThemeConfig)
+            userDataRepository.setThemeTypeConfig(themeTypeConfig)
         }
     }
 

@@ -2,7 +2,7 @@ package top.fatweb.oxygen.toolbox.repository.userdata.impl
 
 import kotlinx.coroutines.flow.Flow
 import top.fatweb.oxygen.toolbox.data.userdata.OxygenPreferencesDataSource
-import top.fatweb.oxygen.toolbox.model.userdata.DarkThemeConfig
+import top.fatweb.oxygen.toolbox.model.userdata.ThemeTypeConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
@@ -28,8 +28,8 @@ internal class LocalUserDataRepository @Inject constructor(
         oxygenPreferencesDataSource.setThemeBrandConfig(themeBrandConfig)
     }
 
-    override suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
-        oxygenPreferencesDataSource.setDarkThemeConfig(darkThemeConfig)
+    override suspend fun setThemeTypeConfig(themeTypeConfig: ThemeTypeConfig) {
+        oxygenPreferencesDataSource.setThemeTypeConfig(themeTypeConfig)
     }
 
     override suspend fun setUseDynamicColor(useDynamicColor: Boolean) {

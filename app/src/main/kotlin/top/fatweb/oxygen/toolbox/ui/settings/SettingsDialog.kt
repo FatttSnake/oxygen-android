@@ -23,7 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
-import top.fatweb.oxygen.toolbox.model.userdata.DarkThemeConfig
+import top.fatweb.oxygen.toolbox.model.userdata.ThemeTypeConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
@@ -55,7 +55,7 @@ fun SettingsDialog(
         onChangeLanguageConfig = viewModel::updateLanguageConfig,
         onChangeLaunchPageConfig = viewModel::updateLaunchPageConfig,
         onchangeThemeBrandConfig = viewModel::updateThemeBrandConfig,
-        onChangeDarkThemeConfig = viewModel::updateDarkThemeConfig,
+        onChangeThemeTypeConfig = viewModel::updateThemeTypeConfig,
         onchangeUseDynamicColor = viewModel::updateUseDynamicColor
     )
 }
@@ -71,7 +71,7 @@ fun SettingsDialog(
     onChangeLanguageConfig: (languageConfig: LanguageConfig) -> Unit,
     onChangeLaunchPageConfig: (launchPageConfig: LaunchPageConfig) -> Unit,
     onchangeThemeBrandConfig: (themeBrandConfig: ThemeBrandConfig) -> Unit,
-    onChangeDarkThemeConfig: (darkThemeConfig: DarkThemeConfig) -> Unit,
+    onChangeThemeTypeConfig: (themeTypeConfig: ThemeTypeConfig) -> Unit,
     onchangeUseDynamicColor: (useDynamicColor: Boolean) -> Unit
 ) {
     val configuration = LocalConfiguration.current
@@ -107,7 +107,7 @@ fun SettingsDialog(
                             onChangeLanguageConfig = onChangeLanguageConfig,
                             onChangeLaunchPageConfig = onChangeLaunchPageConfig,
                             onchangeThemeBrandConfig = onchangeThemeBrandConfig,
-                            onChangeDarkThemeConfig = onChangeDarkThemeConfig,
+                            onChangeThemeTypeConfig = onChangeThemeTypeConfig,
                             onchangeUseDynamicColor = onchangeUseDynamicColor
                         )
                     }
@@ -137,7 +137,7 @@ private fun ColumnScope.SettingsPanel(
     onChangeLanguageConfig: (languageConfig: LanguageConfig) -> Unit,
     onChangeLaunchPageConfig: (launchPageConfig: LaunchPageConfig) -> Unit,
     onchangeThemeBrandConfig: (themeBrandConfig: ThemeBrandConfig) -> Unit,
-    onChangeDarkThemeConfig: (darkThemeConfig: DarkThemeConfig) -> Unit,
+    onChangeThemeTypeConfig: (themeTypeConfig: ThemeTypeConfig) -> Unit,
     onchangeUseDynamicColor: (useDynamicColor: Boolean) -> Unit
 ) {
     DialogSectionTitle(text = stringResource(R.string.feature_settings_language))
@@ -203,18 +203,18 @@ private fun ColumnScope.SettingsPanel(
     DialogSectionGroup {
         DialogChooserRow(
             text = stringResource(R.string.feature_settings_dark_mode_system_default),
-            selected = settings.darkThemeConfig == DarkThemeConfig.FollowSystem,
-            onClick = { onChangeDarkThemeConfig(DarkThemeConfig.FollowSystem) }
+            selected = settings.themeTypeConfig == ThemeTypeConfig.FollowSystem,
+            onClick = { onChangeThemeTypeConfig(ThemeTypeConfig.FollowSystem) }
         )
         DialogChooserRow(
             text = stringResource(R.string.feature_settings_dark_mode_light),
-            selected = settings.darkThemeConfig == DarkThemeConfig.Light,
-            onClick = { onChangeDarkThemeConfig(DarkThemeConfig.Light) }
+            selected = settings.themeTypeConfig == ThemeTypeConfig.Light,
+            onClick = { onChangeThemeTypeConfig(ThemeTypeConfig.Light) }
         )
         DialogChooserRow(
             text = stringResource(R.string.feature_settings_dark_mode_dark),
-            selected = settings.darkThemeConfig == DarkThemeConfig.Dark,
-            onClick = { onChangeDarkThemeConfig(DarkThemeConfig.Dark) }
+            selected = settings.themeTypeConfig == ThemeTypeConfig.Dark,
+            onClick = { onChangeThemeTypeConfig(ThemeTypeConfig.Dark) }
         )
     }
     DialogSectionTitle(text = stringResource(R.string.feature_settings_more))
@@ -251,7 +251,7 @@ private fun SettingsDialogLoadingPreview() {
             onChangeLanguageConfig = {},
             onChangeLaunchPageConfig = {},
             onchangeThemeBrandConfig = {},
-            onChangeDarkThemeConfig = {},
+            onChangeThemeTypeConfig = {},
             onchangeUseDynamicColor = {}
         )
     }
@@ -270,7 +270,7 @@ private fun SettingDialogPreview() {
                     languageConfig = LanguageConfig.FollowSystem,
                     launchPageConfig = LaunchPageConfig.Tools,
                     themeBrandConfig = ThemeBrandConfig.Default,
-                    darkThemeConfig = DarkThemeConfig.FollowSystem,
+                    themeTypeConfig = ThemeTypeConfig.FollowSystem,
                     useDynamicColor = true,
                     isNotFirstLaunch = true
                 )
@@ -278,7 +278,7 @@ private fun SettingDialogPreview() {
             onChangeLanguageConfig = {},
             onChangeLaunchPageConfig = {},
             onchangeThemeBrandConfig = {},
-            onChangeDarkThemeConfig = {},
+            onChangeThemeTypeConfig = {},
             onchangeUseDynamicColor = {}
         )
     }

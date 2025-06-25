@@ -37,7 +37,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import top.fatweb.oxygen.toolbox.model.userdata.DarkThemeConfig
+import top.fatweb.oxygen.toolbox.model.userdata.ThemeTypeConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
@@ -219,10 +219,10 @@ private fun shouldUseDarkTheme(uiState: MainActivityUiState): Boolean =
     when (uiState) {
         MainActivityUiState.Loading -> isSystemInDarkTheme()
         is MainActivityUiState.Success ->
-            when (uiState.userData.darkThemeConfig) {
-                DarkThemeConfig.FollowSystem -> isSystemInDarkTheme()
-                DarkThemeConfig.Light -> false
-                DarkThemeConfig.Dark -> true
+            when (uiState.userData.themeTypeConfig) {
+                ThemeTypeConfig.FollowSystem -> isSystemInDarkTheme()
+                ThemeTypeConfig.Light -> false
+                ThemeTypeConfig.Dark -> true
             }
     }
 

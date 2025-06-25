@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.stateIn
 import timber.log.Timber
 import top.fatweb.oxygen.toolbox.model.Result
 import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
-import top.fatweb.oxygen.toolbox.model.userdata.DarkThemeConfig
+import top.fatweb.oxygen.toolbox.model.userdata.ThemeTypeConfig
 import top.fatweb.oxygen.toolbox.navigation.ToolViewArgs
 import top.fatweb.oxygen.toolbox.repository.tool.StoreRepository
 import top.fatweb.oxygen.toolbox.repository.tool.ToolRepository
@@ -119,10 +119,10 @@ private fun toolViewUiState(
     return isSystemDarkModeFlow.flatMapLatest { isSystemDarkMode ->
         flow {
             userDataRepository.userData.collect { userData ->
-                val isDarkMode: Boolean = when (userData.darkThemeConfig) {
-                    DarkThemeConfig.FollowSystem -> isSystemDarkMode
-                    DarkThemeConfig.Light -> false
-                    DarkThemeConfig.Dark -> true
+                val isDarkMode: Boolean = when (userData.themeTypeConfig) {
+                    ThemeTypeConfig.FollowSystem -> isSystemDarkMode
+                    ThemeTypeConfig.Light -> false
+                    ThemeTypeConfig.Dark -> true
                 }
                 val globalJsVariables = toolRepository.getGlobalJsVariables(isDarkMode)
                 val globalCssVariables = toolRepository.getGlobalCssVariables(isDarkMode)

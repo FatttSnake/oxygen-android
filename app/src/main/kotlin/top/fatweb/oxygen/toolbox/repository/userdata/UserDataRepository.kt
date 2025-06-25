@@ -1,7 +1,7 @@
 package top.fatweb.oxygen.toolbox.repository.userdata
 
 import kotlinx.coroutines.flow.Flow
-import top.fatweb.oxygen.toolbox.model.userdata.DarkThemeConfig
+import top.fatweb.oxygen.toolbox.model.userdata.ThemeTypeConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
@@ -16,7 +16,7 @@ interface UserDataRepository {
 
     suspend fun setThemeBrandConfig(themeBrandConfig: ThemeBrandConfig)
 
-    suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig)
+    suspend fun setThemeTypeConfig(themeTypeConfig: ThemeTypeConfig)
 
     suspend fun setUseDynamicColor(useDynamicColor: Boolean)
 
