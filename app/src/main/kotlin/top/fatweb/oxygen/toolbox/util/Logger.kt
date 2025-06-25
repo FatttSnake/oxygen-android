@@ -16,7 +16,7 @@ class HttpLogger : HttpLoggingInterceptor.Logger {
     }
 }
 
-class OxygenLogTree(
+class LogTree(
     context: Context
 ) : Timber.DebugTree() {
     @IntDef(Log.ASSERT, Log.ERROR, Log.WARN, Log.INFO, Log.DEBUG, Log.VERBOSE)
@@ -41,7 +41,7 @@ class OxygenLogTree(
             }
             logFile.appendText(text = format(priority = priority, tag = tag, message = message, t = t))
         } catch (e: Exception) {
-            Log.e("OxygenLogTree", "Error writing log message to file", e)
+            Log.e("LogTree", "Error writing log message to file", e)
         }
     }
 
