@@ -2,20 +2,20 @@ package top.fatweb.oxygen.toolbox.data.userdata
 
 import androidx.datastore.core.DataStore
 import kotlinx.coroutines.flow.map
-import top.fatweb.oxygen.toolbox.data.ThemeTypeConfigProto
 import top.fatweb.oxygen.toolbox.data.LanguageConfigProto
 import top.fatweb.oxygen.toolbox.data.LaunchPageConfigProto
 import top.fatweb.oxygen.toolbox.data.ThemeBrandConfigProto
+import top.fatweb.oxygen.toolbox.data.ThemeTypeConfigProto
 import top.fatweb.oxygen.toolbox.data.UserPreferences
 import top.fatweb.oxygen.toolbox.data.copy
-import top.fatweb.oxygen.toolbox.model.userdata.ThemeTypeConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
+import top.fatweb.oxygen.toolbox.model.userdata.ThemeTypeConfig
 import top.fatweb.oxygen.toolbox.model.userdata.UserData
 import javax.inject.Inject
 
-class OxygenPreferencesDataSource @Inject constructor(
+class PreferencesDataSource @Inject constructor(
     private val userPreferences: DataStore<UserPreferences>
 ) {
     val userData = userPreferences.data
@@ -26,48 +26,48 @@ class OxygenPreferencesDataSource @Inject constructor(
                     LanguageConfigProto.UNRECOGNIZED,
                     LanguageConfigProto.LANGUAGE_CONFIG_UNSPECIFIED,
                     LanguageConfigProto.LANGUAGE_CONFIG_FOLLOW_SYSTEM
-                    -> LanguageConfig.FollowSystem
+                        -> LanguageConfig.FollowSystem
 
                     LanguageConfigProto.LANGUAGE_CONFIG_CHINESE
-                    -> LanguageConfig.Chinese
+                        -> LanguageConfig.Chinese
 
                     LanguageConfigProto.LANGUAGE_CONFIG_ENGLISH
-                    -> LanguageConfig.English
+                        -> LanguageConfig.English
                 },
                 launchPageConfig = when (it.launchPageConfig) {
                     null,
                     LaunchPageConfigProto.UNRECOGNIZED,
                     LaunchPageConfigProto.LAUNCH_PAGE_CONFIG_UNSPECIFIED,
                     LaunchPageConfigProto.LAUNCH_PAGE_CONFIG_TOOLS
-                    -> LaunchPageConfig.Tools
+                        -> LaunchPageConfig.Tools
 
                     LaunchPageConfigProto.LAUNCH_PAGE_CONFIG_STAR
-                    -> LaunchPageConfig.Star
+                        -> LaunchPageConfig.Star
                 },
                 themeBrandConfig = when (it.themeBrandConfig) {
                     null,
                     ThemeBrandConfigProto.UNRECOGNIZED,
                     ThemeBrandConfigProto.THEME_BRAND_CONFIG_UNSPECIFIED,
                     ThemeBrandConfigProto.THEME_BRAND_CONFIG_DEFAULT
-                    ->
+                        ->
                         ThemeBrandConfig.Default
 
                     ThemeBrandConfigProto.THEME_BRAND_CONFIG_ANDROID
-                    -> ThemeBrandConfig.Android
+                        -> ThemeBrandConfig.Android
                 },
                 themeTypeConfig = when (it.themeTypeConfig) {
                     null,
                     ThemeTypeConfigProto.UNRECOGNIZED,
                     ThemeTypeConfigProto.THEME_TYPE_CONFIG_UNSPECIFIED,
                     ThemeTypeConfigProto.THEME_TYPE_CONFIG_FOLLOW_SYSTEM
-                    ->
+                        ->
                         ThemeTypeConfig.FollowSystem
 
                     ThemeTypeConfigProto.THEME_TYPE_CONFIG_LIGHT
-                    -> ThemeTypeConfig.Light
+                        -> ThemeTypeConfig.Light
 
                     ThemeTypeConfigProto.THEME_TYPE_CONFIG_DARK
-                    -> ThemeTypeConfig.Dark
+                        -> ThemeTypeConfig.Dark
                 },
                 useDynamicColor = it.useDynamicColor,
                 isNotFirstLaunch = it.isNotFirstLaunch

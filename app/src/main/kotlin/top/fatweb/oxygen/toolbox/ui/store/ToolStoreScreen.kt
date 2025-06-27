@@ -99,9 +99,9 @@ internal fun ToolStoreScreen(
     installInfo: ToolStoreUiState.InstallInfo,
     searchValue: String,
     onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit,
-    onChangeInstallStatus: (status: ToolStoreUiState.InstallInfo.Status) -> Unit,
-    onChangeInstallType: (type: ToolStoreUiState.InstallInfo.Type) -> Unit,
-    onInstallTool: (installTool: ToolEntity) -> Unit
+    onChangeInstallStatus: (ToolStoreUiState.InstallInfo.Status) -> Unit,
+    onChangeInstallType: (ToolStoreUiState.InstallInfo.Type) -> Unit,
+    onInstallTool: (ToolEntity) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -362,7 +362,8 @@ private fun InstallAlertDialog(
 
                         ToolStoreUiState.InstallInfo.Status.Processing ->
                             Column(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier
+                                    .fillMaxWidth(),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 CircularProgressIndicator()

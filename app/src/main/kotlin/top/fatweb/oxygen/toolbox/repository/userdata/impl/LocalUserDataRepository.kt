@@ -1,42 +1,42 @@
 package top.fatweb.oxygen.toolbox.repository.userdata.impl
 
 import kotlinx.coroutines.flow.Flow
-import top.fatweb.oxygen.toolbox.data.userdata.OxygenPreferencesDataSource
-import top.fatweb.oxygen.toolbox.model.userdata.ThemeTypeConfig
+import top.fatweb.oxygen.toolbox.data.userdata.PreferencesDataSource
 import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
+import top.fatweb.oxygen.toolbox.model.userdata.ThemeTypeConfig
 import top.fatweb.oxygen.toolbox.model.userdata.UserData
 import top.fatweb.oxygen.toolbox.repository.userdata.UserDataRepository
 import javax.inject.Inject
 
 internal class LocalUserDataRepository @Inject constructor(
-    private val oxygenPreferencesDataSource: OxygenPreferencesDataSource
+    private val preferencesDataSource: PreferencesDataSource
 ) : UserDataRepository {
     override val userData: Flow<UserData> =
-        oxygenPreferencesDataSource.userData
+        preferencesDataSource.userData
 
     override suspend fun setLanguageConfig(languageConfig: LanguageConfig) {
-        oxygenPreferencesDataSource.setLanguageConfig(languageConfig)
+        preferencesDataSource.setLanguageConfig(languageConfig)
     }
 
     override suspend fun setLaunchPageConfig(launchPageConfig: LaunchPageConfig) {
-        oxygenPreferencesDataSource.setLaunchPageConfig(launchPageConfig)
+        preferencesDataSource.setLaunchPageConfig(launchPageConfig)
     }
 
     override suspend fun setThemeBrandConfig(themeBrandConfig: ThemeBrandConfig) {
-        oxygenPreferencesDataSource.setThemeBrandConfig(themeBrandConfig)
+        preferencesDataSource.setThemeBrandConfig(themeBrandConfig)
     }
 
     override suspend fun setThemeTypeConfig(themeTypeConfig: ThemeTypeConfig) {
-        oxygenPreferencesDataSource.setThemeTypeConfig(themeTypeConfig)
+        preferencesDataSource.setThemeTypeConfig(themeTypeConfig)
     }
 
     override suspend fun setUseDynamicColor(useDynamicColor: Boolean) {
-        oxygenPreferencesDataSource.setUseDynamicColor(useDynamicColor)
+        preferencesDataSource.setUseDynamicColor(useDynamicColor)
     }
 
     override suspend fun updateIsNotFirstLaunch() {
-        oxygenPreferencesDataSource.updateIsNotFirstLaunch()
+        preferencesDataSource.updateIsNotFirstLaunch()
     }
 }

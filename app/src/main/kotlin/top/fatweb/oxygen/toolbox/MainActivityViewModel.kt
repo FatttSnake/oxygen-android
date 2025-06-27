@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
- import kotlinx.coroutines.launch
+import kotlinx.coroutines.launch
 import top.fatweb.oxygen.toolbox.model.userdata.UserData
 import top.fatweb.oxygen.toolbox.repository.userdata.UserDataRepository
 import javax.inject.Inject
@@ -17,13 +17,15 @@ import kotlin.time.Duration.Companion.seconds
 class MainActivityViewModel @Inject constructor(
     private val userDataRepository: UserDataRepository
 ) : ViewModel() {
-    val uiState: StateFlow<MainActivityUiState> = userDataRepository.userData.map {
-        MainActivityUiState.Success(it)
-    }.stateIn(
-        scope = viewModelScope,
-        initialValue = MainActivityUiState.Loading,
-        started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5.seconds.inWholeMilliseconds)
-    )
+    val uiState: StateFlow<MainActivityUiState> = userDataRepository.userData
+        .map {
+            MainActivityUiState.Success(it)
+        }
+        .stateIn(
+            scope = viewModelScope,
+            initialValue = MainActivityUiState.Loading,
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5.seconds.inWholeMilliseconds)
+        )
 
     fun updateIsNotFirstLaunch() {
         viewModelScope.launch {

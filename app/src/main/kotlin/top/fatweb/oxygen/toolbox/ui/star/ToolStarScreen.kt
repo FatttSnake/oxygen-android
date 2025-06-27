@@ -92,7 +92,8 @@ internal fun StarScreen(
     var isShowMenu by remember { mutableStateOf(true) }
 
     Box(
-        modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
     ) {
         when (starScreenUiState) {
             StarScreenUiState.Loading -> {
@@ -209,7 +210,8 @@ private fun ToolMenu(
 ) {
     ModalBottomSheet(onDismissRequest = onDismiss, dragHandle = {}) {
         Column(
-            modifier = modifier.padding(16.dp)
+            modifier = modifier
+                .padding(16.dp)
         ) {
             DialogTitle(text = selectedTool.name)
             HorizontalDivider()

@@ -11,7 +11,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 import top.fatweb.oxygen.toolbox.BuildConfig
-import top.fatweb.oxygen.toolbox.data.network.OxygenNetworkDataSource
+import top.fatweb.oxygen.toolbox.data.network.NetworkDataSource
 import top.fatweb.oxygen.toolbox.model.Result
 import top.fatweb.oxygen.toolbox.model.asResult
 import top.fatweb.oxygen.toolbox.network.model.PageVo
@@ -39,10 +39,10 @@ private interface RetrofitOxygenNetworkApi {
 
 private const val API_BASE_URL = BuildConfig.API_URL
 
-internal class RetrofitOxygenNetwork @Inject constructor(
+internal class RetrofitNetwork @Inject constructor(
     networkJson: Json,
     okhttpCallFactory: dagger.Lazy<Call.Factory>
-) : OxygenNetworkDataSource {
+) : NetworkDataSource {
     private val networkApi = Retrofit.Builder()
         .baseUrl(API_BASE_URL)
         .callFactory { okhttpCallFactory.get().newCall(it) }

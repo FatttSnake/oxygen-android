@@ -1,6 +1,7 @@
 package top.fatweb.oxygen.toolbox
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
@@ -37,10 +38,10 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import top.fatweb.oxygen.toolbox.model.userdata.ThemeTypeConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
+import top.fatweb.oxygen.toolbox.model.userdata.ThemeTypeConfig
 import top.fatweb.oxygen.toolbox.monitor.NetworkMonitor
 import top.fatweb.oxygen.toolbox.monitor.TimeZoneMonitor
 import top.fatweb.oxygen.toolbox.navigation.PREVIEW_ARG
@@ -90,21 +91,24 @@ class MainActivity : ComponentActivity() {
             val locale = whatLocale(uiState)
             if (uiState != MainActivityUiState.Loading) {
                 LaunchedEffect(locale) {
-                    LocaleUtils.switchLocale(this@MainActivity, locale)
+                    LocaleUtils.switchLocale(
+                        activity = this@MainActivity,
+                        languageConfig = locale
+                    )
                 }
                 UseIsFirstLaunch(viewModel) {
                     CheckWebView(it)
                 }
             }
 
-            val darkTheme = shouldUseDarkTheme(uiState)
-            LaunchedEffect(darkTheme) {
+            val isDarkTheme = shouldUseDarkTheme(uiState)
+            LaunchedEffect(isDarkTheme) {
                 enableEdgeToEdge(
                     statusBarStyle = SystemBarStyle.auto(
-                        lightScrim = android.graphics.Color.TRANSPARENT,
-                        darkScrim = android.graphics.Color.TRANSPARENT
-                    ) { darkTheme },
-                    navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
+                        lightScrim = Color.TRANSPARENT,
+                        darkScrim = Color.TRANSPARENT
+                    ) { isDarkTheme },
+                    navigationBarStyle = SystemBarStyle.dark(Color.TRANSPARENT)
                 )
             }
 
@@ -119,7 +123,7 @@ class MainActivity : ComponentActivity() {
 
             CompositionLocalProvider(LocalTimeZone provides currentTimeZone) {
                 OxygenTheme(
-                    darkTheme = darkTheme,
+                    darkTheme = isDarkTheme,
                     androidTheme = shouldUseAndroidTheme(uiState),
                     dynamicColor = shouldUseDynamicColor(uiState)
                 ) {
@@ -164,7 +168,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun UseIsFirstLaunch(viewModel: MainActivityViewModel, callback: @Composable (ondDismiss: () -> Unit) -> Unit) {
+private fun UseIsFirstLaunch(
+    viewModel: MainActivityViewModel,
+    callback: @Composable (onDismiss: () -> Unit) -> Unit
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     if (!whatIsFirstLaunch(uiState)) {
         return
@@ -189,7 +196,7 @@ private fun CheckWebView(onDismiss: () -> Unit) {
     if (versionName == null) {
         AlertDialog(
             onDismissRequest = onDismiss,
-            title = {Text(text = stringResource(R.string.core_web_view_warning))},
+            title = { Text(text = stringResource(R.string.core_web_view_warning)) },
             text = { Text(text = stringResource(R.string.core_cannot_load_web_view_version)) },
             confirmButton = {
                 TextButton(onClick = onDismiss) {
@@ -202,7 +209,7 @@ private fun CheckWebView(onDismiss: () -> Unit) {
     if (versionName.split(".").first().toInt() < 80) {
         AlertDialog(
             onDismissRequest = onDismiss,
-            title = {Text(text = stringResource(R.string.core_web_view_warning))},
+            title = { Text(text = stringResource(R.string.core_web_view_warning)) },
             text = { Text(text = stringResource(R.string.core_web_view_version_too_low)) },
             confirmButton = {
                 TextButton(onClick = onDismiss) {

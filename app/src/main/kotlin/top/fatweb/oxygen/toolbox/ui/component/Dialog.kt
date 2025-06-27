@@ -28,7 +28,8 @@ fun DialogTitle(
     text: String
 ) {
     Text(
-        modifier = modifier.padding(16.dp),
+        modifier = modifier
+            .padding(16.dp),
         text = text,
         style = MaterialTheme.typography.titleLarge
     )
@@ -40,7 +41,8 @@ fun DialogSectionTitle(
     text: String
 ) {
     Text(
-        modifier = modifier.padding(top = 16.dp, bottom = 8.dp),
+        modifier = modifier
+            .padding(top = 16.dp, bottom = 8.dp),
         text = text,
         style = MaterialTheme.typography.titleMedium
     )
@@ -52,7 +54,8 @@ fun DialogSectionGroup(
     content: @Composable () -> Unit
 ) {
     Column(
-        modifier = modifier.selectableGroup()
+        modifier = modifier
+            .selectableGroup()
     ) {
         content()
     }

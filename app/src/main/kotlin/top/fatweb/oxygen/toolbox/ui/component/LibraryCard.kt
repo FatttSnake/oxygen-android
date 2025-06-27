@@ -1,7 +1,6 @@
 package top.fatweb.oxygen.toolbox.ui.component
 
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -21,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.model.lib.Developer
 import top.fatweb.oxygen.toolbox.model.lib.Library
@@ -45,11 +45,12 @@ fun LibraryCard(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         onClick = {
             val url = website ?: scm?.url ?: return@Card
-            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+            context.startActivity(Intent(Intent.ACTION_VIEW, url.toUri()))
         }
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .padding(16.dp)
         ) {
             LibraryTitle(
                 name = name ?: uniqueId.split(":").getOrNull(1)
@@ -59,13 +60,15 @@ fun LibraryCard(
                 version = artifactVersion ?: stringResource(R.string.core_unknown)
             )
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier
+                .height(16.dp))
 
             LibraryContent(
-                text = description ?: ""
+                text = description.orEmpty()
             )
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier
+                .height(16.dp))
 
             LibraryFooter(
                 licenses = licenses,
@@ -89,13 +92,15 @@ private fun LibraryTitle(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f),
                 style = MaterialTheme.typography.titleMedium,
                 text = name
             )
             Text(
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.outline, text = version
+                color = MaterialTheme.colorScheme.outline,
+                text = version
             )
         }
         Text(

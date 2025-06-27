@@ -9,8 +9,8 @@ import okhttp3.Call
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import top.fatweb.oxygen.toolbox.BuildConfig
-import top.fatweb.oxygen.toolbox.data.network.OxygenNetworkDataSource
-import top.fatweb.oxygen.toolbox.network.retrofit.RetrofitOxygenNetwork
+import top.fatweb.oxygen.toolbox.data.network.NetworkDataSource
+import top.fatweb.oxygen.toolbox.network.retrofit.RetrofitNetwork
 import top.fatweb.oxygen.toolbox.util.HttpLogger
 import javax.inject.Singleton
 
@@ -41,6 +41,6 @@ internal object NetworkModule {
     fun providesOxygenNetworkDataSource(
         networkJson: Json,
         okhttpCallFactory: dagger.Lazy<Call.Factory>
-    ): OxygenNetworkDataSource =
-        RetrofitOxygenNetwork(networkJson, okhttpCallFactory)
+    ): NetworkDataSource =
+        RetrofitNetwork(networkJson, okhttpCallFactory)
 }

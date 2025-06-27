@@ -39,23 +39,23 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hierarchy
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
 import top.fatweb.oxygen.toolbox.navigation.ABOUT_ROUTE
-import top.fatweb.oxygen.toolbox.navigation.OxygenNavHost
+import top.fatweb.oxygen.toolbox.navigation.NavHost
 import top.fatweb.oxygen.toolbox.navigation.STAR_ROUTE
 import top.fatweb.oxygen.toolbox.navigation.TOOLS_ROUTE
 import top.fatweb.oxygen.toolbox.navigation.TopLevelDestination
-import top.fatweb.oxygen.toolbox.ui.component.OxygenBackground
-import top.fatweb.oxygen.toolbox.ui.component.OxygenGradientBackground
-import top.fatweb.oxygen.toolbox.ui.component.OxygenNavigationBar
-import top.fatweb.oxygen.toolbox.ui.component.OxygenNavigationBarItem
-import top.fatweb.oxygen.toolbox.ui.component.OxygenNavigationRail
-import top.fatweb.oxygen.toolbox.ui.component.OxygenNavigationRailItem
-import top.fatweb.oxygen.toolbox.ui.component.OxygenTopAppBar
+import top.fatweb.oxygen.toolbox.navigation.isTopLevelDestinationInHierarchy
+import top.fatweb.oxygen.toolbox.ui.component.Background
+import top.fatweb.oxygen.toolbox.ui.component.GradientBackground
+import top.fatweb.oxygen.toolbox.ui.component.NavigationBar
+import top.fatweb.oxygen.toolbox.ui.component.NavigationBarItem
+import top.fatweb.oxygen.toolbox.ui.component.NavigationRail
+import top.fatweb.oxygen.toolbox.ui.component.NavigationRailItem
 import top.fatweb.oxygen.toolbox.ui.component.SearchButtonPosition
+import top.fatweb.oxygen.toolbox.ui.component.TopAppBar
 import top.fatweb.oxygen.toolbox.ui.settings.SettingsDialog
 import top.fatweb.oxygen.toolbox.ui.theme.GradientColors
 import top.fatweb.oxygen.toolbox.ui.theme.LocalGradientColors
@@ -104,8 +104,8 @@ fun OxygenApp(appState: OxygenAppState) {
     }
 
     CompositionLocalProvider(LocalFullScreen provides fullScreen) {
-        OxygenBackground {
-            OxygenGradientBackground(
+        Background {
+            GradientBackground(
                 gradientColors = if (shouldShowGradientBackground) LocalGradientColors.current else GradientColors()
             ) {
                 val destination = appState.currentTopLevelDestination
@@ -166,7 +166,7 @@ fun OxygenApp(appState: OxygenAppState) {
                         AnimatedVisibility(
                             visible = appState.shouldShowBottomBar && destination != null
                         ) {
-                            OxygenBottomBar(
+                            BottomBar(
                                 destinations = appState.topLevelDestinations,
                                 currentDestination = appState.currentDestination,
                                 onNavigateToDestination = appState::navigateToTopLevelDestination
@@ -181,7 +181,7 @@ fun OxygenApp(appState: OxygenAppState) {
                         AnimatedVisibility(
                             visible = appState.shouldShowNavRail && destination != null
                         ) {
-                            OxygenNavRail(
+                            NavRail(
                                 modifier = Modifier
                                     .padding(padding)
                                     .consumeWindowInsets(padding)
@@ -193,12 +193,13 @@ fun OxygenApp(appState: OxygenAppState) {
                         }
 
                         Column(
-                            Modifier.fillMaxSize()
+                            modifier = Modifier
+                                .fillMaxSize()
                         ) {
                             AnimatedVisibility(
                                 visible = destination != null
                             ) {
-                                OxygenTopAppBar(
+                                TopAppBar(
                                     scrollBehavior = topAppBarScrollBehavior,
                                     title = {
                                         destination?.let {
@@ -236,7 +237,7 @@ fun OxygenApp(appState: OxygenAppState) {
                                 )
                             }
 
-                            OxygenNavHost(
+                            NavHost(
                                 appState = appState,
                                 startDestination = when (appState.launchPageConfig) {
                                     LaunchPageConfig.Tools -> TOOLS_ROUTE
@@ -262,18 +263,18 @@ fun OxygenApp(appState: OxygenAppState) {
 }
 
 @Composable
-private fun OxygenBottomBar(
+private fun BottomBar(
     modifier: Modifier = Modifier,
     destinations: List<TopLevelDestination>,
     currentDestination: NavDestination?,
     onNavigateToDestination: (TopLevelDestination) -> Unit
 ) {
-    OxygenNavigationBar(
+    NavigationBar(
         modifier = modifier
     ) {
         destinations.forEach { destination ->
             val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
-            OxygenNavigationBarItem(
+            NavigationBarItem(
                 modifier = modifier,
                 selected = selected,
                 label = { Text(stringResource(destination.titleTextId)) },
@@ -296,18 +297,18 @@ private fun OxygenBottomBar(
 }
 
 @Composable
-private fun OxygenNavRail(
+private fun NavRail(
     modifier: Modifier = Modifier,
     destinations: List<TopLevelDestination>,
     currentDestination: NavDestination?,
     onNavigateToDestination: (TopLevelDestination) -> Unit
 ) {
-    OxygenNavigationRail(
+    NavigationRail(
         modifier = modifier
     ) {
         destinations.forEach { destination ->
             val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
-            OxygenNavigationRailItem(
+            NavigationRailItem(
                 modifier = modifier,
                 selected = selected,
                 label = { Text(stringResource(destination.titleTextId)) },
@@ -328,8 +329,3 @@ private fun OxygenNavRail(
         }
     }
 }
-
-private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination) =
-    this?.hierarchy?.any {
-        it.route?.equals(destination.route) == true
-    } == true

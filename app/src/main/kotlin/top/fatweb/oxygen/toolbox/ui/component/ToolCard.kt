@@ -67,7 +67,8 @@ fun ToolCard(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .padding(16.dp)
         ) {
             ToolHeader(
                 ver = specifyVer ?: tool.ver,
@@ -185,7 +186,8 @@ private fun ToolIcon(
         contentAlignment = Alignment.Center
     ) {
         Image(
-            modifier = Modifier.size(80.dp),
+            modifier = Modifier
+                .size(80.dp),
             bitmap = OxygenIcons.fromSvgBase64(icon),
             contentDescription = ""
         )
@@ -200,7 +202,8 @@ private fun ToolInfo(
     toolDesc: String?
 ) {
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
@@ -217,7 +220,8 @@ private fun ToolInfo(
         )
         toolDesc?.let {
             Text(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.outline,
                 text = "${stringResource(R.string.feature_tools_description)}: $it"
@@ -281,7 +285,8 @@ fun ToolCardSkeleton(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .padding(16.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -312,7 +317,8 @@ fun ToolCardSkeleton(
             }
             Spacer(Modifier.height(16.dp))
             Column(
-                modifier = modifier.fillMaxWidth(),
+                modifier = modifier
+                    .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {

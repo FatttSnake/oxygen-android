@@ -186,7 +186,7 @@ fun OxygenTheme(
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
-            typography = OxygenTypography,
+            typography = Typography,
             content = content
         )
     }

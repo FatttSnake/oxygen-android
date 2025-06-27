@@ -3,14 +3,14 @@ package top.fatweb.oxygen.toolbox.network.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import kotlinx.coroutines.flow.first
-import top.fatweb.oxygen.toolbox.data.network.OxygenNetworkDataSource
+import top.fatweb.oxygen.toolbox.data.network.NetworkDataSource
 import top.fatweb.oxygen.toolbox.data.tool.dao.ToolDao
 import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
 import top.fatweb.oxygen.toolbox.network.model.ToolVo
 import top.fatweb.oxygen.toolbox.network.model.asExternalModel
 
 internal class ToolStorePagingSource(
-    private val oxygenNetworkDataSource: OxygenNetworkDataSource,
+    private val networkDataSource: NetworkDataSource,
     private val toolDao: ToolDao,
     private val searchValue: String
 ) : PagingSource<Int, ToolEntity>() {
@@ -23,7 +23,7 @@ internal class ToolStorePagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ToolEntity> {
         return try {
             val currentPage = params.key ?: 1
-            val (_, success, msg, data) = oxygenNetworkDataSource.getStore(
+            val (_, success, msg, data) = networkDataSource.getStore(
                 searchValue = searchValue,
                 currentPage = currentPage
             )

@@ -39,7 +39,14 @@ class LogTree(
             if (logFile.length() >= maxFileSize) {
                 rotateLogFile()
             }
-            logFile.appendText(text = format(priority = priority, tag = tag, message = message, t = t))
+            logFile.appendText(
+                text = format(
+                    priority = priority,
+                    tag = tag,
+                    message = message,
+                    t = t
+                )
+            )
         } catch (e: Exception) {
             Log.e("LogTree", "Error writing log message to file", e)
         }
@@ -51,7 +58,8 @@ class LogTree(
                 logDir.mkdirs()
             }
             logFile.createNewFile()
-        } catch (_: Exception) {}
+        } catch (_: Exception) {
+        }
     }
 
     private fun format(@Level priority: Int, tag: String?, message: String, t: Throwable?) = "${
@@ -67,7 +75,7 @@ class LogTree(
             Log.WARN -> "Warn: "
             else -> "Unknown: "
         }
-    } $message${t?.run { " ${toString()}" } ?: ""}\n"
+    } $message${t?.run { " ${toString()}" }.orEmpty()}\n"
 
     private fun rotateLogFile() {
         logFile.renameTo(

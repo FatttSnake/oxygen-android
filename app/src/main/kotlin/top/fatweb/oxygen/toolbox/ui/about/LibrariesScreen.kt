@@ -1,7 +1,6 @@
 package top.fatweb.oxygen.toolbox.ui.about
 
 import android.content.Intent
-import android.net.Uri
 import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
@@ -49,12 +48,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 import top.fatweb.oxygen.toolbox.ui.component.Indicator
-import top.fatweb.oxygen.toolbox.ui.component.OxygenTopAppBar
+import top.fatweb.oxygen.toolbox.ui.component.TopAppBar
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.DraggableScrollbar
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.rememberDraggableScroller
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.scrollbarState
@@ -73,7 +73,7 @@ internal fun LibrariesRoute(
         modifier = modifier,
         librariesScreenUiState = librariesScreenUiState,
         onBackClick = onBackClick,
-        onSearch = { viewModel.onSearchValueChange(it) }
+        onSearch = viewModel::onSearchValueChange
     )
 }
 
@@ -117,10 +117,10 @@ internal fun LibrariesScreen(
         modifier = Modifier
             .nestedScroll(connection = topAppBarScrollBehavior.nestedScrollConnection),
         containerColor = Color.Transparent,
-        contentWindowInsets = WindowInsets(left = 0, top = 0, right = 0, bottom = 0),
+        contentWindowInsets = WindowInsets(left = 0, top = 0, right = 0, bottom = 0)
     ) { padding ->
         Column(
-            modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .padding(padding)
                 .consumeWindowInsets(padding)
@@ -130,7 +130,7 @@ internal fun LibrariesScreen(
                     )
                 )
         ) {
-            OxygenTopAppBar(
+            TopAppBar(
                 scrollBehavior = topAppBarScrollBehavior,
                 title = {
                     Text(
@@ -200,8 +200,8 @@ internal fun LibrariesScreen(
                             if (license != null) {
                                 showDialog = true
                                 dialogTitle = license.name
-                                dialogContent = license.content ?: ""
-                                dialogUrl = license.url ?: ""
+                                dialogContent = license.content.orEmpty()
+                                dialogUrl = license.url.orEmpty()
                             }
                         }
 
@@ -250,7 +250,8 @@ internal fun LibrariesScreen(
             },
             text = {
                 Column(
-                    modifier = Modifier.verticalScroll(state = rememberScrollState())
+                    modifier = Modifier
+                        .verticalScroll(state = rememberScrollState())
                 ) {
                     Text(text = dialogContent)
                 }
@@ -260,7 +261,7 @@ internal fun LibrariesScreen(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     TextButton(onClick = {
-                        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(dialogUrl)))
+                        context.startActivity(Intent(Intent.ACTION_VIEW, dialogUrl.toUri()))
                     }) {
                         Text(text = stringResource(R.string.core_website))
                     }

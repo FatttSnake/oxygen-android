@@ -24,8 +24,8 @@ class StarScreenViewModel @Inject constructor(
     private val searchValue = savedStateHandle.getStateFlow(SEARCH_VALUE, "")
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val starScreenUiState: StateFlow<StarScreenUiState> =
-        searchValue.flatMapLatest { searchValue ->
+    val starScreenUiState: StateFlow<StarScreenUiState> = searchValue
+        .flatMapLatest { searchValue ->
             toolRepository.getStarToolsStream(searchValue).map {
                 if (it.isEmpty()) {
                     StarScreenUiState.Nothing
@@ -33,7 +33,8 @@ class StarScreenViewModel @Inject constructor(
                     StarScreenUiState.Success(it)
                 }
             }
-        }.stateIn(
+        }
+        .stateIn(
             scope = viewModelScope,
             initialValue = StarScreenUiState.Loading,
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5.seconds.inWholeMilliseconds)

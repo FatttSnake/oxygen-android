@@ -7,7 +7,7 @@ import top.fatweb.oxygen.toolbox.network.model.ResponseResult
 import top.fatweb.oxygen.toolbox.network.model.ToolBaseVo
 import top.fatweb.oxygen.toolbox.network.model.ToolVo
 
-interface OxygenNetworkDataSource {
+interface NetworkDataSource {
     suspend fun getStore(
         searchValue: String = "",
         currentPage: Int = 1

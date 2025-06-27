@@ -8,7 +8,7 @@ import top.fatweb.oxygen.toolbox.network.model.ResponseResult
 
 sealed interface Result<out T> {
     data class Success<T>(val data: T) : Result<T>
-    data class Fail(val message: String): Result<Nothing>
+    data class Fail(val message: String) : Result<Nothing>
     data class Error(val exception: Throwable) : Result<Nothing>
     data object Loading : Result<Nothing>
 }

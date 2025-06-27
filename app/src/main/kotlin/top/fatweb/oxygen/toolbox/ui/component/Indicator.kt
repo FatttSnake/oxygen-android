@@ -25,7 +25,8 @@ fun Indicator(
     contentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

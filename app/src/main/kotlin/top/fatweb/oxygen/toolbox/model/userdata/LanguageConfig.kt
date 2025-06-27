@@ -1,7 +1,9 @@
 package top.fatweb.oxygen.toolbox.model.userdata
 
-enum class LanguageConfig(val code: String? = null) {
+enum class LanguageConfig {
     FollowSystem,
-    Chinese("cn"),
-    English("en")
+
+    Chinese,
+
+    English
 }

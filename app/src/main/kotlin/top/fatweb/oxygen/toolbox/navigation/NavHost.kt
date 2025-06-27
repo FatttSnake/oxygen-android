@@ -11,7 +11,7 @@ import top.fatweb.oxygen.toolbox.ui.OxygenAppState
 import top.fatweb.oxygen.toolbox.ui.util.LocalFullScreen
 
 @Composable
-fun OxygenNavHost(
+fun NavHost(
     modifier: Modifier = Modifier,
     appState: OxygenAppState,
     startDestination: String,

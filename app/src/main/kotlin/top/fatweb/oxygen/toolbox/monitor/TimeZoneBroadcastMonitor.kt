@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
-import android.os.Build.VERSION_CODES
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -21,7 +20,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toKotlinTimeZone
 import top.fatweb.oxygen.toolbox.di.ApplicationScope
 import top.fatweb.oxygen.toolbox.di.Dispatcher
-import top.fatweb.oxygen.toolbox.di.OxygenDispatchers
+import top.fatweb.oxygen.toolbox.di.AppDispatchers
 import java.time.ZoneId
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -31,7 +30,7 @@ import kotlin.time.Duration.Companion.seconds
 class TimeZoneBroadcastMonitor @Inject constructor(
     @ApplicationContext private val context: Context,
     @ApplicationScope applicationScope: CoroutineScope,
-    @Dispatcher(OxygenDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
+    @Dispatcher(AppDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : TimeZoneMonitor {
     override val currentTimeZone: SharedFlow<TimeZone> = callbackFlow {
         trySend(TimeZone.currentSystemDefault())
@@ -40,7 +39,7 @@ class TimeZoneBroadcastMonitor @Inject constructor(
             override fun onReceive(context: Context, intent: Intent) {
                 if (intent.action != Intent.ACTION_TIMEZONE_CHANGED) return
 
-                val zoneIdFromIntent = if (Build.VERSION.SDK_INT < VERSION_CODES.R) {
+                val zoneIdFromIntent = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
                     null
                 } else {
                     intent.getStringExtra(Intent.EXTRA_TIMEZONE)?.run {

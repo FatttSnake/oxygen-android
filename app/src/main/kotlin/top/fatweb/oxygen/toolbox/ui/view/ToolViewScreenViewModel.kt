@@ -77,11 +77,12 @@ class ToolViewScreenViewModel @Inject constructor(
     val webviewInstance = flow<WebViewInstanceState> {
         val webviewInstance = WebView(context)
         emit(WebViewInstanceState.Success(webviewInstance))
-    }.stateIn(
-        viewModelScope,
-        initialValue = WebViewInstanceState.Loading,
-        started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5.seconds.inWholeMilliseconds)
-    )
+    }
+        .stateIn(
+            viewModelScope,
+            initialValue = WebViewInstanceState.Loading,
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5.seconds.inWholeMilliseconds)
+        )
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)

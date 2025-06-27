@@ -51,6 +51,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kevinnzou.web.AccompanistWebChromeClient
@@ -60,7 +61,7 @@ import timber.log.Timber
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 import top.fatweb.oxygen.toolbox.ui.component.Indicator
-import top.fatweb.oxygen.toolbox.ui.component.OxygenTopAppBar
+import top.fatweb.oxygen.toolbox.ui.component.TopAppBar
 import top.fatweb.oxygen.toolbox.ui.util.LocalFullScreen
 import top.fatweb.oxygen.toolbox.ui.util.ResourcesUtils
 import top.fatweb.oxygen.toolbox.util.NativeWebApi
@@ -98,7 +99,10 @@ internal fun ToolViewScreen(
 ) {
     val (isFullScreen, onFullScreenStateChange) = LocalFullScreen.current
 
-    Column(modifier.fillMaxWidth()) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
         AnimatedVisibility(!isFullScreen) {
             TopBar(
                 toolViewUiState = toolViewUiState,
@@ -123,7 +127,7 @@ private fun TopBar(
     isFullScreen: Boolean,
     onBackClick: () -> Unit,
     onFullScreenChange: (Boolean) -> Unit
-) = OxygenTopAppBar(
+) = TopAppBar(
     title = {
         Text(
             text = when (toolViewUiState) {
@@ -164,13 +168,13 @@ private fun Content(
     val fileChooserLauncher = rememberFileChooserLauncher(fileChooserCallback)
     val permissionLauncher = rememberPermissionLauncher()
 
-    var isShowDialog = remember { mutableStateOf(false) }
-    var dialogType = remember { mutableStateOf(DialogType.Alert) }
+    val isShowDialog = remember { mutableStateOf(false) }
+    val dialogType = remember { mutableStateOf(DialogType.Alert) }
     var dialogTitle by remember { mutableStateOf("") }
-    var dialogText = remember { mutableStateOf("") }
-    var dialogInputValue = remember { mutableStateOf("") }
-    var onDialogConfirm = remember { mutableStateOf<((String) -> Unit)?>(null) }
-    var onDialogCancel = remember { mutableStateOf<(() -> Unit)?>(null) }
+    val dialogText = remember { mutableStateOf("") }
+    val dialogInputValue = remember { mutableStateOf("") }
+    val onDialogConfirm = remember { mutableStateOf<((String) -> Unit)?>(null) }
+    val onDialogCancel = remember { mutableStateOf<(() -> Unit)?>(null) }
 
     when (webViewInstanceState) {
         WebViewInstanceState.Loading -> {
@@ -185,7 +189,8 @@ private fun Content(
 
                 ToolViewUiState.Error -> {
                     Column(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
@@ -244,12 +249,13 @@ private fun Content(
             text = {
                 Column {
                     Column(
-                        modifier = Modifier.verticalScroll(state = rememberScrollState())
+                        modifier = Modifier
+                            .verticalScroll(state = rememberScrollState())
                     ) {
                         Text(text = dialogText.value)
                     }
                     if (dialogType.value == DialogType.Prompt) {
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(Modifier.height(8.dp))
                         TextField(
                             value = dialogInputValue.value,
                             onValueChange = {
@@ -329,7 +335,7 @@ private fun initWebView(
             ) {}
             return@setDownloadListener
         }
-        val request = DownloadManager.Request(Uri.parse(url)).apply {
+        val request = DownloadManager.Request(url.toUri()).apply {
             addRequestHeader("User-Agent", userAgent)
             setMimeType(mimetype)
             setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
@@ -402,7 +408,7 @@ private fun rememberChromeClient(
         ): Boolean {
             isShowDialog.value = true
             dialogType.value = DialogType.Alert
-            dialogText.value = message ?: ""
+            dialogText.value = message.orEmpty()
             onDialogConfirm.value = {
                 result?.confirm()
             }
@@ -418,7 +424,7 @@ private fun rememberChromeClient(
         ): Boolean {
             isShowDialog.value = true
             dialogType.value = DialogType.Confirm
-            dialogText.value = message ?: ""
+            dialogText.value = message.orEmpty()
             onDialogConfirm.value = {
                 result?.confirm()
             }
@@ -438,8 +444,8 @@ private fun rememberChromeClient(
         ): Boolean {
             isShowDialog.value = true
             dialogType.value = DialogType.Prompt
-            dialogText.value = message ?: ""
-            dialogInputValue.value = defaultValue ?: ""
+            dialogText.value = message.orEmpty()
+            dialogInputValue.value = defaultValue.orEmpty()
             onDialogConfirm.value = {
                 result?.confirm(dialogInputValue.value)
             }

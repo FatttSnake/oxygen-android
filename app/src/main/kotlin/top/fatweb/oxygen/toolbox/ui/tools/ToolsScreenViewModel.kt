@@ -24,8 +24,8 @@ class ToolsScreenViewModel @Inject constructor(
     private val searchValue = savedStateHandle.getStateFlow(SEARCH_VALUE, "")
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val toolsScreenUiState: StateFlow<ToolsScreenUiState> =
-        searchValue.flatMapLatest { searchValue ->
+    val toolsScreenUiState: StateFlow<ToolsScreenUiState> = searchValue
+        .flatMapLatest { searchValue ->
             toolRepository.getAllToolsStream(searchValue).map {
                 if (it.isEmpty()) {
                     ToolsScreenUiState.Nothing
@@ -33,7 +33,8 @@ class ToolsScreenViewModel @Inject constructor(
                     ToolsScreenUiState.Success(it)
                 }
             }
-        }.stateIn(
+        }
+        .stateIn(
             scope = viewModelScope,
             initialValue = ToolsScreenUiState.Loading,
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5.seconds.inWholeMilliseconds)

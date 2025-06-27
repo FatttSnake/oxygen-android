@@ -47,7 +47,7 @@ import androidx.webkit.WebViewCompat
 import kotlinx.coroutines.delay
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
-import top.fatweb.oxygen.toolbox.ui.component.OxygenTopAppBar
+import top.fatweb.oxygen.toolbox.ui.component.TopAppBar
 import top.fatweb.oxygen.toolbox.ui.theme.OxygenPreviews
 import top.fatweb.oxygen.toolbox.ui.theme.OxygenTheme
 import top.fatweb.oxygen.toolbox.ui.util.ResourcesUtils
@@ -59,7 +59,8 @@ internal fun AboutRoute(
     onNavigateToLibraries: () -> Unit
 ) {
     AboutScreen(
-        modifier = modifier.safeDrawingPadding(),
+        modifier = modifier
+            .safeDrawingPadding(),
         onBackClick = onBackClick,
         onNavigateToLibraries = onNavigateToLibraries
     )
@@ -80,7 +81,7 @@ internal fun AboutScreen(
         modifier = Modifier
             .nestedScroll(connection = topAppBarScrollBehavior.nestedScrollConnection),
         containerColor = Color.Transparent,
-        contentWindowInsets = WindowInsets(left = 0, top = 0, right = 0, bottom = 0),
+        contentWindowInsets = WindowInsets(left = 0, top = 0, right = 0, bottom = 0)
     ) { padding ->
         Column(
             modifier = modifier
@@ -95,7 +96,7 @@ internal fun AboutScreen(
                 .verticalScroll(state = scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            OxygenTopAppBar(
+            TopAppBar(
                 scrollBehavior = topAppBarScrollBehavior,
                 title = {
                     Text(
@@ -162,9 +163,9 @@ private fun AboutAppInfo(
         Text(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.outline,
-            text = "${ResourcesUtils.getAppVersionName(LocalContext.current)} (${
+            text = "${ResourcesUtils.getAppVersionName(context)} (${
                 stringResource(
-                    if (ResourcesUtils.getAppVersionCode(LocalContext.current) % 100 == 0L)
+                    if (ResourcesUtils.getAppVersionCode(context) % 100 == 0L)
                         R.string.core_ga_version
                     else
                         R.string.core_beta_version
@@ -185,10 +186,12 @@ private fun AboutAppInfo(
 
 @Composable
 private fun AboutFooter(
-    modifier: Modifier = Modifier, onNavigateToLibraries: () -> Unit
+    modifier: Modifier = Modifier,
+    onNavigateToLibraries: () -> Unit
 ) {
     Row(
-        modifier = modifier.padding(32.dp)
+        modifier = modifier
+            .padding(32.dp)
     ) {
         TextButton(
             onClick = onNavigateToLibraries

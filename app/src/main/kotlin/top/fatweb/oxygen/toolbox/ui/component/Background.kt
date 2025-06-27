@@ -24,16 +24,17 @@ import top.fatweb.oxygen.toolbox.ui.theme.OxygenTheme
 import kotlin.math.tan
 
 @Composable
-fun OxygenBackground(
+fun Background(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
     val color = LocalBackgroundTheme.current.color
     val tonalElevation = LocalBackgroundTheme.current.tonalElevation
     Surface(
+        modifier = modifier
+            .fillMaxSize(),
         color = if (color == Color.Unspecified) Color.Transparent else color,
-        tonalElevation = if (tonalElevation == Dp.Unspecified) 0.dp else tonalElevation,
-        modifier = modifier.fillMaxSize()
+        tonalElevation = if (tonalElevation == Dp.Unspecified) 0.dp else tonalElevation
     ) {
         CompositionLocalProvider(LocalAbsoluteTonalElevation provides 0.dp) {
             content()
@@ -42,7 +43,7 @@ fun OxygenBackground(
 }
 
 @Composable
-fun OxygenGradientBackground(
+fun GradientBackground(
     modifier: Modifier = Modifier,
     gradientColors: GradientColors = LocalGradientColors.current,
     content: @Composable () -> Unit
@@ -50,8 +51,9 @@ fun OxygenGradientBackground(
     val currentTopColor by rememberUpdatedState(gradientColors.top)
     val currentBottomColor by rememberUpdatedState(gradientColors.bottom)
     Surface(
-        color = if (gradientColors.container == Color.Unspecified) Color.Transparent else gradientColors.container,
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize(),
+        color = if (gradientColors.container == Color.Unspecified) Color.Transparent else gradientColors.container
     ) {
         Box(
             Modifier
@@ -95,7 +97,11 @@ fun OxygenGradientBackground(
 @Composable
 fun BackgroundDefault() {
     OxygenTheme(dynamicColor = false) {
-        OxygenBackground(Modifier.size(100.dp), content = {})
+        Background(
+            modifier = Modifier
+                .size(100.dp),
+            content = {}
+        )
     }
 }
 
@@ -103,7 +109,11 @@ fun BackgroundDefault() {
 @Composable
 fun BackgroundDynamic() {
     OxygenTheme(dynamicColor = true) {
-        OxygenBackground(Modifier.size(100.dp), content = {})
+        Background(
+            modifier = Modifier
+                .size(100.dp),
+            content = {}
+        )
     }
 }
 
@@ -111,7 +121,11 @@ fun BackgroundDynamic() {
 @Composable
 fun BackgroundAndroid() {
     OxygenTheme(androidTheme = true) {
-        OxygenBackground(Modifier.size(100.dp), content = {})
+        Background(
+            modifier = Modifier
+                .size(100.dp),
+            content = {}
+        )
     }
 }
 
@@ -119,7 +133,11 @@ fun BackgroundAndroid() {
 @Composable
 fun GradientBackgroundDefault() {
     OxygenTheme(dynamicColor = false) {
-        OxygenGradientBackground(Modifier.size(100.dp), content = {})
+        GradientBackground(
+            modifier = Modifier
+                .size(100.dp),
+            content = {}
+        )
     }
 }
 
@@ -127,7 +145,11 @@ fun GradientBackgroundDefault() {
 @Composable
 fun GradientBackgroundDynamic() {
     OxygenTheme(dynamicColor = true) {
-        OxygenGradientBackground(Modifier.size(100.dp), content = {})
+        GradientBackground(
+            modifier = Modifier
+                .size(100.dp),
+            content = {}
+        )
     }
 }
 
@@ -135,6 +157,10 @@ fun GradientBackgroundDynamic() {
 @Composable
 fun GradientBackgroundAndroid() {
     OxygenTheme(androidTheme = true) {
-        OxygenGradientBackground(Modifier.size(100.dp), content = {})
+        GradientBackground(
+            modifier = Modifier
+                .size(100.dp),
+            content = {}
+        )
     }
 }

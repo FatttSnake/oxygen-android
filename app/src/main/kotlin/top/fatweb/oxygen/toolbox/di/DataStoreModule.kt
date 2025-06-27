@@ -23,7 +23,7 @@ object DataStoreModule {
     @Singleton
     internal fun providesUserPreferencesDataStore(
         @ApplicationContext context: Context,
-        @Dispatcher(OxygenDispatchers.IO) ioDispatcher: CoroutineDispatcher,
+        @Dispatcher(AppDispatchers.IO) ioDispatcher: CoroutineDispatcher,
         @ApplicationScope scope: CoroutineScope,
         userPreferencesSerializer: UserPreferencesSerializer
     ): DataStore<UserPreferences> =

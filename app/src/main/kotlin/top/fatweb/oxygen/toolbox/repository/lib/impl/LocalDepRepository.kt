@@ -15,7 +15,8 @@ class LocalDepRepository @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun searchName(name: String): Flow<Dependencies> =
         depDataSource.dependencies.flatMapLatest { dependencies ->
-            flowOf(dependencies.copy(
+            flowOf(
+                dependencies.copy(
                 libraries = dependencies.libraries.filter {
                     it.name?.lowercase()?.contains(Regex("^.*${name.lowercase()}.*$")) ?: false
                 }

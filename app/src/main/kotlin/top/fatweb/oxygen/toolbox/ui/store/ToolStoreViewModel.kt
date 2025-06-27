@@ -31,17 +31,17 @@ class ToolStoreViewModel @Inject constructor(
     val installInfo = savedStateHandle.getStateFlow(INSTALL_INFO, ToolStoreUiState.InstallInfo())
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val storeData: Flow<PagingData<ToolEntity>> =
-        searchValue.flatMapLatest { searchValue ->
+    val storeData: Flow<PagingData<ToolEntity>> = searchValue
+        .flatMapLatest { searchValue ->
             storeRepository
                 .getStore(searchValue)
                 .cachedIn(viewModelScope)
         }
-            .stateIn(
-                scope = viewModelScope,
-                initialValue = PagingData.empty(),
-                started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5.seconds.inWholeMilliseconds)
-            )
+        .stateIn(
+            scope = viewModelScope,
+            initialValue = PagingData.empty(),
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5.seconds.inWholeMilliseconds)
+        )
 
     fun onSearchValueChange(value: String) {
         savedStateHandle[SEARCH_VALUE] = value

@@ -23,10 +23,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
-import top.fatweb.oxygen.toolbox.model.userdata.ThemeTypeConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
+import top.fatweb.oxygen.toolbox.model.userdata.ThemeTypeConfig
 import top.fatweb.oxygen.toolbox.model.userdata.UserData
 import top.fatweb.oxygen.toolbox.ui.component.DialogChooserRow
 import top.fatweb.oxygen.toolbox.ui.component.DialogClickerRow
@@ -54,9 +54,9 @@ fun SettingsDialog(
         onDismiss = onDismiss,
         onChangeLanguageConfig = viewModel::updateLanguageConfig,
         onChangeLaunchPageConfig = viewModel::updateLaunchPageConfig,
-        onchangeThemeBrandConfig = viewModel::updateThemeBrandConfig,
+        onChangeThemeBrandConfig = viewModel::updateThemeBrandConfig,
         onChangeThemeTypeConfig = viewModel::updateThemeTypeConfig,
-        onchangeUseDynamicColor = viewModel::updateUseDynamicColor
+        onChangeUseDynamicColor = viewModel::updateUseDynamicColor
     )
 }
 
@@ -68,11 +68,11 @@ fun SettingsDialog(
     onNavigateToAbout: () -> Unit,
     onDismiss: () -> Unit,
     supportDynamicColor: Boolean = supportsDynamicTheming(),
-    onChangeLanguageConfig: (languageConfig: LanguageConfig) -> Unit,
-    onChangeLaunchPageConfig: (launchPageConfig: LaunchPageConfig) -> Unit,
-    onchangeThemeBrandConfig: (themeBrandConfig: ThemeBrandConfig) -> Unit,
-    onChangeThemeTypeConfig: (themeTypeConfig: ThemeTypeConfig) -> Unit,
-    onchangeUseDynamicColor: (useDynamicColor: Boolean) -> Unit
+    onChangeLanguageConfig: (LanguageConfig) -> Unit,
+    onChangeLaunchPageConfig: (LaunchPageConfig) -> Unit,
+    onChangeThemeBrandConfig: (ThemeBrandConfig) -> Unit,
+    onChangeThemeTypeConfig: (ThemeTypeConfig) -> Unit,
+    onChangeUseDynamicColor: (Boolean) -> Unit
 ) {
     val configuration = LocalConfiguration.current
 
@@ -90,7 +90,8 @@ fun SettingsDialog(
         text = {
             HorizontalDivider()
             Column(
-                modifier = Modifier.verticalScroll(rememberScrollState())
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
             ) {
                 when (settingsUiState) {
                     SettingsUiState.Loading -> {
@@ -106,13 +107,16 @@ fun SettingsDialog(
                             onDismiss = onDismiss,
                             onChangeLanguageConfig = onChangeLanguageConfig,
                             onChangeLaunchPageConfig = onChangeLaunchPageConfig,
-                            onchangeThemeBrandConfig = onchangeThemeBrandConfig,
+                            onChangeThemeBrandConfig = onChangeThemeBrandConfig,
                             onChangeThemeTypeConfig = onChangeThemeTypeConfig,
-                            onchangeUseDynamicColor = onchangeUseDynamicColor
+                            onChangeUseDynamicColor = onChangeUseDynamicColor
                         )
                     }
                 }
-                HorizontalDivider(modifier = Modifier.padding(top = 8.dp))
+                HorizontalDivider(
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                )
             }
         },
         confirmButton = {
@@ -134,11 +138,11 @@ private fun ColumnScope.SettingsPanel(
     onNavigateToLibraries: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onDismiss: () -> Unit,
-    onChangeLanguageConfig: (languageConfig: LanguageConfig) -> Unit,
-    onChangeLaunchPageConfig: (launchPageConfig: LaunchPageConfig) -> Unit,
-    onchangeThemeBrandConfig: (themeBrandConfig: ThemeBrandConfig) -> Unit,
-    onChangeThemeTypeConfig: (themeTypeConfig: ThemeTypeConfig) -> Unit,
-    onchangeUseDynamicColor: (useDynamicColor: Boolean) -> Unit
+    onChangeLanguageConfig: (LanguageConfig) -> Unit,
+    onChangeLaunchPageConfig: (LaunchPageConfig) -> Unit,
+    onChangeThemeBrandConfig: (ThemeBrandConfig) -> Unit,
+    onChangeThemeTypeConfig: (ThemeTypeConfig) -> Unit,
+    onChangeUseDynamicColor: (Boolean) -> Unit
 ) {
     DialogSectionTitle(text = stringResource(R.string.feature_settings_language))
     DialogSectionGroup {
@@ -176,12 +180,12 @@ private fun ColumnScope.SettingsPanel(
         DialogChooserRow(
             text = stringResource(R.string.feature_settings_theme_brand_default),
             selected = settings.themeBrandConfig == ThemeBrandConfig.Default,
-            onClick = { onchangeThemeBrandConfig(ThemeBrandConfig.Default) }
+            onClick = { onChangeThemeBrandConfig(ThemeBrandConfig.Default) }
         )
         DialogChooserRow(
             text = stringResource(R.string.feature_settings_theme_brand_android),
             selected = settings.themeBrandConfig == ThemeBrandConfig.Android,
-            onClick = { onchangeThemeBrandConfig(ThemeBrandConfig.Android) }
+            onClick = { onChangeThemeBrandConfig(ThemeBrandConfig.Android) }
         )
     }
     AnimatedVisibility(visible = settings.themeBrandConfig == ThemeBrandConfig.Default && supportDynamicColor) {
@@ -190,12 +194,12 @@ private fun ColumnScope.SettingsPanel(
             DialogChooserRow(
                 text = stringResource(R.string.feature_settings_dynamic_color_enable),
                 selected = settings.useDynamicColor,
-                onClick = { onchangeUseDynamicColor(true) }
+                onClick = { onChangeUseDynamicColor(true) }
             )
             DialogChooserRow(
                 text = stringResource(R.string.feature_settings_dynamic_color_disable),
                 selected = !settings.useDynamicColor,
-                onClick = { onchangeUseDynamicColor(false) }
+                onClick = { onChangeUseDynamicColor(false) }
             )
         }
     }
@@ -250,9 +254,9 @@ private fun SettingsDialogLoadingPreview() {
             settingsUiState = SettingsUiState.Loading,
             onChangeLanguageConfig = {},
             onChangeLaunchPageConfig = {},
-            onchangeThemeBrandConfig = {},
+            onChangeThemeBrandConfig = {},
             onChangeThemeTypeConfig = {},
-            onchangeUseDynamicColor = {}
+            onChangeUseDynamicColor = {}
         )
     }
 }
@@ -277,9 +281,9 @@ private fun SettingDialogPreview() {
             ),
             onChangeLanguageConfig = {},
             onChangeLaunchPageConfig = {},
-            onchangeThemeBrandConfig = {},
+            onChangeThemeBrandConfig = {},
             onChangeThemeTypeConfig = {},
-            onchangeUseDynamicColor = {}
+            onChangeUseDynamicColor = {}
         )
     }
 }

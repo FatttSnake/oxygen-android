@@ -18,8 +18,8 @@ fun LazyStaggeredGridScope.librariesPanel(
             ) {
                 LibraryCard(
                     library = it,
-                    licenses = librariesScreenUiState.dependencies.licenses.filter { entry ->
-                        it.licenses.contains(entry.key)
+                    licenses = librariesScreenUiState.dependencies.licenses.filter { license ->
+                        it.licenses.contains(license.key)
                     },
                     onClickLicense = onClickLicense
                 )

@@ -31,7 +31,8 @@ fun ClickableText(
             clickablePart
         )
         append(mainText.substringBefore(clickablePart))
-        pushLink(LinkAnnotation.Clickable(
+        pushLink(
+            LinkAnnotation.Clickable(
             tag = "Click",
             linkInteractionListener = { onClick() }
         ))

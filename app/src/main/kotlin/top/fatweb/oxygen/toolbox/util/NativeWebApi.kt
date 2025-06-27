@@ -24,7 +24,7 @@ class NativeWebApi(
     @JavascriptInterface
     fun readClipboard(): String {
         val clipboardManager = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
-        return clipboardManager?.primaryClip?.getItemAt(0)?.text?.toString() ?: ""
+        return clipboardManager?.primaryClip?.getItemAt(0)?.text?.toString().orEmpty()
     }
 
     @JavascriptInterface

@@ -44,7 +44,7 @@ import android.R as androidR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OxygenTopAppBar(
+fun TopAppBar(
     modifier: Modifier = Modifier,
     expandedHeight: Dp = 48.dp,
     scrollBehavior: TopAppBarScrollBehavior? = null,
@@ -181,9 +181,9 @@ enum class SearchButtonPosition {
 @OptIn(ExperimentalMaterial3Api::class)
 @OxygenPreviews
 @Composable
-private fun OxygenTopAppBarPreview() {
+private fun TopAppBarPreview() {
     OxygenTheme {
-        OxygenTopAppBar(
+        TopAppBar(
             title = {
                 Text(
                     text = stringResource(androidR.string.untitled),
