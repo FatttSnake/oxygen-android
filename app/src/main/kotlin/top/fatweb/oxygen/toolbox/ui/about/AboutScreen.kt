@@ -198,7 +198,7 @@ private fun AboutFooter(
         ) {
             Text(
                 color = MaterialTheme.colorScheme.primary,
-                text = stringResource(R.string.feature_settings_open_source_license)
+                text = stringResource(R.string.feature_settings_more_open_source_license)
             )
         }
     }

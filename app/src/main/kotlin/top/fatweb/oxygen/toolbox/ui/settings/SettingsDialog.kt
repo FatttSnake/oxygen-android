@@ -225,7 +225,7 @@ private fun ColumnScope.SettingsPanel(
     DialogSectionGroup {
         DialogClickerRow(
             icon = OxygenIcons.Code,
-            text = stringResource(R.string.feature_settings_open_source_license),
+            text = stringResource(R.string.feature_settings_more_open_source_license),
             onClick = {
                 onNavigateToLibraries()
                 onDismiss()

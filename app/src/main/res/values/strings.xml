@@ -85,7 +85,7 @@
     <string name="feature_settings_dynamic_color_enable">Enable</string>
     <string name="feature_settings_dynamic_color_disable">Disable</string>
     <string name="feature_settings_more">More</string>
-    <string name="feature_settings_open_source_license">Open Source License</string>
+    <string name="feature_settings_more_open_source_license">Open Source License</string>
     <string name="feature_settings_more_about">About</string>
     <string name="feature_settings_top_app_bar_action_icon_description">More</string>
     <string name="feature_settings_top_app_bar_navigation_icon_description">Search</string>

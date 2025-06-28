@@ -84,7 +84,7 @@
     <string name="feature_settings_dynamic_color_enable">启用</string>
     <string name="feature_settings_dynamic_color_disable">禁用</string>
     <string name="feature_settings_more">更多</string>
-    <string name="feature_settings_open_source_license">开源许可</string>
+    <string name="feature_settings_more_open_source_license">开源许可</string>
     <string name="feature_settings_more_about">关于</string>
     <string name="feature_settings_top_app_bar_action_icon_description">更多</string>
     <string name="feature_settings_top_app_bar_navigation_icon_description">搜索</string>
