@@ -175,7 +175,7 @@ fun OxygenApp(appState: OxygenAppState) {
                     }
                 ) { padding ->
                     Row(
-                        Modifier
+                        modifier = Modifier
                             .fillMaxSize()
                     ) {
                         AnimatedVisibility(

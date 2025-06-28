@@ -64,10 +64,10 @@ fun SettingsDialog(
 fun SettingsDialog(
     modifier: Modifier = Modifier,
     settingsUiState: SettingsUiState,
+    supportDynamicColor: Boolean = supportsDynamicTheming(),
     onNavigateToLibraries: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onDismiss: () -> Unit,
-    supportDynamicColor: Boolean = supportsDynamicTheming(),
     onChangeLanguageConfig: (LanguageConfig) -> Unit,
     onChangeLaunchPageConfig: (LaunchPageConfig) -> Unit,
     onChangeThemeBrandConfig: (ThemeBrandConfig) -> Unit,

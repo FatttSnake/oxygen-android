@@ -56,7 +56,7 @@ fun GradientBackground(
         color = if (gradientColors.container == Color.Unspecified) Color.Transparent else gradientColors.container
     ) {
         Box(
-            Modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .drawWithCache {
                     val offset = size.height * tan(
@@ -95,72 +95,66 @@ fun GradientBackground(
 
 @OxygenPreviews
 @Composable
-fun BackgroundDefault() {
+fun DefaultBackgroundPreview() {
     OxygenTheme(dynamicColor = false) {
         Background(
             modifier = Modifier
-                .size(100.dp),
-            content = {}
-        )
+                .size(100.dp)
+        ) {}
     }
 }
 
 @OxygenPreviews
 @Composable
-fun BackgroundDynamic() {
+fun DynamicBackgroundPreview() {
     OxygenTheme(dynamicColor = true) {
         Background(
             modifier = Modifier
-                .size(100.dp),
-            content = {}
-        )
+                .size(100.dp)
+        ) {}
     }
 }
 
 @OxygenPreviews
 @Composable
-fun BackgroundAndroid() {
+fun AndroidBackgroundPreview() {
     OxygenTheme(androidTheme = true) {
         Background(
             modifier = Modifier
-                .size(100.dp),
-            content = {}
-        )
+                .size(100.dp)
+        ) {}
     }
 }
 
 @OxygenPreviews
 @Composable
-fun GradientBackgroundDefault() {
+fun GradientDefaultBackgroundPreview() {
     OxygenTheme(dynamicColor = false) {
         GradientBackground(
             modifier = Modifier
-                .size(100.dp),
-            content = {}
-        )
+                .size(100.dp)
+        ) {}
     }
 }
 
 @OxygenPreviews
 @Composable
-fun GradientBackgroundDynamic() {
+fun GradientDynamicBackgroundPreview() {
     OxygenTheme(dynamicColor = true) {
         GradientBackground(
             modifier = Modifier
-                .size(100.dp),
-            content = {}
-        )
+                .size(100.dp)
+        ) {}
     }
 }
 
 @OxygenPreviews
 @Composable
-fun GradientBackgroundAndroid() {
+fun GradientAndroidBackgroundPreview() {
     OxygenTheme(androidTheme = true) {
         GradientBackground(
             modifier = Modifier
-                .size(100.dp),
-            content = {}
-        )
+                .size(100.dp)
+        ) {}
     }
 }
