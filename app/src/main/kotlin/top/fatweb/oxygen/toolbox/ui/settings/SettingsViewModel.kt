@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
-import top.fatweb.oxygen.toolbox.model.userdata.ThemeTypeConfig
+import top.fatweb.oxygen.toolbox.model.userdata.ThemeModeConfig
 import top.fatweb.oxygen.toolbox.model.userdata.UserData
 import top.fatweb.oxygen.toolbox.repository.userdata.UserDataRepository
 import javax.inject.Inject
@@ -50,9 +50,9 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun updateThemeTypeConfig(themeTypeConfig: ThemeTypeConfig) {
+    fun updateThemeModeConfig(themeModeConfig: ThemeModeConfig) {
         viewModelScope.launch {
-            userDataRepository.setThemeTypeConfig(themeTypeConfig)
+            userDataRepository.setThemeModeConfig(themeModeConfig)
         }
     }
 

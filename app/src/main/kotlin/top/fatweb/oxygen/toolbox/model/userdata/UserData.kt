@@ -7,7 +7,7 @@ data class UserData(
 
     val themeBrandConfig: ThemeBrandConfig,
 
-    val themeTypeConfig: ThemeTypeConfig,
+    val themeModeConfig: ThemeModeConfig,
 
     val useDynamicColor: Boolean,
 

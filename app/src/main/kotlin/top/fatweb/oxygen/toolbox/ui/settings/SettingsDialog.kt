@@ -26,7 +26,7 @@ import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
-import top.fatweb.oxygen.toolbox.model.userdata.ThemeTypeConfig
+import top.fatweb.oxygen.toolbox.model.userdata.ThemeModeConfig
 import top.fatweb.oxygen.toolbox.model.userdata.UserData
 import top.fatweb.oxygen.toolbox.ui.component.DialogChooserRow
 import top.fatweb.oxygen.toolbox.ui.component.DialogClickerRow
@@ -55,7 +55,7 @@ fun SettingsDialog(
         onChangeLanguageConfig = viewModel::updateLanguageConfig,
         onChangeLaunchPageConfig = viewModel::updateLaunchPageConfig,
         onChangeThemeBrandConfig = viewModel::updateThemeBrandConfig,
-        onChangeThemeTypeConfig = viewModel::updateThemeTypeConfig,
+        onChangeThemeModeConfig = viewModel::updateThemeModeConfig,
         onChangeUseDynamicColor = viewModel::updateUseDynamicColor
     )
 }
@@ -71,7 +71,7 @@ fun SettingsDialog(
     onChangeLanguageConfig: (LanguageConfig) -> Unit,
     onChangeLaunchPageConfig: (LaunchPageConfig) -> Unit,
     onChangeThemeBrandConfig: (ThemeBrandConfig) -> Unit,
-    onChangeThemeTypeConfig: (ThemeTypeConfig) -> Unit,
+    onChangeThemeModeConfig: (ThemeModeConfig) -> Unit,
     onChangeUseDynamicColor: (Boolean) -> Unit
 ) {
     val configuration = LocalConfiguration.current
@@ -108,7 +108,7 @@ fun SettingsDialog(
                             onChangeLanguageConfig = onChangeLanguageConfig,
                             onChangeLaunchPageConfig = onChangeLaunchPageConfig,
                             onChangeThemeBrandConfig = onChangeThemeBrandConfig,
-                            onChangeThemeTypeConfig = onChangeThemeTypeConfig,
+                            onChangeThemeModeConfig = onChangeThemeModeConfig,
                             onChangeUseDynamicColor = onChangeUseDynamicColor
                         )
                     }
@@ -141,7 +141,7 @@ private fun ColumnScope.SettingsPanel(
     onChangeLanguageConfig: (LanguageConfig) -> Unit,
     onChangeLaunchPageConfig: (LaunchPageConfig) -> Unit,
     onChangeThemeBrandConfig: (ThemeBrandConfig) -> Unit,
-    onChangeThemeTypeConfig: (ThemeTypeConfig) -> Unit,
+    onChangeThemeModeConfig: (ThemeModeConfig) -> Unit,
     onChangeUseDynamicColor: (Boolean) -> Unit
 ) {
     DialogSectionTitle(text = stringResource(R.string.feature_settings_language))
@@ -203,22 +203,22 @@ private fun ColumnScope.SettingsPanel(
             )
         }
     }
-    DialogSectionTitle(text = stringResource(R.string.feature_settings_dark_mode))
+    DialogSectionTitle(text = stringResource(R.string.feature_settings_theme_mode))
     DialogSectionGroup {
         DialogChooserRow(
-            text = stringResource(R.string.feature_settings_dark_mode_system_default),
-            selected = settings.themeTypeConfig == ThemeTypeConfig.FollowSystem,
-            onClick = { onChangeThemeTypeConfig(ThemeTypeConfig.FollowSystem) }
+            text = stringResource(R.string.feature_settings_theme_mode_system_default),
+            selected = settings.themeModeConfig == ThemeModeConfig.FollowSystem,
+            onClick = { onChangeThemeModeConfig(ThemeModeConfig.FollowSystem) }
         )
         DialogChooserRow(
-            text = stringResource(R.string.feature_settings_dark_mode_light),
-            selected = settings.themeTypeConfig == ThemeTypeConfig.Light,
-            onClick = { onChangeThemeTypeConfig(ThemeTypeConfig.Light) }
+            text = stringResource(R.string.feature_settings_theme_mode_light),
+            selected = settings.themeModeConfig == ThemeModeConfig.Light,
+            onClick = { onChangeThemeModeConfig(ThemeModeConfig.Light) }
         )
         DialogChooserRow(
-            text = stringResource(R.string.feature_settings_dark_mode_dark),
-            selected = settings.themeTypeConfig == ThemeTypeConfig.Dark,
-            onClick = { onChangeThemeTypeConfig(ThemeTypeConfig.Dark) }
+            text = stringResource(R.string.feature_settings_theme_mode_dark),
+            selected = settings.themeModeConfig == ThemeModeConfig.Dark,
+            onClick = { onChangeThemeModeConfig(ThemeModeConfig.Dark) }
         )
     }
     DialogSectionTitle(text = stringResource(R.string.feature_settings_more))
@@ -255,7 +255,7 @@ private fun SettingsDialogLoadingPreview() {
             onChangeLanguageConfig = {},
             onChangeLaunchPageConfig = {},
             onChangeThemeBrandConfig = {},
-            onChangeThemeTypeConfig = {},
+            onChangeThemeModeConfig = {},
             onChangeUseDynamicColor = {}
         )
     }
@@ -274,7 +274,7 @@ private fun SettingDialogPreview() {
                     languageConfig = LanguageConfig.FollowSystem,
                     launchPageConfig = LaunchPageConfig.Tools,
                     themeBrandConfig = ThemeBrandConfig.Default,
-                    themeTypeConfig = ThemeTypeConfig.FollowSystem,
+                    themeModeConfig = ThemeModeConfig.FollowSystem,
                     useDynamicColor = true,
                     isNotFirstLaunch = true
                 )
@@ -282,7 +282,7 @@ private fun SettingDialogPreview() {
             onChangeLanguageConfig = {},
             onChangeLaunchPageConfig = {},
             onChangeThemeBrandConfig = {},
-            onChangeThemeTypeConfig = {},
+            onChangeThemeModeConfig = {},
             onChangeUseDynamicColor = {}
         )
     }

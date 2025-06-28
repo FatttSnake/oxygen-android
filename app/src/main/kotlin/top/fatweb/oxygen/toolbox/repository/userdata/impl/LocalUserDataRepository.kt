@@ -5,7 +5,7 @@ import top.fatweb.oxygen.toolbox.data.userdata.PreferencesDataSource
 import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
-import top.fatweb.oxygen.toolbox.model.userdata.ThemeTypeConfig
+import top.fatweb.oxygen.toolbox.model.userdata.ThemeModeConfig
 import top.fatweb.oxygen.toolbox.model.userdata.UserData
 import top.fatweb.oxygen.toolbox.repository.userdata.UserDataRepository
 import javax.inject.Inject
@@ -28,8 +28,8 @@ internal class LocalUserDataRepository @Inject constructor(
         preferencesDataSource.setThemeBrandConfig(themeBrandConfig)
     }
 
-    override suspend fun setThemeTypeConfig(themeTypeConfig: ThemeTypeConfig) {
-        preferencesDataSource.setThemeTypeConfig(themeTypeConfig)
+    override suspend fun setThemeModeConfig(themeModeConfig: ThemeModeConfig) {
+        preferencesDataSource.setThemeModeConfig(themeModeConfig)
     }
 
     override suspend fun setUseDynamicColor(useDynamicColor: Boolean) {

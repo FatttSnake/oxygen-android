@@ -5,13 +5,13 @@ import kotlinx.coroutines.flow.map
 import top.fatweb.oxygen.toolbox.data.LanguageConfigProto
 import top.fatweb.oxygen.toolbox.data.LaunchPageConfigProto
 import top.fatweb.oxygen.toolbox.data.ThemeBrandConfigProto
-import top.fatweb.oxygen.toolbox.data.ThemeTypeConfigProto
+import top.fatweb.oxygen.toolbox.data.ThemeModeConfigProto
 import top.fatweb.oxygen.toolbox.data.UserPreferences
 import top.fatweb.oxygen.toolbox.data.copy
 import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
-import top.fatweb.oxygen.toolbox.model.userdata.ThemeTypeConfig
+import top.fatweb.oxygen.toolbox.model.userdata.ThemeModeConfig
 import top.fatweb.oxygen.toolbox.model.userdata.UserData
 import javax.inject.Inject
 
@@ -55,19 +55,19 @@ class PreferencesDataSource @Inject constructor(
                     ThemeBrandConfigProto.THEME_BRAND_CONFIG_ANDROID
                         -> ThemeBrandConfig.Android
                 },
-                themeTypeConfig = when (it.themeTypeConfig) {
+                themeModeConfig = when (it.themeModeConfig) {
                     null,
-                    ThemeTypeConfigProto.UNRECOGNIZED,
-                    ThemeTypeConfigProto.THEME_TYPE_CONFIG_UNSPECIFIED,
-                    ThemeTypeConfigProto.THEME_TYPE_CONFIG_FOLLOW_SYSTEM
+                    ThemeModeConfigProto.UNRECOGNIZED,
+                    ThemeModeConfigProto.THEME_MODE_CONFIG_UNSPECIFIED,
+                    ThemeModeConfigProto.THEME_MODE_CONFIG_FOLLOW_SYSTEM
                         ->
-                        ThemeTypeConfig.FollowSystem
+                        ThemeModeConfig.FollowSystem
 
-                    ThemeTypeConfigProto.THEME_TYPE_CONFIG_LIGHT
-                        -> ThemeTypeConfig.Light
+                    ThemeModeConfigProto.THEME_MODE_CONFIG_LIGHT
+                        -> ThemeModeConfig.Light
 
-                    ThemeTypeConfigProto.THEME_TYPE_CONFIG_DARK
-                        -> ThemeTypeConfig.Dark
+                    ThemeModeConfigProto.THEME_MODE_CONFIG_DARK
+                        -> ThemeModeConfig.Dark
                 },
                 useDynamicColor = it.useDynamicColor,
                 isNotFirstLaunch = it.isNotFirstLaunch
@@ -108,13 +108,13 @@ class PreferencesDataSource @Inject constructor(
         }
     }
 
-    suspend fun setThemeTypeConfig(themeTypeConfig: ThemeTypeConfig) {
+    suspend fun setThemeModeConfig(themeModeConfig: ThemeModeConfig) {
         userPreferences.updateData {
             it.copy {
-                this.themeTypeConfig = when (themeTypeConfig) {
-                    ThemeTypeConfig.FollowSystem -> ThemeTypeConfigProto.THEME_TYPE_CONFIG_FOLLOW_SYSTEM
-                    ThemeTypeConfig.Light -> ThemeTypeConfigProto.THEME_TYPE_CONFIG_LIGHT
-                    ThemeTypeConfig.Dark -> ThemeTypeConfigProto.THEME_TYPE_CONFIG_DARK
+                this.themeModeConfig = when (themeModeConfig) {
+                    ThemeModeConfig.FollowSystem -> ThemeModeConfigProto.THEME_MODE_CONFIG_FOLLOW_SYSTEM
+                    ThemeModeConfig.Light -> ThemeModeConfigProto.THEME_MODE_CONFIG_LIGHT
+                    ThemeModeConfig.Dark -> ThemeModeConfigProto.THEME_MODE_CONFIG_DARK
                 }
             }
         }

@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
 import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
-import top.fatweb.oxygen.toolbox.model.userdata.ThemeTypeConfig
+import top.fatweb.oxygen.toolbox.model.userdata.ThemeModeConfig
 import top.fatweb.oxygen.toolbox.model.userdata.UserData
 
 interface UserDataRepository {
@@ -16,7 +16,7 @@ interface UserDataRepository {
 
     suspend fun setThemeBrandConfig(themeBrandConfig: ThemeBrandConfig)
 
-    suspend fun setThemeTypeConfig(themeTypeConfig: ThemeTypeConfig)
+    suspend fun setThemeModeConfig(themeModeConfig: ThemeModeConfig)
 
     suspend fun setUseDynamicColor(useDynamicColor: Boolean)
 

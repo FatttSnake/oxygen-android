@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option java_package = "top.fatweb.oxygen.toolbox.data";
+option java_multiple_files = true;
+
+enum ThemeModeConfigProto {
+  THEME_MODE_CONFIG_UNSPECIFIED = 0;
+  THEME_MODE_CONFIG_FOLLOW_SYSTEM = 1;
+  THEME_MODE_CONFIG_LIGHT = 2;
+  THEME_MODE_CONFIG_DARK = 3;
+}

@@ -77,10 +77,10 @@
     <string name="feature_settings_theme_brand">Theme Brand</string>
     <string name="feature_settings_theme_brand_default">Default</string>
     <string name="feature_settings_theme_brand_android">Android</string>
-    <string name="feature_settings_dark_mode">Dark Mode</string>
-    <string name="feature_settings_dark_mode_system_default">System Default</string>
-    <string name="feature_settings_dark_mode_light">Light</string>
-    <string name="feature_settings_dark_mode_dark">Dark</string>
+    <string name="feature_settings_theme_mode">Theme Mode</string>
+    <string name="feature_settings_theme_mode_system_default">System Default</string>
+    <string name="feature_settings_theme_mode_light">Light</string>
+    <string name="feature_settings_theme_mode_dark">Dark</string>
     <string name="feature_settings_dynamic_color">Dynamic Color</string>
     <string name="feature_settings_dynamic_color_enable">Enable</string>
     <string name="feature_settings_dynamic_color_disable">Disable</string>

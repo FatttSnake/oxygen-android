@@ -1,6 +1,6 @@
 package top.fatweb.oxygen.toolbox.model.userdata
 
-enum class ThemeTypeConfig {
+enum class ThemeModeConfig {
     FollowSystem,
 
     Light,

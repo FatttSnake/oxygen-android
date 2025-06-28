@@ -17,10 +17,10 @@ class LocalDepRepository @Inject constructor(
         depDataSource.dependencies.flatMapLatest { dependencies ->
             flowOf(
                 dependencies.copy(
-                libraries = dependencies.libraries.filter {
-                    it.name?.lowercase()?.contains(Regex("^.*${name.lowercase()}.*$")) ?: false
-                }
-            ))
+                    libraries = dependencies.libraries.filter {
+                        it.name?.lowercase()?.contains(Regex("^.*${name.lowercase()}.*$")) ?: false
+                    }
+                ))
         }
 
     @OptIn(ExperimentalCoroutinesApi::class)

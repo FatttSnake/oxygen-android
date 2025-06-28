@@ -33,9 +33,9 @@ fun ClickableText(
         append(mainText.substringBefore(clickablePart))
         pushLink(
             LinkAnnotation.Clickable(
-            tag = "Click",
-            linkInteractionListener = { onClick() }
-        ))
+                tag = "Click",
+                linkInteractionListener = { onClick() }
+            ))
         withStyle(style = SpanStyle(color = primaryColor)) {
             append(clickablePart)
         }
