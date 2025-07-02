@@ -56,7 +56,7 @@ import top.fatweb.oxygen.toolbox.ui.component.ToolCardSkeleton
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.DraggableScrollbar
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.rememberDraggableScroller
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.scrollbarState
-import top.fatweb.oxygen.toolbox.ui.util.ResourcesUtils
+import top.fatweb.oxygen.toolbox.ui.util.ResourcesHelper
 
 @Composable
 internal fun ToolsRoute(
@@ -201,8 +201,8 @@ internal fun ToolsScreen(
                 onUninstall(selectedTool!!)
                 scope.launch {
                     if (onShowSnackbar(
-                            ResourcesUtils.getString(localContext, R.string.core_uninstall_success),
-                            ResourcesUtils.getString(localContext, R.string.core_undo)
+                            ResourcesHelper.getString(localContext, R.string.core_uninstall_success),
+                            ResourcesHelper.getString(localContext, R.string.core_undo)
                         )
                     ) {
                         onUndo(selectedTool!!)

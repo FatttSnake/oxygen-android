@@ -50,7 +50,7 @@ import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 import top.fatweb.oxygen.toolbox.ui.component.TopAppBar
 import top.fatweb.oxygen.toolbox.ui.theme.OxygenPreviews
 import top.fatweb.oxygen.toolbox.ui.theme.OxygenTheme
-import top.fatweb.oxygen.toolbox.ui.util.ResourcesUtils
+import top.fatweb.oxygen.toolbox.ui.util.ResourcesHelper
 
 @Composable
 internal fun AboutRoute(
@@ -163,9 +163,9 @@ private fun AboutAppInfo(
         Text(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.outline,
-            text = "${ResourcesUtils.getAppVersionName(context)} (${
+            text = "${ResourcesHelper.getAppVersionName(context)} (${
                 stringResource(
-                    if (ResourcesUtils.getAppVersionCode(context) % 100 == 0L)
+                    if (ResourcesHelper.getAppVersionCode(context) % 100 == 0L)
                         R.string.core_ga_version
                     else
                         R.string.core_beta_version

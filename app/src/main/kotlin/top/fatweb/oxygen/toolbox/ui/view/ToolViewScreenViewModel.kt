@@ -32,7 +32,7 @@ import top.fatweb.oxygen.toolbox.navigation.ToolViewArgs
 import top.fatweb.oxygen.toolbox.repository.tool.StoreRepository
 import top.fatweb.oxygen.toolbox.repository.tool.ToolRepository
 import top.fatweb.oxygen.toolbox.repository.userdata.UserDataRepository
-import top.fatweb.oxygen.toolbox.ui.util.ResourcesUtils
+import top.fatweb.oxygen.toolbox.ui.util.ResourcesHelper
 import top.fatweb.oxygen.toolbox.util.decodeToStringWithZip
 import javax.inject.Inject
 import kotlin.io.encoding.Base64
@@ -104,7 +104,7 @@ private fun toolViewUiState(
     val isSystemDarkModeFlow = callbackFlow<Boolean> {
         val receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, instent: Intent?) {
-                context?.let(ResourcesUtils::getConfiguration)?.run {
+                context?.let(ResourcesHelper::getConfiguration)?.run {
                     trySend((uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES)
                 }
             }
@@ -112,7 +112,7 @@ private fun toolViewUiState(
         val filter = IntentFilter(Intent.ACTION_CONFIGURATION_CHANGED)
         context.registerReceiver(receiver, filter)
 
-        trySend((ResourcesUtils.getConfiguration(context).uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES)
+        trySend((ResourcesHelper.getConfiguration(context).uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES)
 
         awaitClose { context.unregisterReceiver(receiver) }
     }

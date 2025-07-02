@@ -63,7 +63,7 @@ import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 import top.fatweb.oxygen.toolbox.ui.component.Indicator
 import top.fatweb.oxygen.toolbox.ui.component.TopAppBar
 import top.fatweb.oxygen.toolbox.ui.util.LocalFullScreen
-import top.fatweb.oxygen.toolbox.ui.util.ResourcesUtils
+import top.fatweb.oxygen.toolbox.ui.util.ResourcesHelper
 import top.fatweb.oxygen.toolbox.util.NativeWebApi
 import top.fatweb.oxygen.toolbox.util.Permissions
 import kotlin.coroutines.resume
@@ -326,7 +326,7 @@ private fun initWebView(
         if (!listOf("http://", "https://").any(url::startsWith)) {
             webview.evaluateJavascript(
                 "alert('${
-                    ResourcesUtils.getString(
+                    ResourcesHelper.getString(
                         context = context,
                         resId = R.string.core_can_only_download_http_https,
                         url
@@ -390,7 +390,7 @@ private fun rememberChromeClient(
             fileChooserLauncher.launch(
                 Intent.createChooser(
                     intent,
-                    fileChooserParams?.title ?: ResourcesUtils.getString(
+                    fileChooserParams?.title ?: ResourcesHelper.getString(
                         context = context,
                         resId = R.string.core_file_select_one_text
                     )

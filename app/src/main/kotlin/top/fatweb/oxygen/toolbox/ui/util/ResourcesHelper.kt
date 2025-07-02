@@ -10,7 +10,7 @@ import androidx.core.os.ConfigurationCompat
 import androidx.core.os.LocaleListCompat
 import java.util.Locale
 
-object ResourcesUtils {
+object ResourcesHelper {
     fun getConfiguration(context: Context): Configuration = context.resources.configuration
 
     fun getAppLocale(context: Context): Locale = getConfiguration(context).locales.get(0)

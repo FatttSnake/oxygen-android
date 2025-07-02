@@ -9,7 +9,7 @@ import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
-import top.fatweb.oxygen.toolbox.ui.util.ResourcesUtils
+import top.fatweb.oxygen.toolbox.ui.util.ResourcesHelper
 
 @Composable
 fun ClickableText(
@@ -21,11 +21,11 @@ fun ClickableText(
     val primaryColor = MaterialTheme.colorScheme.primary
 
     val annotatedString = buildAnnotatedString {
-        val clickablePart = ResourcesUtils.getString(
+        val clickablePart = ResourcesHelper.getString(
             context = context,
             resId = replaceText
         )
-        val mainText = ResourcesUtils.getString(
+        val mainText = ResourcesHelper.getString(
             context = context,
             resId = text,
             clickablePart

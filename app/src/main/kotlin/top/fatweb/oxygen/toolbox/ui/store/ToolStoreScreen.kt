@@ -60,7 +60,7 @@ import top.fatweb.oxygen.toolbox.ui.component.ToolCardSkeleton
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.DraggableScrollbar
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.rememberDraggableScroller
 import top.fatweb.oxygen.toolbox.ui.component.scrollbar.scrollbarState
-import top.fatweb.oxygen.toolbox.ui.util.ResourcesUtils
+import top.fatweb.oxygen.toolbox.ui.util.ResourcesHelper
 
 @Composable
 internal fun ToolStoreRoute(
@@ -120,7 +120,7 @@ internal fun ToolStoreScreen(
         if (toolStorePagingItems.loadState.refresh is LoadState.Error) {
             Toast.makeText(
                 context,
-                ResourcesUtils.getString(
+                ResourcesHelper.getString(
                     context = context,
                     resId = R.string.feature_store_reload_error
                 ),

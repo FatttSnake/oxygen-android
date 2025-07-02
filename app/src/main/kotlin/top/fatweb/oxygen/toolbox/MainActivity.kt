@@ -1,12 +1,9 @@
 package top.fatweb.oxygen.toolbox
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.AlertDialog
@@ -51,7 +48,7 @@ import top.fatweb.oxygen.toolbox.ui.OxygenApp
 import top.fatweb.oxygen.toolbox.ui.rememberOxygenAppState
 import top.fatweb.oxygen.toolbox.ui.theme.OxygenTheme
 import top.fatweb.oxygen.toolbox.ui.util.LocalTimeZone
-import top.fatweb.oxygen.toolbox.ui.util.LocaleUtils
+import top.fatweb.oxygen.toolbox.ui.util.LocaleHelper
 import javax.inject.Inject
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
@@ -85,13 +82,12 @@ class MainActivity : ComponentActivity() {
                 is MainActivityUiState.Success -> false
             }
         }
-        enableEdgeToEdge()
 
         setContent {
             val locale = whatLocale(uiState)
-            if (uiState != MainActivityUiState.Loading) {
+            if (uiState is MainActivityUiState.Success) {
                 LaunchedEffect(locale) {
-                    LocaleUtils.switchLocale(
+                    LocaleHelper.switchLocale(
                         activity = this@MainActivity,
                         languageConfig = locale
                     )
@@ -102,23 +98,12 @@ class MainActivity : ComponentActivity() {
             }
 
             val isDarkTheme = shouldUseDarkTheme(uiState)
-            LaunchedEffect(isDarkTheme) {
-                enableEdgeToEdge(
-                    statusBarStyle = SystemBarStyle.auto(
-                        lightScrim = Color.TRANSPARENT,
-                        darkScrim = Color.TRANSPARENT
-                    ) { isDarkTheme },
-                    navigationBarStyle = SystemBarStyle.dark(Color.TRANSPARENT)
-                )
-            }
-
             val appState = rememberOxygenAppState(
                 windowSizeClass = calculateWindowSizeClass(this),
                 networkMonitor = networkMonitor,
                 timeZoneMonitor = timeZoneMonitor,
                 launchPageConfig = whatLaunchPage(uiState)
             )
-
             val currentTimeZone by appState.currentTimeZone.collectAsStateWithLifecycle()
 
             CompositionLocalProvider(LocalTimeZone provides currentTimeZone) {
@@ -156,12 +141,14 @@ class MainActivity : ComponentActivity() {
     override fun attachBaseContext(newBase: Context) {
         val userDataRepository =
             EntryPointAccessors.fromApplication<UserDataRepositoryEntryPoint>(newBase).userDataRepository
+        val languageConfig = runBlocking {
+            userDataRepository.userData.first().languageConfig
+        }
+
         super.attachBaseContext(
-            LocaleUtils.attachBaseContext(
+            LocaleHelper.attachBaseContext(
                 context = newBase,
-                languageConfig = runBlocking {
-                    userDataRepository.userData.first().languageConfig
-                }
+                languageConfig = languageConfig
             )
         )
     }
