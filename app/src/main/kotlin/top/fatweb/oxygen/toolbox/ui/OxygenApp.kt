@@ -130,6 +130,7 @@ fun OxygenApp(
                 }
 
                 LaunchedEffect(destination) {
+                    topAppBarScrollBehavior.state.heightOffset = 0f
                     activeSearch = false
                     searchValue = ""
                     if (searchCount == 0) {
