@@ -67,6 +67,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         var uiState: MainActivityUiState by mutableStateOf(MainActivityUiState.Loading)
+        val showSettingsDialogState = mutableStateOf(false)
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -89,7 +90,10 @@ class MainActivity : ComponentActivity() {
                 LaunchedEffect(locale) {
                     LocaleHelper.switchLocale(
                         activity = this@MainActivity,
-                        languageConfig = locale
+                        languageConfig = locale,
+                        beforeSwitch = {
+                            showSettingsDialogState.value = false
+                        }
                     )
                 }
                 UseIsFirstLaunch(viewModel) {
@@ -112,7 +116,10 @@ class MainActivity : ComponentActivity() {
                     androidTheme = shouldUseAndroidTheme(uiState),
                     dynamicColor = shouldUseDynamicColor(uiState)
                 ) {
-                    OxygenApp(appState)
+                    OxygenApp(
+                        appState = appState,
+                        showSettingsDialogState = showSettingsDialogState
+                    )
                 }
             }
 

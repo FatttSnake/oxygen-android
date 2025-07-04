@@ -23,11 +23,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -64,12 +64,13 @@ import top.fatweb.oxygen.toolbox.ui.util.LocalFullScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OxygenApp(appState: OxygenAppState) {
+fun OxygenApp(
+    appState: OxygenAppState,
+    showSettingsDialogState: MutableState<Boolean>
+) {
     val shouldShowGradientBackground =
         appState.currentDestination?.route == ABOUT_ROUTE
-    var showSettingsDialog by rememberSaveable {
-        mutableStateOf(false)
-    }
+    var showSettingsDialog by showSettingsDialogState
 
     val context = LocalContext.current
     val window = (context as ComponentActivity).window

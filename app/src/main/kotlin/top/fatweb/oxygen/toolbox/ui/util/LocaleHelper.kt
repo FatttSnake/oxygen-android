@@ -9,10 +9,15 @@ import top.fatweb.oxygen.toolbox.model.userdata.LanguageConfig
 import java.util.Locale
 
 object LocaleHelper {
-    fun switchLocale(activity: Activity, languageConfig: LanguageConfig) {
+    fun switchLocale(
+        activity: Activity,
+        languageConfig: LanguageConfig,
+        beforeSwitch: () -> Unit = {}
+    ) {
         val newLanguage = getLocaleFromLanguageConfig(languageConfig).language
         val currentLanguage = ResourcesHelper.getAppLocale(activity).language
         if (newLanguage != currentLanguage) {
+            beforeSwitch()
             activity.safeRecreate()
         }
     }
