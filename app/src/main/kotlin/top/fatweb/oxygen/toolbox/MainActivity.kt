@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -109,6 +110,12 @@ class MainActivity : ComponentActivity() {
                 launchPageConfig = whatLaunchPage(uiState)
             )
             val currentTimeZone by appState.currentTimeZone.collectAsStateWithLifecycle()
+
+            LaunchedEffect(isDarkTheme) {
+                WindowCompat.getInsetsController(window, window.decorView).apply {
+                    isAppearanceLightStatusBars = !isDarkTheme
+                }
+            }
 
             CompositionLocalProvider(LocalTimeZone provides currentTimeZone) {
                 OxygenTheme(
