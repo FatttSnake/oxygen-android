@@ -43,8 +43,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -85,7 +85,7 @@ internal fun LibrariesScreen(
     onBackClick: () -> Unit,
     onSearch: (String) -> Unit
 ) {
-    val configuration = LocalConfiguration.current
+    val windowInfo = LocalWindowInfo.current
     val context = LocalContext.current
 
     val isLibrariesLoading = librariesScreenUiState is LibrariesScreenUiState.Loading
@@ -239,8 +239,8 @@ internal fun LibrariesScreen(
     if (showDialog) {
         AlertDialog(
             modifier = Modifier
-                .widthIn(max = configuration.screenWidthDp.dp - 80.dp)
-                .heightIn(max = configuration.screenHeightDp.dp - 40.dp),
+                .widthIn(max = windowInfo.containerSize.width.dp - 80.dp)
+                .heightIn(max = windowInfo.containerSize.height.dp - 40.dp),
             onDismissRequest = { showDialog = false },
             title = {
                 Text(

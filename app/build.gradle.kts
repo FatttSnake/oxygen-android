@@ -1,13 +1,29 @@
-import com.mikepenz.aboutlibraries.plugin.AboutLibrariesTask
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import java.io.FileInputStream
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.Properties
 
-val localDateTime: LocalDateTime = LocalDateTime.now(ZoneOffset.UTC)
-val baseVersionCode = 1
-val baseVersionName = "0.0.0"
+object VersionConfig {
+    private val localDateTime: LocalDateTime = LocalDateTime.now(ZoneOffset.UTC)
+    private val baseVersionCode = 1
+    private val baseVersionName = "0.0.0"
+
+    val namespace = "top.fatweb.oxygen.toolbox"
+    val applicationId = namespace
+    val minSdk = 24
+    val targetSdk = 36
+    val versionCode = baseVersionCode
+    val versionName = "$baseVersionName${
+        if (baseVersionCode % 100 != 0) ".${
+            localDateTime.format(
+                DateTimeFormatter.ofPattern("yyMMdd")
+            )
+        }" else ""
+    }"
+}
 
 val keystoreProperties = rootProject.file("keystore.properties").run {
     if (!exists()) {
@@ -34,28 +50,20 @@ plugins {
 }
 
 android {
-    namespace = "top.fatweb.oxygen.toolbox"
-    compileSdk = 35
+    namespace = VersionConfig.namespace
+    compileSdk = VersionConfig.targetSdk
 
     defaultConfig {
-        applicationId = "top.fatweb.oxygen.toolbox"
-        minSdk = 24
-        targetSdk = 35
-        versionCode = baseVersionCode
-        versionName = "$baseVersionName${
-            if (baseVersionCode % 100 != 0) ".${
-                localDateTime.format(
-                    DateTimeFormatter.ofPattern("yyMMdd")
-                )
-            }" else ""
-        }"
+        applicationId = VersionConfig.applicationId
+        minSdk = VersionConfig.minSdk
+        targetSdk = VersionConfig.targetSdk
+        versionCode = VersionConfig.versionCode
+        versionName = VersionConfig.versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
-
-        setProperty("archivesBaseName", "$applicationId-v$versionName($versionCode)")
     }
 
     signingConfigs {
@@ -88,8 +96,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+            languageVersion.set(KotlinVersion.KOTLIN_2_2)
+        }
     }
     buildFeatures {
         compose = true
@@ -100,6 +111,11 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    setProperty(
+        "archivesBaseName",
+        "${VersionConfig.applicationId}-v${VersionConfig.versionName}_${VersionConfig.versionCode}"
+    )
 }
 
 protobuf {
@@ -129,19 +145,19 @@ androidComponents.beforeVariants {
 }
 
 aboutLibraries {
-    registerAndroidTasks = false
-    configPath = "libConfig"
-    outputFileName = "dependencies.json"
-    exclusionPatterns = listOf<Regex>().map { it.toPattern() }
+    android {
+        registerAndroidTasks = false
+    }
+    export {
+        outputFile = file("src/main/res/raw/dependencies.json")
+    }
+    library {
+        exclusionPatterns = listOf<Regex>().map { it.toPattern() }
+    }
 }
 
-task("exportLibrariesToJson", AboutLibrariesTask::class) {
-    resultDirectory = project.file("src/main/res/raw/")
-    variant = "release"
-}.dependsOn("collectDependencies")
-
 afterEvaluate {
-    tasks.findByName("preBuild")?.dependsOn(tasks.findByName("exportLibrariesToJson"))
+    tasks.findByName("preBuild")?.dependsOn(tasks.findByName("exportLibraryDefinitions"))
     tasks.findByName("kspDebugKotlin")?.dependsOn(tasks.findByName("generateDebugProto"))
     tasks.findByName("kspReleaseKotlin")?.dependsOn(tasks.findByName("generateReleaseProto"))
 }

@@ -28,9 +28,9 @@ import kotlin.time.Duration.Companion.seconds
 
 @Singleton
 class TimeZoneBroadcastMonitor @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
     @ApplicationScope applicationScope: CoroutineScope,
-    @Dispatcher(AppDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
+    @param:Dispatcher(AppDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : TimeZoneMonitor {
     override val currentTimeZone: SharedFlow<TimeZone> = callbackFlow {
         trySend(TimeZone.currentSystemDefault())

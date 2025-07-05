@@ -13,8 +13,8 @@ import top.fatweb.oxygen.toolbox.model.lib.Dependencies
 import javax.inject.Inject
 
 class DepDataSource @Inject constructor(
-    @ApplicationContext private val context: Context,
-    @Dispatcher(AppDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
+    @param:ApplicationContext private val context: Context,
+    @param:Dispatcher(AppDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) {
     private val json = Json { ignoreUnknownKeys = true }
 

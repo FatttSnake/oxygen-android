@@ -16,7 +16,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -74,12 +74,12 @@ fun SettingsDialog(
     onChangeThemeModeConfig: (ThemeModeConfig) -> Unit,
     onChangeUseDynamicColor: (Boolean) -> Unit
 ) {
-    val configuration = LocalConfiguration.current
+    val windowInfo = LocalWindowInfo.current
 
     AlertDialog(
         modifier = modifier
-            .widthIn(max = configuration.screenWidthDp.dp - 80.dp)
-            .heightIn(max = configuration.screenHeightDp.dp - 40.dp),
+            .widthIn(max = windowInfo.containerSize.width.dp - 80.dp)
+            .heightIn(max = windowInfo.containerSize.height.dp - 40.dp),
         onDismissRequest = onDismiss,
         title = {
             Text(

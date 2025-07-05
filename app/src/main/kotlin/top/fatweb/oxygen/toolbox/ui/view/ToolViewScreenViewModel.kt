@@ -101,7 +101,7 @@ private fun toolViewUiState(
     val entityFlow =
         if (!preview) toolRepository.getToolByUsernameAndToolId(username, toolId) else flowOf(null)
 
-    val isSystemDarkModeFlow = callbackFlow<Boolean> {
+    val isSystemDarkModeFlow = callbackFlow {
         val receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, instent: Intent?) {
                 context?.let(ResourcesHelper::getConfiguration)?.run {

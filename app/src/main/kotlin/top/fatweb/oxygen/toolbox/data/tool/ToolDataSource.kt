@@ -10,8 +10,8 @@ import top.fatweb.oxygen.toolbox.di.Dispatcher
 import javax.inject.Inject
 
 class ToolDataSource @Inject constructor(
-    @ApplicationContext private val context: Context,
-    @Dispatcher(AppDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
+    @param:ApplicationContext private val context: Context,
+    @param:Dispatcher(AppDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) {
     val toolViewTemplate = flow {
         emit(

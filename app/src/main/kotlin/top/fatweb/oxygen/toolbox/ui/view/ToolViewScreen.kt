@@ -46,8 +46,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -161,7 +161,7 @@ private fun Content(
     toolViewUiState: ToolViewUiState,
     webViewInstanceState: WebViewInstanceState
 ) {
-    val configuration = LocalConfiguration.current
+    val windowInfo = LocalWindowInfo.current
     val context = LocalContext.current
 
     var fileChooserCallback by remember { mutableStateOf<ValueCallback<Array<Uri>>?>(null) }
@@ -237,8 +237,8 @@ private fun Content(
     if (isShowDialog.value) {
         AlertDialog(
             modifier = Modifier
-                .widthIn(max = configuration.screenWidthDp.dp - 80.dp)
-                .heightIn(max = configuration.screenHeightDp.dp - 40.dp),
+                .widthIn(max = windowInfo.containerSize.width.dp - 80.dp)
+                .heightIn(max = windowInfo.containerSize.height.dp - 40.dp),
             onDismissRequest = {},
             title = {
                 Text(
