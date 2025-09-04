@@ -101,7 +101,7 @@ internal fun ToolStoreScreen(
     onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit,
     onChangeInstallStatus: (ToolStoreUiState.InstallInfo.Status) -> Unit,
     onChangeInstallType: (ToolStoreUiState.InstallInfo.Type) -> Unit,
-    onInstallTool: (ToolEntity) -> Unit
+    onInstallTool: (toolEntity: ToolEntity, onFinish: () -> Unit) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -140,15 +140,7 @@ internal fun ToolStoreScreen(
     val state = rememberLazyStaggeredGridState()
     val scrollbarState = state.scrollbarState(itemsAvailable = itemsAvailable)
 
-    var installTool by remember {
-        mutableStateOf(
-            ToolEntity(
-                toolId = "Unknown",
-                authorUsername = "Unknown",
-                ver = "Unknown"
-            )
-        )
-    }
+    var installTool by remember { mutableStateOf<ToolEntity?>(null) }
 
     PullToRefreshBox(
         modifier = modifier
@@ -178,7 +170,11 @@ internal fun ToolStoreScreen(
                             onChangeInstallType(installType)
                         },
                         onClick = {
-                            onNavigateToToolView(it.authorUsername, it.toolId, it.upgrade != null)
+                            onNavigateToToolView(
+                                it.authorUsername,
+                                it.toolId,
+                                it.ver != it.installedVersion
+                            )
                         }
                     )
                 }
@@ -246,12 +242,18 @@ internal fun ToolStoreScreen(
         )
     }
 
-    InstallAlertDialog(
-        installTool = installTool,
-        installInfo = installInfo,
-        onChangeInstallStatus = onChangeInstallStatus,
-        onInstallTool = { onInstallTool(installTool) }
-    )
+    installTool?.let {
+        InstallAlertDialog(
+            installTool = it,
+            installInfo = installInfo,
+            onChangeInstallStatus = onChangeInstallStatus,
+            onInstallTool = {
+                onInstallTool(it) {
+                    toolStorePagingItems.refresh()
+                }
+            }
+        )
+    }
 }
 
 private fun LazyStaggeredGridScope.toolsPanel(
@@ -265,13 +267,12 @@ private fun LazyStaggeredGridScope.toolsPanel(
         val item = toolStorePagingItems[it]!!
         ToolCard(
             tool = item,
-            specifyVer = item.upgrade,
-            actionIcon = if (item.upgrade != null) OxygenIcons.Upgrade else if (!item.isInstalled) OxygenIcons.Download else null,
+            actionIcon = if (item.installedVersion.isNullOrBlank()) OxygenIcons.Download else if (item.installedVersion != item.ver) OxygenIcons.Upgrade else null,
             actionIconContentDescription = stringResource(R.string.core_install),
             onAction = {
                 onAction(
                     item,
-                    if (item.upgrade != null) ToolStoreUiState.InstallInfo.Type.Upgrade else ToolStoreUiState.InstallInfo.Type.Install
+                    if (item.installedVersion.isNullOrBlank()) ToolStoreUiState.InstallInfo.Type.Install else ToolStoreUiState.InstallInfo.Type.Upgrade
                 )
             },
             onClick = { onClick(item) }
@@ -353,8 +354,8 @@ private fun InstallAlertDialog(
                                         R.string.feature_store_ask_upgrade,
                                         installTool.authorUsername,
                                         installTool.toolId,
-                                        installTool.ver,
-                                        installTool.upgrade ?: installTool.ver
+                                        installTool.installedVersion ?: installTool.ver,
+                                        installTool.ver
                                     )
                                 }
 

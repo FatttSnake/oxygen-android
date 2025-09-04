@@ -1,10 +1,10 @@
 package top.fatweb.oxygen.toolbox.network.model
 
 import kotlinx.serialization.Serializable
-import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
+import top.fatweb.oxygen.toolbox.model.tool.ToolWithDistEntity
 
 @Serializable
-data class ToolVo(
+data class ToolWithDistVo(
     val id: Long,
 
     val name: String,
@@ -27,25 +27,29 @@ data class ToolVo(
 
     val categories: List<ToolCategoryVo>,
 
+    val dist: ToolDataVo,
+
     val entryPoint: String,
 
     val publish: Long
 )
 
-fun ToolVo.asExternalModel() = ToolEntity(
+fun ToolWithDistVo.asExternalModel() = ToolWithDistEntity(
     id = id,
     name = name,
     toolId = toolId,
     icon = icon,
     platform = platform,
     description = description,
-    base = base.asExternalModel(),
+    baseId = base.id,
+    baseVersion = base.version,
     authorUsername = author.username,
     authorNickname = author.userInfo.nickname,
     authorAvatar = author.userInfo.avatar,
     ver = ver,
     keywords = keywords,
     categories = categories.map { it.name },
+    dist = dist.data,
     entryPoint = entryPoint,
     publish = publish
 )

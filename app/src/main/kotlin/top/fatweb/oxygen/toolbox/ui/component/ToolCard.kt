@@ -42,14 +42,13 @@ import com.valentinilk.shimmer.shimmer
 import com.valentinilk.shimmer.shimmerSpec
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
-import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
+import top.fatweb.oxygen.toolbox.model.tool.ToolCommonEntity
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ToolCard(
     modifier: Modifier = Modifier,
-    tool: ToolEntity,
-    specifyVer: String? = null,
+    tool: ToolCommonEntity,
     actionIcon: ImageVector? = null,
     actionIconContentDescription: String = "",
     onAction: () -> Unit = {},
@@ -71,7 +70,7 @@ fun ToolCard(
                 .padding(16.dp)
         ) {
             ToolHeader(
-                ver = specifyVer ?: tool.ver,
+                ver = tool.ver,
                 actionIcon = actionIcon,
                 actionIconContentDescription = actionIconContentDescription,
                 onAction = onAction

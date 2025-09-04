@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
+import top.fatweb.oxygen.toolbox.model.tool.ToolWithDistEntity
 import top.fatweb.oxygen.toolbox.repository.tool.ToolRepository
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
@@ -45,19 +45,19 @@ class ToolsScreenViewModel @Inject constructor(
         savedStateHandle[SEARCH_VALUE] = value
     }
 
-    fun uninstall(tool: ToolEntity) {
+    fun uninstall(tool: ToolWithDistEntity) {
         viewModelScope.launch {
             toolRepository.removeTool(tool)
         }
     }
 
-    fun undo(tool: ToolEntity) {
+    fun undo(tool: ToolWithDistEntity) {
         viewModelScope.launch {
             toolRepository.saveTool(tool)
         }
     }
 
-    fun changeStar(tool: ToolEntity, star: Boolean) {
+    fun changeStar(tool: ToolWithDistEntity, star: Boolean) {
         viewModelScope.launch {
             toolRepository.updateTool(tool.copy(isStar = star))
         }
@@ -67,7 +67,7 @@ class ToolsScreenViewModel @Inject constructor(
 sealed interface ToolsScreenUiState {
     data object Loading : ToolsScreenUiState
     data object Nothing : ToolsScreenUiState
-    data class Success(val tools: List<ToolEntity>) : ToolsScreenUiState
+    data class Success(val tools: List<ToolWithDistEntity>) : ToolsScreenUiState
 }
 
 private const val SEARCH_VALUE = "searchValue"

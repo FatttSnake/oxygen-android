@@ -5,23 +5,26 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import top.fatweb.oxygen.toolbox.data.network.NetworkDataSource
+import top.fatweb.oxygen.toolbox.data.network.ToolStoreDataSource
 import top.fatweb.oxygen.toolbox.data.tool.dao.ToolDao
 import top.fatweb.oxygen.toolbox.model.Result
 import top.fatweb.oxygen.toolbox.model.asExternalModel
+import top.fatweb.oxygen.toolbox.model.tool.ToolBaseWithDistEntity
 import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
-import top.fatweb.oxygen.toolbox.network.model.ToolVo
+import top.fatweb.oxygen.toolbox.model.tool.ToolWithDistEntity
+import top.fatweb.oxygen.toolbox.network.model.ToolBaseWithDistVo
+import top.fatweb.oxygen.toolbox.network.model.ToolWithDistVo
 import top.fatweb.oxygen.toolbox.network.model.asExternalModel
 import top.fatweb.oxygen.toolbox.network.paging.ToolStorePagingSource
-import top.fatweb.oxygen.toolbox.repository.tool.StoreRepository
+import top.fatweb.oxygen.toolbox.repository.tool.ToolStoreRepository
 import javax.inject.Inject
 
 private const val PAGE_SIZE = 20
 
-internal class NetworkStoreRepository @Inject constructor(
-    private val networkDataSource: NetworkDataSource,
+internal class NetworkToolStoreRepository @Inject constructor(
+    private val toolStoreDataSource: ToolStoreDataSource,
     private val toolDao: ToolDao
-) : StoreRepository {
+) : ToolStoreRepository {
     override suspend fun getStore(
         searchValue: String
     ): Flow<PagingData<ToolEntity>> =
@@ -29,23 +32,31 @@ internal class NetworkStoreRepository @Inject constructor(
             config = PagingConfig(pageSize = PAGE_SIZE),
             pagingSourceFactory = {
                 ToolStorePagingSource(
-                    networkDataSource = networkDataSource,
+                    toolStoreDataSource = toolStoreDataSource,
                     toolDao = toolDao,
                     searchValue = searchValue
                 )
             }
         ).flow
 
-    override fun detail(
+    override fun getToolDist(
         username: String,
         toolId: String,
         ver: String
-    ): Flow<Result<ToolEntity>> =
-        networkDataSource.detail(
+    ): Flow<Result<ToolWithDistEntity>> =
+        toolStoreDataSource.getToolDist(
             username = username,
             toolId = toolId,
             ver = ver
         ).map {
-            it.asExternalModel(ToolVo::asExternalModel)
+            it.asExternalModel(ToolWithDistVo::asExternalModel)
+        }
+
+    override fun getToolBaseDist(id: Long, version: Long): Flow<Result<ToolBaseWithDistEntity>> =
+        toolStoreDataSource.getToolBaseDist(
+            id = id,
+            version = version
+        ).map {
+            it.asExternalModel(ToolBaseWithDistVo::asExternalModel)
         }
 }

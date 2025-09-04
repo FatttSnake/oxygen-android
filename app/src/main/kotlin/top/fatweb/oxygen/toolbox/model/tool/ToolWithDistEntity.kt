@@ -1,8 +1,17 @@
 package top.fatweb.oxygen.toolbox.model.tool
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import top.fatweb.oxygen.toolbox.model.Converters
 import top.fatweb.oxygen.toolbox.network.model.Platform
 
-data class ToolEntity(
+@Entity(tableName = "tool")
+@TypeConverters(Converters::class)
+data class ToolWithDistEntity(
+    @PrimaryKey
     override val id: Long,
 
     override val name: String,
@@ -15,7 +24,9 @@ data class ToolEntity(
 
     override val description: String? = null,
 
-    val base: ToolBaseEntity,
+    val baseId: Long,
+
+    val baseVersion: Long,
 
     override val authorUsername: String,
 
@@ -29,9 +40,17 @@ data class ToolEntity(
 
     override val categories: List<String>,
 
+    val dist: String,
+
     override val entryPoint: String,
 
     override val publish: Long,
 
+    val isStar: Boolean = false,
+
+    @ColumnInfo(defaultValue = "NULL")
+    var upgrade: String? = null
+) : ToolCommonEntity {
+    @Ignore
     override var installedVersion: String? = null
-) : ToolCommonEntity
+}

@@ -46,7 +46,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
-import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
+import top.fatweb.oxygen.toolbox.model.tool.ToolWithDistEntity
 import top.fatweb.oxygen.toolbox.ui.component.DEFAULT_TOOL_CARD_SKELETON_COUNT
 import top.fatweb.oxygen.toolbox.ui.component.DialogClickerRow
 import top.fatweb.oxygen.toolbox.ui.component.DialogSectionGroup
@@ -92,9 +92,9 @@ internal fun ToolsScreen(
     onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit,
     onNavigateToToolStore: () -> Unit,
     onShowSnackbar: suspend (message: String, action: String?) -> Boolean,
-    onUninstall: (ToolEntity) -> Unit,
-    onUndo: (ToolEntity) -> Unit,
-    onChangeStar: (ToolEntity, Boolean) -> Unit
+    onUninstall: (ToolWithDistEntity) -> Unit,
+    onUndo: (ToolWithDistEntity) -> Unit,
+    onChangeStar: (ToolWithDistEntity, Boolean) -> Unit
 ) {
     val localContext = LocalContext.current
 
@@ -107,7 +107,7 @@ internal fun ToolsScreen(
     val state = rememberLazyStaggeredGridState()
     val scrollbarState = state.scrollbarState(itemsAvailable = itemsAvailable)
 
-    var selectedTool by remember { mutableStateOf<ToolEntity?>(null) }
+    var selectedTool by remember { mutableStateOf<ToolWithDistEntity?>(null) }
     var isShowMenu by remember { mutableStateOf(true) }
 
     Box(
@@ -201,7 +201,10 @@ internal fun ToolsScreen(
                 onUninstall(selectedTool!!)
                 scope.launch {
                     if (onShowSnackbar(
-                            ResourcesHelper.getString(localContext, R.string.core_uninstall_success),
+                            ResourcesHelper.getString(
+                                localContext,
+                                R.string.core_uninstall_success
+                            ),
                             ResourcesHelper.getString(localContext, R.string.core_undo)
                         )
                     ) {
@@ -218,9 +221,9 @@ internal fun ToolsScreen(
 }
 
 private fun LazyStaggeredGridScope.toolsPanel(
-    toolItems: List<ToolEntity>,
+    toolItems: List<ToolWithDistEntity>,
     onClick: (username: String, toolId: String, preview: Boolean) -> Unit,
-    onLongClick: (ToolEntity) -> Unit
+    onLongClick: (ToolWithDistEntity) -> Unit
 ) {
     items(
         items = toolItems,
@@ -242,7 +245,7 @@ private fun LazyStaggeredGridScope.toolsPanel(
 private fun ToolMenu(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
-    selectedTool: ToolEntity,
+    selectedTool: ToolWithDistEntity,
     onUninstall: () -> Unit,
     onChangeStar: (Boolean) -> Unit
 ) {

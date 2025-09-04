@@ -7,58 +7,67 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
-import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
+import top.fatweb.oxygen.toolbox.model.tool.ToolWithDistEntity
 
 @Dao
 interface ToolDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertTool(tool: ToolEntity)
+    suspend fun insert(tool: ToolWithDistEntity)
 
     @Update
-    suspend fun updateTool(tool: ToolEntity)
+    suspend fun update(tool: ToolWithDistEntity)
 
     @Delete
-    suspend fun deleteTool(tool: ToolEntity)
+    suspend fun deleteTool(tool: ToolWithDistEntity)
 
     @Query(
         """
-            SELECT * FROM tools
-                WHERE id = :id
+            DELETE FROM tool
+            WHERE authorUsername = :username
+                and toolId = :toolId
         """
     )
-    fun selectToolById(id: Long): Flow<ToolEntity?>
+    suspend fun deleteTool(username: String, toolId: String)
 
     @Query(
         """
-            SELECT * FROM tools
+            SELECT * FROM tool
+            WHERE id = :id
+        """
+    )
+    fun selectById(id: Long): Flow<ToolWithDistEntity?>
+
+    @Query(
+        """
+            SELECT * FROM tool
             WHERE :searchValue = ''
                 OR name LIKE '%' || :searchValue || '%' COLLATE NOCASE
                 OR keywords LIKE '%\"%' || :searchValue || '%\"%' COLLATE NOCASE
-            ORDER BY updateTime DESC
+            ORDER BY publish DESC
         """
     )
-    fun selectAllTools(searchValue: String): Flow<List<ToolEntity>>
+    fun selectAll(searchValue: String): Flow<List<ToolWithDistEntity>>
 
     @Query(
         """
-            SELECT * FROM tools
+            SELECT * FROM tool
             WHERE isStar = 1
                 AND (
                     :searchValue = ''
                     OR name LIKE '%' || :searchValue || '%' COLLATE NOCASE
                     OR keywords LIKE '%"%' || :searchValue || '%"%' COLLATE NOCASE
                 )
-            ORDER BY updateTime DESC
+            ORDER BY publish DESC
         """
     )
-    fun selectStarTools(searchValue: String): Flow<List<ToolEntity>>
+    fun selectStar(searchValue: String): Flow<List<ToolWithDistEntity>>
 
     @Query(
         """
-            SELECT * FROM tools
+            SELECT * FROM tool
             WHERE authorUsername = :username
                 and toolId = :toolId LIMIT 1
         """
     )
-    fun selectToolByUsernameAndToolId(username: String, toolId: String): Flow<ToolEntity?>
+    fun selectByUsernameAndToolId(username: String, toolId: String): Flow<ToolWithDistEntity?>
 }

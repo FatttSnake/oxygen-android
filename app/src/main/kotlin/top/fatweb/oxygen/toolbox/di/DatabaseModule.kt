@@ -7,6 +7,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import top.fatweb.oxygen.toolbox.data.tool.ToolDatabase
+import top.fatweb.oxygen.toolbox.data.tool.dao.ToolBaseDao
 import top.fatweb.oxygen.toolbox.data.tool.dao.ToolDao
 
 @Module
@@ -15,4 +16,8 @@ object DatabaseModule {
     @Provides
     fun provideToolDao(@ApplicationContext context: Context): ToolDao =
         ToolDatabase.getInstance(context).toolDao()
+
+    @Provides
+    fun provideToolBaseDao(@ApplicationContext context: Context): ToolBaseDao =
+        ToolDatabase.getInstance(context).toolBaseDao()
 }

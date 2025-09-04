@@ -42,7 +42,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
-import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
+import top.fatweb.oxygen.toolbox.model.tool.ToolWithDistEntity
 import top.fatweb.oxygen.toolbox.ui.component.DEFAULT_TOOL_CARD_SKELETON_COUNT
 import top.fatweb.oxygen.toolbox.ui.component.DialogClickerRow
 import top.fatweb.oxygen.toolbox.ui.component.DialogSectionGroup
@@ -79,7 +79,7 @@ internal fun StarScreen(
     modifier: Modifier = Modifier,
     starScreenUiState: StarScreenUiState,
     onNavigateToToolView: (username: String, toolId: String, preview: Boolean) -> Unit,
-    onUnstar: (ToolEntity) -> Unit
+    onUnstar: (ToolWithDistEntity) -> Unit
 ) {
     ReportDrawnWhen { starScreenUiState !is StarScreenUiState.Loading }
 
@@ -88,7 +88,7 @@ internal fun StarScreen(
     val state = rememberLazyStaggeredGridState()
     val scrollbarState = state.scrollbarState(itemsAvailable = itemsAvailable)
 
-    var selectedTool by remember { mutableStateOf<ToolEntity?>(null) }
+    var selectedTool by remember { mutableStateOf<ToolWithDistEntity?>(null) }
     var isShowMenu by remember { mutableStateOf(true) }
 
     Box(
@@ -181,9 +181,9 @@ internal fun StarScreen(
 }
 
 private fun LazyStaggeredGridScope.toolsPanel(
-    toolItems: List<ToolEntity>,
+    toolItems: List<ToolWithDistEntity>,
     onClick: (username: String, toolId: String, preview: Boolean) -> Unit,
-    onLongClick: (ToolEntity) -> Unit
+    onLongClick: (ToolWithDistEntity) -> Unit
 ) {
     items(
         items = toolItems,
@@ -204,7 +204,7 @@ private fun LazyStaggeredGridScope.toolsPanel(
 @Composable
 private fun ToolMenu(
     modifier: Modifier = Modifier,
-    selectedTool: ToolEntity,
+    selectedTool: ToolWithDistEntity,
     onDismiss: () -> Unit,
     onUnstar: () -> Unit
 ) {

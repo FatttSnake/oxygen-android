@@ -10,20 +10,22 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 import top.fatweb.oxygen.toolbox.model.Result
 import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
-import top.fatweb.oxygen.toolbox.repository.tool.StoreRepository
 import top.fatweb.oxygen.toolbox.repository.tool.ToolRepository
+import top.fatweb.oxygen.toolbox.repository.tool.ToolStoreRepository
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class ToolStoreViewModel @Inject constructor(
-    private val storeRepository: StoreRepository,
+    private val toolStoreRepository: ToolStoreRepository,
     private val toolRepository: ToolRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -33,7 +35,7 @@ class ToolStoreViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val storeData: Flow<PagingData<ToolEntity>> = searchValue
         .flatMapLatest { searchValue ->
-            storeRepository
+            toolStoreRepository
                 .getStore(searchValue)
                 .cachedIn(viewModelScope)
         }
@@ -55,34 +57,122 @@ class ToolStoreViewModel @Inject constructor(
     }
 
     fun installTool(
-        toolEntity: ToolEntity
+        toolEntity: ToolEntity,
+        onFinish: () -> Unit
     ) {
         viewModelScope.launch {
-            storeRepository.detail(toolEntity.authorUsername, toolEntity.toolId).collect { result ->
+            toolStoreRepository.getToolDist(
+                username = toolEntity.authorUsername,
+                toolId = toolEntity.toolId
+            ).collect { result ->
                 when (result) {
                     Result.Loading -> changeInstallInfo(status = ToolStoreUiState.InstallInfo.Status.Processing)
 
-                    is Result.Error, is Result.Fail -> changeInstallInfo(status = ToolStoreUiState.InstallInfo.Status.Fail)
+                    is Result.Error -> {
+                        Timber.e(
+                            result.exception,
+                            "Failed to install tool: ${toolEntity.authorUsername}:${toolEntity.toolId}"
+                        )
+                        changeInstallInfo(status = ToolStoreUiState.InstallInfo.Status.Fail)
+                    }
+
+                    is Result.Fail -> {
+                        Timber.w("Failed to install tool base: ${toolEntity.authorUsername}:${toolEntity.toolId}, reason: ${result.message}")
+                        changeInstallInfo(status = ToolStoreUiState.InstallInfo.Status.Fail)
+                    }
 
                     is Result.Success -> {
+                        if (!installToolBase(
+                                baseId = result.data.baseId,
+                                baseVersion = result.data.baseVersion
+                            )
+                        ) {
+                            changeInstallInfo(status = ToolStoreUiState.InstallInfo.Status.Fail)
+                            return@collect
+                        }
+
                         when (installInfo.value.type) {
                             ToolStoreUiState.InstallInfo.Type.Install -> {
                                 toolRepository.saveTool(
                                     result.data
                                 )
-                                toolEntity.isInstalled = true
+                                toolEntity.installedVersion = result.data.ver
                             }
 
                             ToolStoreUiState.InstallInfo.Type.Upgrade -> {
-                                toolRepository.removeTool(toolEntity)
+                                toolRepository.removeTool(
+                                    toolEntity.authorUsername,
+                                    toolEntity.toolId
+                                )
                                 toolRepository.saveTool(result.data)
-                                toolEntity.upgrade = null
+                                toolEntity.installedVersion = result.data.ver
                             }
                         }
 
                         changeInstallInfo(status = ToolStoreUiState.InstallInfo.Status.Success)
+                        onFinish()
                     }
                 }
+            }
+        }
+    }
+
+    private suspend fun installToolBase(
+        baseId: Long,
+        baseVersion: Long
+    ): Boolean {
+        val localToolBase = toolRepository.getToolBaseByIdAndVersion(
+            id = baseId,
+            version = baseVersion
+        ).first()
+
+        return when {
+            localToolBase != null && !localToolBase.isCache -> true
+            localToolBase != null && localToolBase.isCache -> {
+                toolRepository.updateToolBase(localToolBase.apply {
+                    isCache = false
+                })
+                true
+            }
+
+            else -> {
+                var isInstallSuccess = false
+                var shouldContinue = true
+
+                toolStoreRepository.getToolBaseDist(
+                    id = baseId,
+                    version = baseVersion
+                )
+                    .collect { result ->
+                        if (!shouldContinue) return@collect
+
+                        when (result) {
+                            is Result.Success -> {
+                                toolRepository.saveToolBase(result.data.apply {
+                                    isCache = false
+                                })
+                                isInstallSuccess = true
+                                shouldContinue = false
+                            }
+
+                            is Result.Error -> {
+                                Timber.e(
+                                    result.exception,
+                                    "Failed to install tool base: $baseId version $baseVersion"
+                                )
+                                shouldContinue = false
+                            }
+
+                            is Result.Fail -> {
+                                Timber.w("Failed to install tool base: $baseId version: $baseVersion, reason: ${result.message}")
+                                shouldContinue = false
+                            }
+
+                            Result.Loading -> {}
+                        }
+                    }
+
+                isInstallSuccess
             }
         }
     }

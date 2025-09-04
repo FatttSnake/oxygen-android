@@ -3,7 +3,7 @@ package top.fatweb.oxygen.toolbox.model
 import androidx.room.TypeConverter
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.json.Json
-import top.fatweb.oxygen.toolbox.model.tool.ToolEntity.Platform
+import top.fatweb.oxygen.toolbox.network.model.Platform
 
 class Converters {
     private val json = Json { ignoreUnknownKeys = true }

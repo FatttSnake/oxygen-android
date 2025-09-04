@@ -12,6 +12,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
@@ -26,11 +27,12 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import timber.log.Timber
 import top.fatweb.oxygen.toolbox.model.Result
-import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
+import top.fatweb.oxygen.toolbox.model.tool.ToolBaseWithDistEntity
+import top.fatweb.oxygen.toolbox.model.tool.ToolWithDistEntity
 import top.fatweb.oxygen.toolbox.model.userdata.ThemeModeConfig
 import top.fatweb.oxygen.toolbox.navigation.ToolViewArgs
-import top.fatweb.oxygen.toolbox.repository.tool.StoreRepository
 import top.fatweb.oxygen.toolbox.repository.tool.ToolRepository
+import top.fatweb.oxygen.toolbox.repository.tool.ToolStoreRepository
 import top.fatweb.oxygen.toolbox.repository.userdata.UserDataRepository
 import top.fatweb.oxygen.toolbox.ui.util.ResourcesHelper
 import top.fatweb.oxygen.toolbox.util.decodeToStringWithZip
@@ -43,8 +45,8 @@ import kotlin.time.Duration.Companion.seconds
 class ToolViewScreenViewModel @Inject constructor(
     @ApplicationContext context: Context,
     userDataRepository: UserDataRepository,
-    storeRepository: StoreRepository,
     toolRepository: ToolRepository,
+    toolStoreRepository: ToolStoreRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     val isPreview = savedStateHandle.getStateFlow(IS_PREVIEW, false)
@@ -54,19 +56,18 @@ class ToolViewScreenViewModel @Inject constructor(
     private val toolId = toolViewArgs.toolId
     private val preview = toolViewArgs.preview
 
-    private val storeDetailCache = MutableStateFlow<Result<ToolEntity>?>(null)
+    private val toolViewDataCache = MutableStateFlow<ToolViewDataCache?>(null)
 
-
-    val toolViewUiState: StateFlow<ToolViewUiState> = toolViewUiState(
+    val toolViewUiState: StateFlow<ToolViewUiState> = createToolViewUiState(
         context = context,
         savedStateHandle = savedStateHandle,
         username = username,
         toolId = toolId,
         preview = preview,
         userDataRepository = userDataRepository,
-        storeRepository = storeRepository,
         toolRepository = toolRepository,
-        storeDetailCache = storeDetailCache
+        toolStoreRepository = toolStoreRepository,
+        toolViewDataCache = toolViewDataCache
     )
         .stateIn(
             scope = viewModelScope,
@@ -74,138 +75,349 @@ class ToolViewScreenViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5.seconds.inWholeMilliseconds)
         )
 
-    val webviewInstance = flow<WebViewInstanceState> {
-        val webviewInstance = WebView(context)
-        emit(WebViewInstanceState.Success(webviewInstance))
-    }
+    val webviewInstance = createWebViewInstanceState(context)
         .stateIn(
-            viewModelScope,
+            scope = viewModelScope,
             initialValue = WebViewInstanceState.Loading,
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5.seconds.inWholeMilliseconds)
         )
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
-private fun toolViewUiState(
+private fun createToolViewUiState(
     context: Context,
     savedStateHandle: SavedStateHandle,
     username: String,
     toolId: String,
     preview: Boolean,
     userDataRepository: UserDataRepository,
-    storeRepository: StoreRepository,
     toolRepository: ToolRepository,
-    storeDetailCache: MutableStateFlow<Result<ToolEntity>?>
+    toolStoreRepository: ToolStoreRepository,
+    toolViewDataCache: MutableStateFlow<ToolViewDataCache?>,
 ): Flow<ToolViewUiState> {
-    val toolViewTemplate = toolRepository.toolViewTemplate
-    val entityFlow =
-        if (!preview) toolRepository.getToolByUsernameAndToolId(username, toolId) else flowOf(null)
-
-    val isSystemDarkModeFlow = callbackFlow {
-        val receiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, instent: Intent?) {
-                context?.let(ResourcesHelper::getConfiguration)?.run {
-                    trySend((uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES)
-                }
-            }
-        }
-        val filter = IntentFilter(Intent.ACTION_CONFIGURATION_CHANGED)
-        context.registerReceiver(receiver, filter)
-
-        trySend((ResourcesHelper.getConfiguration(context).uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES)
-
-        awaitClose { context.unregisterReceiver(receiver) }
+    val isSystemDarkModeFlow = createSystemDarkModeFlow(context)
+    val toolWithDistFlow = if (!preview) {
+        toolRepository.getToolByUsernameAndToolId(username, toolId)
+    } else {
+        flowOf(null)
     }
+    val toolBaseWithDistFlow = toolWithDistFlow.flatMapLatest { toolWithDist ->
+        if (toolWithDist != null) {
+            toolRepository.getToolBaseByIdAndVersion(
+                id = toolWithDist.baseId,
+                version = toolWithDist.baseVersion
+            )
+        } else {
+            flowOf(null)
+        }
+    }
+    val toolViewTemplateFlow = toolRepository.toolViewTemplate
 
     return isSystemDarkModeFlow.flatMapLatest { isSystemDarkMode ->
-        flow {
-            userDataRepository.userData.collect { userData ->
-                val isDarkMode: Boolean = when (userData.themeModeConfig) {
-                    ThemeModeConfig.FollowSystem -> isSystemDarkMode
-                    ThemeModeConfig.Light -> false
-                    ThemeModeConfig.Dark -> true
-                }
-                val globalJsVariables = toolRepository.getGlobalJsVariables(isDarkMode)
-                val globalCssVariables = toolRepository.getGlobalCssVariables(isDarkMode)
-                combine(entityFlow, toolViewTemplate, globalJsVariables, ::Triple)
-                    .combine(globalCssVariables) { triple, globalCssVariables ->
-                        Quadruple(triple.first, triple.second, triple.third, globalCssVariables)
-                    }
-                    .collect { (entityFlow, toolViewTemplate, globalJsVariables, globalCssVariables) ->
-                        if (entityFlow == null) {
-                            savedStateHandle[IS_PREVIEW] = true
-                            val cachedDetail = storeDetailCache.value
-                            if (cachedDetail != null) {
-                                emitResult(
-                                    result = cachedDetail,
-                                    toolViewTemplate = toolViewTemplate,
-                                    globalJsVariables = globalJsVariables,
-                                    globalCssVariables = globalCssVariables
-                                )
-                            } else {
-                                storeRepository.detail(username, toolId).collect { result ->
-                                    storeDetailCache.value = result
-                                    emitResult(
-                                        result = result,
-                                        toolViewTemplate = toolViewTemplate,
-                                        globalJsVariables = globalJsVariables,
-                                        globalCssVariables = globalCssVariables
-                                    )
-                                }
-                            }
-                        } else {
-                            savedStateHandle[IS_PREVIEW] = false
-                            emit(
-                                ToolViewUiState.Success(
-                                    entityFlow.name,
-                                    processHtml(
-                                        toolViewTemplate = toolViewTemplate,
-                                        globalJsVariables = globalJsVariables,
-                                        globalCssVariables = globalCssVariables,
-                                        distBase64 = entityFlow.dist!!,
-                                        baseBase64 = entityFlow.base!!
-                                    )
-                                )
-                            )
-                        }
-                    }
-            }
+        createToolViewStateFlow(
+            savedStateHandle = savedStateHandle,
+            username = username,
+            toolId = toolId,
+            isSystemDarkMode = isSystemDarkMode,
+            userDataRepository = userDataRepository,
+            toolRepository = toolRepository,
+            toolStoreRepository = toolStoreRepository,
+            toolWithDistFlow = toolWithDistFlow,
+            toolBaseWithDistFlow = toolBaseWithDistFlow,
+            toolViewTemplateFlow = toolViewTemplateFlow,
+            toolViewDataCache = toolViewDataCache
+        )
+    }
+}
+
+private fun createSystemDarkModeFlow(context: Context): Flow<Boolean> = callbackFlow {
+    val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, instent: Intent?) {
+            context?.let { sendDarkModeState(it) }
+        }
+    }
+
+    val filter = IntentFilter(Intent.ACTION_CONFIGURATION_CHANGED)
+    context.registerReceiver(receiver, filter)
+
+    sendDarkModeState(context)
+
+    awaitClose { context.unregisterReceiver(receiver) }
+}
+
+private fun SendChannel<Boolean>.sendDarkModeState(context: Context) {
+    val configuration = ResourcesHelper.getConfiguration(context)
+    val isDarkMode =
+        (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+    trySend(isDarkMode)
+}
+
+private fun createToolViewStateFlow(
+    savedStateHandle: SavedStateHandle,
+    username: String,
+    toolId: String,
+    isSystemDarkMode: Boolean,
+    userDataRepository: UserDataRepository,
+    toolRepository: ToolRepository,
+    toolStoreRepository: ToolStoreRepository,
+    toolWithDistFlow: Flow<ToolWithDistEntity?>,
+    toolBaseWithDistFlow: Flow<ToolBaseWithDistEntity?>,
+    toolViewTemplateFlow: Flow<String>,
+    toolViewDataCache: MutableStateFlow<ToolViewDataCache?>,
+): Flow<ToolViewUiState> = flow {
+    userDataRepository.userData.collect { userData ->
+        val isDarkMode = determineDarkMode(userData.themeModeConfig, isSystemDarkMode)
+        val globalJsVariablesFlow = toolRepository.getGlobalJsVariables(isDarkMode)
+        val globalCssVariablesFlow = toolRepository.getGlobalCssVariables(isDarkMode)
+
+        combine(
+            toolWithDistFlow,
+            toolBaseWithDistFlow,
+            toolViewTemplateFlow,
+            globalJsVariablesFlow,
+            globalCssVariablesFlow,
+            ::ToolViewData
+        ).collect { (toolWithDist, toolBaseWithDist, toolViewTemplate, globalJsVariables, globalCssVariables) ->
+            handleToolViewData(
+                savedStateHandle = savedStateHandle,
+                username = username,
+                toolId = toolId,
+                toolWithDist = toolWithDist,
+                toolBaseWithDist = toolBaseWithDist,
+                toolViewTemplate = toolViewTemplate,
+                globalJsVariables = globalJsVariables,
+                globalCssVariables = globalCssVariables,
+                toolRepository = toolRepository,
+                toolStoreRepository = toolStoreRepository,
+                toolViewDataCache = toolViewDataCache,
+                collector = this
+            )
         }
     }
 }
 
-private suspend fun FlowCollector<ToolViewUiState>.emitResult(
-    result: Result<ToolEntity>,
+private fun determineDarkMode(
+    themeModeConfig: ThemeModeConfig,
+    isSystemDarkMode: Boolean
+): Boolean {
+    return when (themeModeConfig) {
+        ThemeModeConfig.FollowSystem -> isSystemDarkMode
+        ThemeModeConfig.Light -> false
+        ThemeModeConfig.Dark -> true
+    }
+}
+
+private suspend fun handleToolViewData(
+    savedStateHandle: SavedStateHandle,
+    username: String,
+    toolId: String,
+    toolWithDist: ToolWithDistEntity?,
+    toolBaseWithDist: ToolBaseWithDistEntity?,
     toolViewTemplate: String,
     globalJsVariables: String,
-    globalCssVariables: String
+    globalCssVariables: String,
+    toolRepository: ToolRepository,
+    toolStoreRepository: ToolStoreRepository,
+    toolViewDataCache: MutableStateFlow<ToolViewDataCache?>,
+    collector: FlowCollector<ToolViewUiState>
 ) {
-    emit(
-        when (result) {
-            is Result.Success -> {
-                val dist = result.data.dist!!
-                val base = result.data.base!!
-                ToolViewUiState.Success(
-                    result.data.name,
-                    processHtml(
+    if (toolWithDist != null && toolBaseWithDist != null) {
+        handleNormalMode(
+            savedStateHandle = savedStateHandle,
+            toolWithDist = toolWithDist,
+            toolBaseWithDist = toolBaseWithDist,
+            toolViewTemplate = toolViewTemplate,
+            globalJsVariables = globalJsVariables,
+            globalCssVariables = globalCssVariables,
+            collector = collector
+        )
+    } else {
+        handlePreviewMode(
+            savedStateHandle = savedStateHandle,
+            username = username,
+            toolId = toolId,
+            toolViewTemplate = toolViewTemplate,
+            globalJsVariables = globalJsVariables,
+            globalCssVariables = globalCssVariables,
+            toolRepository = toolRepository,
+            toolStoreRepository = toolStoreRepository,
+            toolViewDataCache = toolViewDataCache,
+            collector = collector
+        )
+    }
+}
+
+private suspend fun handlePreviewMode(
+    savedStateHandle: SavedStateHandle,
+    username: String,
+    toolId: String,
+    toolViewTemplate: String,
+    globalJsVariables: String,
+    globalCssVariables: String,
+    toolRepository: ToolRepository,
+    toolStoreRepository: ToolStoreRepository,
+    toolViewDataCache: MutableStateFlow<ToolViewDataCache?>,
+    collector: FlowCollector<ToolViewUiState>
+) {
+    savedStateHandle[IS_PREVIEW] = true
+
+    val cachedToolViewData = toolViewDataCache.value
+
+    if (cachedToolViewData != null) {
+        emitToolResult(
+            toolWithDistResult = cachedToolViewData.toolWithDistResult,
+            toolBaseWithDistResult = cachedToolViewData.toolBaseWithDistResult,
+            toolViewTemplate = toolViewTemplate,
+            globalJsVariables = globalJsVariables,
+            globalCssVariables = globalCssVariables,
+            toolViewDataCache = toolViewDataCache,
+            collector = collector
+        )
+    } else {
+        toolStoreRepository.getToolDist(username = username, toolId = toolId)
+            .collect { toolWithDistResult ->
+                when (toolWithDistResult) {
+                    is Result.Success -> {
+                        val toolWithDist = toolWithDistResult.data
+
+                        toolRepository.getToolBaseByIdAndVersion(
+                            id = toolWithDist.baseId,
+                            version = toolWithDist.baseVersion
+                        ).collect { localToolBase ->
+                            if (localToolBase != null) {
+                                emitToolResult(
+                                    toolWithDistResult = toolWithDistResult,
+                                    toolBaseWithDistResult = Result.Success(localToolBase),
+                                    toolViewTemplate = toolViewTemplate,
+                                    globalJsVariables = globalJsVariables,
+                                    globalCssVariables = globalCssVariables,
+                                    toolViewDataCache = toolViewDataCache,
+                                    collector = collector
+                                )
+                            } else {
+                                toolStoreRepository.getToolBaseDist(
+                                    id = toolWithDist.baseId,
+                                    version = toolWithDist.baseVersion
+                                ).collect { toolBaseWithDistResult ->
+                                    if (toolBaseWithDistResult is Result.Success) {
+                                        toolRepository.saveToolBase(toolBaseWithDistResult.data)
+                                    }
+
+                                    emitToolResult(
+                                        toolWithDistResult = toolWithDistResult,
+                                        toolBaseWithDistResult = toolBaseWithDistResult,
+                                        toolViewTemplate = toolViewTemplate,
+                                        globalJsVariables = globalJsVariables,
+                                        globalCssVariables = globalCssVariables,
+                                        toolViewDataCache = toolViewDataCache,
+                                        collector = collector
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    else -> emitToolResult(
+                        toolWithDistResult = toolWithDistResult,
+                        toolBaseWithDistResult = Result.Fail("Can not load tool"),
                         toolViewTemplate = toolViewTemplate,
                         globalJsVariables = globalJsVariables,
                         globalCssVariables = globalCssVariables,
-                        distBase64 = dist,
-                        baseBase64 = base
+                        toolViewDataCache = toolViewDataCache,
+                        collector = collector
                     )
-                )
+                }
             }
+    }
+}
 
-            is Result.Loading -> ToolViewUiState.Loading
-            is Result.Error -> {
-                Timber.e(result.exception, "Can not load tool")
-                ToolViewUiState.Error
-            }
+private suspend fun handleNormalMode(
+    savedStateHandle: SavedStateHandle,
+    toolWithDist: ToolWithDistEntity,
+    toolBaseWithDist: ToolBaseWithDistEntity,
+    toolViewTemplate: String,
+    globalJsVariables: String,
+    globalCssVariables: String,
+    collector: FlowCollector<ToolViewUiState>
+) {
+    savedStateHandle[IS_PREVIEW] = false
 
-            is Result.Fail -> ToolViewUiState.Error
-        }
+    collector.emit(
+        createSuccessState(
+            toolWithDist = toolWithDist,
+            toolBaseWithDist = toolBaseWithDist,
+            toolViewTemplate = toolViewTemplate,
+            globalJsVariables = globalJsVariables,
+            globalCssVariables = globalCssVariables
+        )
     )
+}
+
+private suspend fun emitToolResult(
+    toolWithDistResult: Result<ToolWithDistEntity>,
+    toolBaseWithDistResult: Result<ToolBaseWithDistEntity>,
+    toolViewTemplate: String,
+    globalJsVariables: String,
+    globalCssVariables: String,
+    toolViewDataCache: MutableStateFlow<ToolViewDataCache?>,
+    collector: FlowCollector<ToolViewUiState>
+) {
+    val uiState = when {
+        toolWithDistResult is Result.Success && toolBaseWithDistResult is Result.Success -> {
+            toolViewDataCache.value = ToolViewDataCache(
+                toolWithDistResult = toolWithDistResult,
+                toolBaseWithDistResult = toolBaseWithDistResult
+            )
+            createSuccessState(
+                toolWithDistResult.data,
+                toolBaseWithDistResult.data,
+                toolViewTemplate,
+                globalJsVariables,
+                globalCssVariables
+            )
+        }
+
+        toolWithDistResult is Result.Loading || toolBaseWithDistResult is Result.Loading -> ToolViewUiState.Loading
+        else -> {
+            if (toolWithDistResult is Result.Error) {
+                Timber.e(toolWithDistResult.exception, "Can not load tool")
+            } else if (toolWithDistResult is Result.Fail) {
+                Timber.w("Failed to load tool: ${toolWithDistResult.message}")
+            }
+
+            if (toolBaseWithDistResult is Result.Error) {
+                Timber.e(toolBaseWithDistResult.exception, "Can not load tool base")
+            } else if (toolBaseWithDistResult is Result.Fail) {
+                Timber.w("Failed to load tool base: ${toolBaseWithDistResult.message}")
+            }
+
+            ToolViewUiState.Error
+        }
+    }
+
+    collector.emit(uiState)
+}
+
+private fun createSuccessState(
+    toolWithDist: ToolWithDistEntity,
+    toolBaseWithDist: ToolBaseWithDistEntity,
+    toolViewTemplate: String,
+    globalJsVariables: String,
+    globalCssVariables: String
+) = ToolViewUiState.Success(
+    toolName = toolWithDist.name,
+    htmlData = processHtml(
+        toolViewTemplate = toolViewTemplate,
+        globalJsVariables = globalJsVariables,
+        globalCssVariables = globalCssVariables,
+        distBase64 = toolWithDist.dist,
+        baseBase64 = toolBaseWithDist.dist
+    )
+)
+
+private fun createWebViewInstanceState(context: Context): Flow<WebViewInstanceState> = flow {
+    val webviewInstance = WebView(context)
+    emit(WebViewInstanceState.Success(webviewInstance))
 }
 
 sealed interface ToolViewUiState {
@@ -245,6 +457,17 @@ private fun processHtml(
         .replace(oldValue = "{{replace_base_code}}", newValue = base)
 }
 
-data class Quadruple<A, B, C, D>(val first: A, val second: B, val third: C, val fourth: D)
+private data class ToolViewDataCache(
+    val toolWithDistResult: Result<ToolWithDistEntity>,
+    val toolBaseWithDistResult: Result<ToolBaseWithDistEntity>
+)
+
+private data class ToolViewData(
+    val toolWithDist: ToolWithDistEntity?,
+    val toolBaseWithDist: ToolBaseWithDistEntity?,
+    val template: String,
+    val jsVariables: String,
+    val cssVariables: String
+)
 
 private const val IS_PREVIEW = "IS_PREVIEW"

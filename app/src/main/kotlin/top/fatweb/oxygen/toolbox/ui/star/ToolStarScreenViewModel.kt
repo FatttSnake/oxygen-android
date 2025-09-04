@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import top.fatweb.oxygen.toolbox.model.tool.ToolEntity
+import top.fatweb.oxygen.toolbox.model.tool.ToolWithDistEntity
 import top.fatweb.oxygen.toolbox.repository.tool.ToolRepository
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
@@ -44,7 +44,7 @@ class StarScreenViewModel @Inject constructor(
         savedStateHandle[SEARCH_VALUE] = value
     }
 
-    fun unstar(tool: ToolEntity) {
+    fun unstar(tool: ToolWithDistEntity) {
         viewModelScope.launch {
             toolRepository.updateTool(tool.copy(isStar = false))
         }
@@ -54,7 +54,7 @@ class StarScreenViewModel @Inject constructor(
 sealed interface StarScreenUiState {
     data object Loading : StarScreenUiState
     data object Nothing : StarScreenUiState
-    data class Success(val tools: List<ToolEntity>) : StarScreenUiState
+    data class Success(val tools: List<ToolWithDistEntity>) : StarScreenUiState
 }
 
 private const val SEARCH_VALUE = "searchValue"

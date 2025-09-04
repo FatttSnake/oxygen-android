@@ -11,38 +11,46 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 import top.fatweb.oxygen.toolbox.BuildConfig
-import top.fatweb.oxygen.toolbox.data.network.NetworkDataSource
+import top.fatweb.oxygen.toolbox.data.network.ToolStoreDataSource
 import top.fatweb.oxygen.toolbox.model.Result
 import top.fatweb.oxygen.toolbox.model.asResult
 import top.fatweb.oxygen.toolbox.network.model.PageVo
+import top.fatweb.oxygen.toolbox.network.model.Platform
 import top.fatweb.oxygen.toolbox.network.model.ResponseResult
-import top.fatweb.oxygen.toolbox.network.model.ToolBaseVo
+import top.fatweb.oxygen.toolbox.network.model.ToolBaseWithDistVo
 import top.fatweb.oxygen.toolbox.network.model.ToolVo
+import top.fatweb.oxygen.toolbox.network.model.ToolWithDistVo
 import javax.inject.Inject
 
 private interface RetrofitOxygenNetworkApi {
-    @GET(value = "/tool/store")
+    @GET("/tool/store")
     suspend fun getStore(
         @Query("currentPage") currentPage: Int,
         @Query("searchValue") searchValue: String,
-        @Query("platform") platform: ToolBaseVo.Platform? = ToolBaseVo.Platform.Android
+        @Query("platform") platform: Platform? = Platform.Android
     ): ResponseResult<PageVo<ToolVo>>
 
-    @GET(value = "/tool/detail/{username}/{toolId}/{ver}")
-    suspend fun detail(
+    @GET("/tool/dist/{username}/{toolId}/{ver}")
+    suspend fun getToolDist(
         @Path("username") username: String,
         @Path("toolId") toolId: String,
         @Path("ver") ver: String,
-        @Query("platform") platform: ToolBaseVo.Platform? = ToolBaseVo.Platform.Android
-    ): ResponseResult<ToolVo>
+        @Query("platform") platform: Platform? = Platform.Android
+    ): ResponseResult<ToolWithDistVo>
+
+    @GET("/tool/base/{id}/{version}")
+    suspend fun getToolBaseDist(
+        @Path("id") id: Long,
+        @Path("version") version: Long
+    ): ResponseResult<ToolBaseWithDistVo>
 }
 
 private const val API_BASE_URL = BuildConfig.API_URL
 
-internal class RetrofitNetwork @Inject constructor(
+internal class ToolStoreClient @Inject constructor(
     networkJson: Json,
     okhttpCallFactory: dagger.Lazy<Call.Factory>
-) : NetworkDataSource {
+) : ToolStoreDataSource {
     private val networkApi = Retrofit.Builder()
         .baseUrl(API_BASE_URL)
         .callFactory { okhttpCallFactory.get().newCall(it) }
@@ -58,19 +66,29 @@ internal class RetrofitNetwork @Inject constructor(
     ): ResponseResult<PageVo<ToolVo>> =
         networkApi.getStore(searchValue = searchValue, currentPage = currentPage)
 
-    override fun detail(
+    override fun getToolDist(
         username: String,
         toolId: String,
         ver: String,
-        platform: ToolBaseVo.Platform
-    ): Flow<Result<ToolVo>> =
+        platform: Platform
+    ): Flow<Result<ToolWithDistVo>> =
         flow {
             emit(
-                networkApi.detail(
+                networkApi.getToolDist(
                     username = username,
                     toolId = toolId,
                     ver = ver,
                     platform = platform
+                )
+            )
+        }.asResult()
+
+    override fun getToolBaseDist(id: Long, version: Long): Flow<Result<ToolBaseWithDistVo>> =
+        flow {
+            emit(
+                networkApi.getToolBaseDist(
+                    id = id,
+                    version = version
                 )
             )
         }.asResult()
