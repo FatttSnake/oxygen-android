@@ -20,6 +20,7 @@
     <string name="core_install">Install</string>
     <string name="core_installing">Installing…</string>
     <string name="core_loading">Loading…</string>
+    <string name="core_no">No</string>
     <string name="core_no_connect">⚠️ Unable to connect to the internet</string>
     <string name="core_nothing">Nothing</string>
     <string name="core_nothing_found">Nothing found</string>
@@ -36,6 +37,7 @@
     <string name="core_web_view_warning">⚠️ WebView warning ⚠️</string>
     <string name="core_web_view_version_too_low">The current WebView version is too low, which may cause abnormal use of the tool. Please be informed.</string>
     <string name="core_website">Website</string>
+    <string name="core_yes">Yes</string>
 
     <string name="feature_store_ask_install">Are you sure you want to install tool %1$s provided by user %2$s?</string>
     <string name="feature_store_ask_upgrade">Are you sure you want to upgrade tool %1$s provided by user %2$s from version %3$s to version %4$s?</string>
@@ -66,6 +68,9 @@
     <string name="feature_star_no_tools_starred">No tools starred yet</string>
     <string name="feature_star_title">Star</string>
 
+    <string name="feature_settings_ask_clear_cache">Are you sure to clear the cache?</string>
+    <string name="feature_settings_clear_cache">Clear Cache</string>
+    <string name="feature_settings_clear_cache_success">Clear cache successfully</string>
     <string name="feature_settings_dynamic_color">Dynamic Color</string>
     <string name="feature_settings_dynamic_color_disable">Disable</string>
     <string name="feature_settings_dynamic_color_enable">Enable</string>

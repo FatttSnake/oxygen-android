@@ -61,4 +61,7 @@ class OfflineToolRepository @Inject constructor(
 
     override suspend fun removeToolBase(toolBaseWithDistEntity: ToolBaseWithDistEntity) =
         toolBaseDao.delete(toolBaseWithDistEntity)
+
+    override suspend fun clearToolBaseCache() =
+        toolBaseDao.clearCache()
 }

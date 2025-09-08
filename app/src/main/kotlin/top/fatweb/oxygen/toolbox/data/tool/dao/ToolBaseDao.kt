@@ -27,4 +27,12 @@ interface ToolBaseDao {
         """
     )
     fun selectByIdAndVersion(id: Long, version: Long): Flow<ToolBaseWithDistEntity?>
+
+    @Query(
+        """
+            DELETE FROM tool_base
+            WHERE isCache = 1
+        """
+    )
+    suspend fun clearCache()
 }

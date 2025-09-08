@@ -34,4 +34,6 @@ interface ToolRepository {
     suspend fun updateToolBase(toolBaseWithDistEntity: ToolBaseWithDistEntity)
 
     suspend fun removeToolBase(toolBaseWithDistEntity: ToolBaseWithDistEntity)
+
+    suspend fun clearToolBaseCache()
 }

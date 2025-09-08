@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -43,6 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.webkit.WebViewCompat
 import kotlinx.coroutines.delay
 import top.fatweb.oxygen.toolbox.R
@@ -55,6 +57,7 @@ import top.fatweb.oxygen.toolbox.ui.util.ResourcesHelper
 @Composable
 internal fun AboutRoute(
     modifier: Modifier = Modifier,
+    viewModel: AboutScreenViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     onNavigateToLibraries: () -> Unit
 ) {
@@ -62,6 +65,7 @@ internal fun AboutRoute(
         modifier = modifier
             .safeDrawingPadding(),
         onBackClick = onBackClick,
+        onClearCache = viewModel::clearCache,
         onNavigateToLibraries = onNavigateToLibraries
     )
 }
@@ -71,6 +75,7 @@ internal fun AboutRoute(
 internal fun AboutScreen(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
+    onClearCache: () -> Unit,
     onNavigateToLibraries: () -> Unit
 ) {
     val scrollState = rememberScrollState()
@@ -117,6 +122,7 @@ internal fun AboutScreen(
             AboutAppInfo()
             Spacer(Modifier.weight(1f))
             AboutFooter(
+                onClearCache = onClearCache,
                 onNavigateToLibraries = onNavigateToLibraries
             )
         }
@@ -187,12 +193,23 @@ private fun AboutAppInfo(
 @Composable
 private fun AboutFooter(
     modifier: Modifier = Modifier,
+    onClearCache: () -> Unit,
     onNavigateToLibraries: () -> Unit
 ) {
+    var isRequireClearCache by remember { mutableStateOf(false) }
+
     Row(
         modifier = modifier
             .padding(32.dp)
     ) {
+        TextButton(
+            onClick = { isRequireClearCache = true }
+        ) {
+            Text(
+                color = MaterialTheme.colorScheme.primary,
+                text = stringResource(R.string.feature_settings_clear_cache)
+            )
+        }
         TextButton(
             onClick = onNavigateToLibraries
         ) {
@@ -201,6 +218,27 @@ private fun AboutFooter(
                 text = stringResource(R.string.feature_settings_more_open_source_license)
             )
         }
+    }
+
+    if (isRequireClearCache) {
+        AlertDialog(
+            onDismissRequest = { isRequireClearCache = false },
+            title = { Text(text = stringResource(R.string.feature_settings_clear_cache)) },
+            text = { Text(text = stringResource(R.string.feature_settings_ask_clear_cache)) },
+            dismissButton = {
+                TextButton(onClick = { isRequireClearCache = false }) {
+                    Text(text = stringResource(R.string.core_no))
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    isRequireClearCache = false
+                    onClearCache()
+                }) {
+                    Text(text = stringResource(R.string.core_yes))
+                }
+            }
+        )
     }
 }
 
@@ -216,6 +254,10 @@ private fun AboutAppInfoPreview() {
 @Composable
 private fun AboutScreenPreview() {
     OxygenTheme {
-        AboutScreen(onBackClick = {}, onNavigateToLibraries = {})
+        AboutScreen(
+            onBackClick = {},
+            onClearCache = {},
+            onNavigateToLibraries = {}
+        )
     }
 }

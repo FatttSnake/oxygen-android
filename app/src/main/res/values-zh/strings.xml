@@ -21,6 +21,7 @@
     <string name="core_install">安装</string>
     <string name="core_installing">安装中……</string>
     <string name="core_loading">加载中…</string>
+    <string name="core_no">否</string>
     <string name="core_no_connect">⚠️ 无法连接至互联网</string>
     <string name="core_nothing">空空如也</string>
     <string name="core_nothing_found">未找到相关内容</string>
@@ -37,6 +38,7 @@
     <string name="core_web_view_warning">⚠️ WebView 警告 ⚠️</string>
     <string name="core_web_view_version_too_low">当前 WebView 版本过低，可能会导致工具使用异常，请知悉。</string>
     <string name="core_website">网站</string>
+    <string name="core_yes">是</string>
 
     <string name="feature_store_ask_install">确定安装由用户 %1$s 提供的工具 %2$s 吗？</string>
     <string name="feature_store_ask_upgrade">确定要将用户 %2$s 提供的工具 %1$s 从版本 %3$s 更新到版本 %4$s 吗？</string>
@@ -67,6 +69,9 @@
     <string name="feature_star_no_tools_starred">暂无工具已收藏</string>
     <string name="feature_star_title">收藏</string>
 
+    <string name="feature_settings_ask_clear_cache">确定清除缓存吗？</string>
+    <string name="feature_settings_clear_cache">清除缓存</string>
+    <string name="feature_settings_clear_cache_success">清除缓存成功</string>
     <string name="feature_settings_dynamic_color">动态颜色</string>
     <string name="feature_settings_dynamic_color_disable">禁用</string>
     <string name="feature_settings_dynamic_color_enable">启用</string>
