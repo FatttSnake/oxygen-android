@@ -122,7 +122,11 @@ internal fun ToolStoreScreen(
                 context,
                 ResourcesHelper.getString(
                     context = context,
-                    resId = R.string.feature_store_reload_error
+                    resId = if (toolStorePagingItems.itemCount == 0) R.string.feature_store_load_error else R.string.feature_store_reload_error,
+                    ResourcesHelper.getString(
+                        context = context,
+                        resId = R.string.feature_store_retry
+                    )
                 ),
                 Toast.LENGTH_LONG
             ).show()
