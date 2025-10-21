@@ -9,7 +9,7 @@ import java.util.Properties
 object VersionConfig {
     private val localDateTime: LocalDateTime = LocalDateTime.now(ZoneOffset.UTC)
     private val baseVersionCode = 1
-    private val baseVersionName = "0.0.0"
+    private val baseVersionName = "0.0.1"
 
     val namespace = "top.fatweb.oxygen.toolbox"
     val applicationId = namespace
