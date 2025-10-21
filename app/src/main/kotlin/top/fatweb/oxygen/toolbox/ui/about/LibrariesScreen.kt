@@ -134,7 +134,7 @@ internal fun LibrariesScreen(
                 scrollBehavior = topAppBarScrollBehavior,
                 title = {
                     Text(
-                        text = stringResource(R.string.feature_settings_more_open_source_license),
+                        text = stringResource(R.string.feature_settings_more_open_source_licenses),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
