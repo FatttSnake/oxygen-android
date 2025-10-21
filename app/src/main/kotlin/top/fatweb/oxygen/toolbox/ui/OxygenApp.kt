@@ -179,6 +179,7 @@ fun OxygenApp(
                     Row(
                         modifier = Modifier
                             .fillMaxSize()
+                            .padding(padding)
                     ) {
                         AnimatedVisibility(
                             visible = appState.shouldShowNavRail && destination != null
