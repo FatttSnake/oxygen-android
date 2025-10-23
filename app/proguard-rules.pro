@@ -12,6 +12,16 @@
 #   public *;
 #}
 
+# Keep DataStore fields
+-keepclassmembers class * extends com.google.protobuf.GeneratedMessageLite* {
+   <fields>;
+}
+
+# Keep SerialName annotation
+-keepclassmembers class * {
+    @kotlinx.serialization.SerialName <fields>;
+}
+
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
 #-keepattributes SourceFile,LineNumberTable
@@ -19,3 +29,6 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-dontwarn kotlinx.serialization.KSerializer
+-dontwarn kotlinx.serialization.Serializable

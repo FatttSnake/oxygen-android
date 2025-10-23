@@ -7,7 +7,7 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.sp
 
 // Set of Material typography styles to start with
-internal val OxygenTypography = Typography(
+internal val Typography = Typography(
     displayLarge = TextStyle(
         fontWeight = FontWeight.Normal,
         fontSize = 57.sp,

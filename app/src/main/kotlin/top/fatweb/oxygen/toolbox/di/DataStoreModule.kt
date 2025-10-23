@@ -11,11 +11,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import top.fatweb.oxygen.toolbox.datastore.IntToStringIdsMigration
-import top.fatweb.oxygen.toolbox.datastore.UserPreferences
-import top.fatweb.oxygen.toolbox.datastore.UserPreferencesSerializer
-import top.fatweb.oxygen.toolbox.network.Dispatcher
-import top.fatweb.oxygen.toolbox.network.OxygenDispatchers
+import top.fatweb.oxygen.toolbox.data.UserPreferences
+import top.fatweb.oxygen.toolbox.data.userdata.IntToStringIdsMigration
+import top.fatweb.oxygen.toolbox.data.userdata.UserPreferencesSerializer
 import javax.inject.Singleton
 
 @Module
@@ -25,7 +23,7 @@ object DataStoreModule {
     @Singleton
     internal fun providesUserPreferencesDataStore(
         @ApplicationContext context: Context,
-        @Dispatcher(OxygenDispatchers.IO) ioDispatcher: CoroutineDispatcher,
+        @Dispatcher(AppDispatchers.IO) ioDispatcher: CoroutineDispatcher,
         @ApplicationScope scope: CoroutineScope,
         userPreferencesSerializer: UserPreferencesSerializer
     ): DataStore<UserPreferences> =
