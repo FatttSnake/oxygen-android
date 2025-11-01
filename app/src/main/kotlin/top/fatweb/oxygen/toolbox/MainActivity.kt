@@ -43,7 +43,6 @@ import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
 import top.fatweb.oxygen.toolbox.model.userdata.ThemeModeConfig
 import top.fatweb.oxygen.toolbox.monitor.NetworkMonitor
 import top.fatweb.oxygen.toolbox.monitor.TimeZoneMonitor
-import top.fatweb.oxygen.toolbox.navigation.PREVIEW_ARG
 import top.fatweb.oxygen.toolbox.navigation.navigateToToolView
 import top.fatweb.oxygen.toolbox.repository.userdata.UserDataRepository
 import top.fatweb.oxygen.toolbox.ui.OxygenApp
@@ -134,15 +133,13 @@ class MainActivity : ComponentActivity() {
 
             LaunchedEffect(intent.data) {
                 intent.data?.run {
-                    val pathSegments = pathSegments
-                    val preview = getBooleanQueryParameter(PREVIEW_ARG, false)
-                    if (pathSegments.size == 2) {
-                        appState.navController.navigateToToolView(
-                            username = pathSegments[0],
-                            toolId = pathSegments[1],
-                            preview = preview
-                        )
-                    }
+                    val username = getQueryParameter("username") ?: return@run
+                    val toolId = getQueryParameter("toolId") ?: return@run
+                    appState.navController.navigateToToolView(
+                        username = username,
+                        toolId = toolId,
+                        preview = false
+                    )
                 }
             }
         }
