@@ -1,5 +1,7 @@
 package top.fatweb.oxygen.toolbox.ui.about
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.animation.core.AnimationConstants
 import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
 import androidx.compose.animation.graphics.res.animatedVectorResource
@@ -47,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.webkit.WebViewCompat
 import kotlinx.coroutines.delay
+import top.fatweb.oxygen.toolbox.BuildConfig
 import top.fatweb.oxygen.toolbox.R
 import top.fatweb.oxygen.toolbox.icon.OxygenIcons
 import top.fatweb.oxygen.toolbox.ui.component.TopAppBar
@@ -78,6 +81,7 @@ internal fun AboutScreen(
     onClearCache: () -> Unit,
     onNavigateToLibraries: () -> Unit
 ) {
+    val context = LocalContext.current
     val scrollState = rememberScrollState()
     val topAppBarScrollBehavior =
         TopAppBarDefaults.pinnedScrollBehavior(canScroll = { scrollState.maxValue > 0 })
@@ -123,7 +127,10 @@ internal fun AboutScreen(
             Spacer(Modifier.weight(1f))
             AboutFooter(
                 onClearCache = onClearCache,
-                onNavigateToLibraries = onNavigateToLibraries
+                onNavigateToLibraries = onNavigateToLibraries,
+                onOpenProjectUrl = {
+                    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.PROJECT_URL)))
+                }
             )
         }
     }
@@ -194,7 +201,8 @@ private fun AboutAppInfo(
 private fun AboutFooter(
     modifier: Modifier = Modifier,
     onClearCache: () -> Unit,
-    onNavigateToLibraries: () -> Unit
+    onNavigateToLibraries: () -> Unit,
+    onOpenProjectUrl: () -> Unit
 ) {
     var isRequireClearCache by remember { mutableStateOf(false) }
 
@@ -216,6 +224,14 @@ private fun AboutFooter(
             Text(
                 color = MaterialTheme.colorScheme.primary,
                 text = stringResource(R.string.feature_settings_more_open_source_licenses)
+            )
+        }
+        TextButton(
+            onClick = onOpenProjectUrl
+        ) {
+            Text(
+                color = MaterialTheme.colorScheme.primary,
+                text = stringResource(R.string.feature_settings_more_project)
             )
         }
     }
