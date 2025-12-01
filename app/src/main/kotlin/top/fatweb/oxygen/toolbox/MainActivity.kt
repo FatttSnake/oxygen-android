@@ -1,6 +1,8 @@
 package top.fatweb.oxygen.toolbox
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -43,6 +45,7 @@ import top.fatweb.oxygen.toolbox.model.userdata.ThemeBrandConfig
 import top.fatweb.oxygen.toolbox.model.userdata.ThemeModeConfig
 import top.fatweb.oxygen.toolbox.monitor.NetworkMonitor
 import top.fatweb.oxygen.toolbox.monitor.TimeZoneMonitor
+import top.fatweb.oxygen.toolbox.navigation.TopLevelDestination
 import top.fatweb.oxygen.toolbox.navigation.navigateToToolView
 import top.fatweb.oxygen.toolbox.repository.userdata.UserDataRepository
 import top.fatweb.oxygen.toolbox.ui.OxygenApp
@@ -62,12 +65,20 @@ class MainActivity : ComponentActivity() {
     lateinit var timeZoneMonitor: TimeZoneMonitor
 
     private val viewModel: MainActivityViewModel by viewModels()
+    private val appLinkData = mutableStateOf<Uri?>(null)
+
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface UserDataRepositoryEntryPoint {
+        val userDataRepository: UserDataRepository
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
+        appLinkData.value = intent?.data
         var uiState: MainActivityUiState by mutableStateOf(MainActivityUiState.Loading)
         val showSettingsDialogState = mutableStateOf(false)
 
@@ -131,8 +142,8 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            LaunchedEffect(intent.data) {
-                intent.data?.run {
+            LaunchedEffect(appLinkData.value) {
+                appLinkData.value?.run {
                     val username = getQueryParameter("username") ?: return@run
                     val toolId = getQueryParameter("toolId") ?: return@run
                     appState.navController.navigateToToolView(
@@ -142,13 +153,22 @@ class MainActivity : ComponentActivity() {
                     )
                 }
             }
+
+            LaunchedEffect(appState.navController) {
+                appState.navController.addOnDestinationChangedListener { _, destination, _ ->
+                    if (destination.route in TopLevelDestination.entries.map { it.route }) {
+                        appLinkData.value = null
+                    }
+                }
+            }
         }
     }
 
-    @EntryPoint
-    @InstallIn(SingletonComponent::class)
-    interface UserDataRepositoryEntryPoint {
-        val userDataRepository: UserDataRepository
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+
+        setIntent(intent)
+        appLinkData.value = intent.data
     }
 
     override fun attachBaseContext(newBase: Context) {

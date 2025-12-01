@@ -27,6 +27,7 @@
 
         <activity
             android:name=".MainActivity"
+            android:launchMode="singleTask"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,6 +43,16 @@
                 <data android:scheme="https" />
                 <data android:host="tool.fatweb.top" />
                 <data android:pathPrefix="/app" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="oxygen-app" />
+                <data android:host="open-tool" />
             </intent-filter>
         </activity>
     </application>
