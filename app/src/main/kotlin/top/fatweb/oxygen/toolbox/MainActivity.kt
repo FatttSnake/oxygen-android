@@ -2,9 +2,11 @@ package top.fatweb.oxygen.toolbox
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -23,7 +25,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -75,8 +76,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
-        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
         appLinkData.value = intent?.data
         var uiState: MainActivityUiState by mutableStateOf(MainActivityUiState.Loading)
@@ -115,6 +116,16 @@ class MainActivity : ComponentActivity() {
             }
 
             val isDarkTheme = shouldUseDarkTheme(uiState)
+            // Fix the abnormal background color of navigation bar on some devices
+            LaunchedEffect(isDarkTheme) {
+                enableEdgeToEdge(
+                    statusBarStyle = SystemBarStyle.auto(
+                        lightScrim = Color.TRANSPARENT,
+                        darkScrim = Color.TRANSPARENT
+                    ) { isDarkTheme },
+                    navigationBarStyle = SystemBarStyle.dark(Color.TRANSPARENT)
+                )
+            }
             val appState = rememberOxygenAppState(
                 windowSizeClass = calculateWindowSizeClass(this),
                 networkMonitor = networkMonitor,
@@ -122,12 +133,6 @@ class MainActivity : ComponentActivity() {
                 launchPageConfig = whatLaunchPage(uiState)
             )
             val currentTimeZone by appState.currentTimeZone.collectAsStateWithLifecycle()
-
-            LaunchedEffect(isDarkTheme) {
-                WindowCompat.getInsetsController(window, window.decorView).apply {
-                    isAppearanceLightStatusBars = !isDarkTheme
-                }
-            }
 
             CompositionLocalProvider(LocalTimeZone provides currentTimeZone) {
                 OxygenTheme(
