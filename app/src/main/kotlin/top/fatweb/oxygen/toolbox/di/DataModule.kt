@@ -8,18 +8,33 @@ import top.fatweb.oxygen.toolbox.monitor.ConnectivityManagerNetworkMonitor
 import top.fatweb.oxygen.toolbox.monitor.NetworkMonitor
 import top.fatweb.oxygen.toolbox.monitor.TimeZoneBroadcastMonitor
 import top.fatweb.oxygen.toolbox.monitor.TimeZoneMonitor
-import top.fatweb.oxygen.toolbox.repository.OfflineFirstUserDataRepository
-import top.fatweb.oxygen.toolbox.repository.UserDataRepository
+import top.fatweb.oxygen.toolbox.repository.lib.DepRepository
+import top.fatweb.oxygen.toolbox.repository.lib.impl.LocalDepRepository
+import top.fatweb.oxygen.toolbox.repository.tool.ToolRepository
+import top.fatweb.oxygen.toolbox.repository.tool.ToolStoreRepository
+import top.fatweb.oxygen.toolbox.repository.tool.impl.NetworkToolStoreRepository
+import top.fatweb.oxygen.toolbox.repository.tool.impl.OfflineToolRepository
+import top.fatweb.oxygen.toolbox.repository.userdata.UserDataRepository
+import top.fatweb.oxygen.toolbox.repository.userdata.impl.LocalUserDataRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class DataModule {
     @Binds
-    internal abstract fun bindsUserDataRepository(userDataRepository: OfflineFirstUserDataRepository): UserDataRepository
-
-    @Binds
     internal abstract fun bindsNetworkMonitor(networkMonitor: ConnectivityManagerNetworkMonitor): NetworkMonitor
 
     @Binds
     internal abstract fun bindsTimeZoneMonitor(timeZoneMonitor: TimeZoneBroadcastMonitor): TimeZoneMonitor
+
+    @Binds
+    internal abstract fun bindsUserDataRepository(userDataRepository: LocalUserDataRepository): UserDataRepository
+
+    @Binds
+    internal abstract fun bindsDepRepository(depRepository: LocalDepRepository): DepRepository
+
+    @Binds
+    internal abstract fun bindsToolStoreRepository(toolStoreRepository: NetworkToolStoreRepository): ToolStoreRepository
+
+    @Binds
+    internal abstract fun bindsToolRepository(toolRepository: OfflineToolRepository): ToolRepository
 }

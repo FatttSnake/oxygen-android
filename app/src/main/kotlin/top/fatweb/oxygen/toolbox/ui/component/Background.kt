@@ -1,6 +1,5 @@
 package top.fatweb.oxygen.toolbox.ui.component
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -15,26 +14,27 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import top.fatweb.oxygen.toolbox.ui.theme.GradientColors
 import top.fatweb.oxygen.toolbox.ui.theme.LocalBackgroundTheme
 import top.fatweb.oxygen.toolbox.ui.theme.LocalGradientColors
+import top.fatweb.oxygen.toolbox.ui.theme.OxygenPreviews
 import top.fatweb.oxygen.toolbox.ui.theme.OxygenTheme
 import kotlin.math.tan
 
 @Composable
-fun OxygenBackground(
+fun Background(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
     val color = LocalBackgroundTheme.current.color
     val tonalElevation = LocalBackgroundTheme.current.tonalElevation
     Surface(
+        modifier = modifier
+            .fillMaxSize(),
         color = if (color == Color.Unspecified) Color.Transparent else color,
-        tonalElevation = if (tonalElevation == Dp.Unspecified) 0.dp else tonalElevation,
-        modifier = modifier.fillMaxSize()
+        tonalElevation = if (tonalElevation == Dp.Unspecified) 0.dp else tonalElevation
     ) {
         CompositionLocalProvider(LocalAbsoluteTonalElevation provides 0.dp) {
             content()
@@ -43,7 +43,7 @@ fun OxygenBackground(
 }
 
 @Composable
-fun OxygenGradientBackground(
+fun GradientBackground(
     modifier: Modifier = Modifier,
     gradientColors: GradientColors = LocalGradientColors.current,
     content: @Composable () -> Unit
@@ -51,11 +51,12 @@ fun OxygenGradientBackground(
     val currentTopColor by rememberUpdatedState(gradientColors.top)
     val currentBottomColor by rememberUpdatedState(gradientColors.bottom)
     Surface(
-        color = if (gradientColors.container == Color.Unspecified) Color.Transparent else gradientColors.container,
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize(),
+        color = if (gradientColors.container == Color.Unspecified) Color.Transparent else gradientColors.container
     ) {
         Box(
-            Modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .drawWithCache {
                     val offset = size.height * tan(
@@ -92,54 +93,68 @@ fun OxygenGradientBackground(
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "Light theme")
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark theme")
-annotation class ThemePreviews
-
-@ThemePreviews
+@OxygenPreviews
 @Composable
-fun BackgroundDefault() {
+fun DefaultBackgroundPreview() {
     OxygenTheme(dynamicColor = false) {
-        OxygenBackground(Modifier.size(100.dp), content = {})
+        Background(
+            modifier = Modifier
+                .size(100.dp)
+        ) {}
     }
 }
 
-@ThemePreviews
+@OxygenPreviews
 @Composable
-fun BackgroundDynamic() {
+fun DynamicBackgroundPreview() {
     OxygenTheme(dynamicColor = true) {
-        OxygenBackground(Modifier.size(100.dp), content = {})
+        Background(
+            modifier = Modifier
+                .size(100.dp)
+        ) {}
     }
 }
 
-@ThemePreviews
+@OxygenPreviews
 @Composable
-fun BackgroundAndroid() {
+fun AndroidBackgroundPreview() {
     OxygenTheme(androidTheme = true) {
-        OxygenBackground(Modifier.size(100.dp), content = {})
+        Background(
+            modifier = Modifier
+                .size(100.dp)
+        ) {}
     }
 }
 
-@ThemePreviews
+@OxygenPreviews
 @Composable
-fun GradientBackgroundDefault() {
+fun GradientDefaultBackgroundPreview() {
     OxygenTheme(dynamicColor = false) {
-        OxygenGradientBackground(Modifier.size(100.dp), content = {})
+        GradientBackground(
+            modifier = Modifier
+                .size(100.dp)
+        ) {}
     }
 }
 
-@ThemePreviews
+@OxygenPreviews
 @Composable
-fun GradientBackgroundDynamic() {
+fun GradientDynamicBackgroundPreview() {
     OxygenTheme(dynamicColor = true) {
-        OxygenGradientBackground(Modifier.size(100.dp), content = {})
+        GradientBackground(
+            modifier = Modifier
+                .size(100.dp)
+        ) {}
     }
 }
 
-@ThemePreviews
+@OxygenPreviews
 @Composable
-fun GradientBackgroundAndroid() {
+fun GradientAndroidBackgroundPreview() {
     OxygenTheme(androidTheme = true) {
-        OxygenGradientBackground(Modifier.size(100.dp), content = {})
+        GradientBackground(
+            modifier = Modifier
+                .size(100.dp)
+        ) {}
     }
 }

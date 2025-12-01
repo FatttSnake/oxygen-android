@@ -17,14 +17,17 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.datetime.TimeZone
-import top.fatweb.oxygen.toolbox.model.LaunchPageConfig
+import top.fatweb.oxygen.toolbox.model.userdata.LaunchPageConfig
 import top.fatweb.oxygen.toolbox.monitor.NetworkMonitor
 import top.fatweb.oxygen.toolbox.monitor.TimeZoneMonitor
 import top.fatweb.oxygen.toolbox.navigation.STAR_ROUTE
 import top.fatweb.oxygen.toolbox.navigation.TOOLS_ROUTE
+import top.fatweb.oxygen.toolbox.navigation.TOOL_STORE_ROUTE
 import top.fatweb.oxygen.toolbox.navigation.TopLevelDestination
-import top.fatweb.oxygen.toolbox.navigation.navigateToSearch
+import top.fatweb.oxygen.toolbox.navigation.navigateToAbout
+import top.fatweb.oxygen.toolbox.navigation.navigateToLibraries
 import top.fatweb.oxygen.toolbox.navigation.navigateToStar
+import top.fatweb.oxygen.toolbox.navigation.navigateToToolStore
 import top.fatweb.oxygen.toolbox.navigation.navigateToTools
 import kotlin.time.Duration.Companion.seconds
 
@@ -56,21 +59,24 @@ fun rememberOxygenAppState(
 
 @Stable
 class OxygenAppState(
-    val windowSizeClass: WindowSizeClass,
+    private val windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
     timeZoneMonitor: TimeZoneMonitor,
     coroutineScope: CoroutineScope,
     val navController: NavHostController,
     val launchPageConfig: LaunchPageConfig
 ) {
+    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.entries
+
     val currentDestination: NavDestination?
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when (currentDestination?.route) {
-            TOOLS_ROUTE -> TopLevelDestination.TOOLS
-            STAR_ROUTE -> TopLevelDestination.STAR
+            TOOL_STORE_ROUTE -> TopLevelDestination.ToolStore
+            TOOLS_ROUTE -> TopLevelDestination.Tools
+            STAR_ROUTE -> TopLevelDestination.Star
             else -> null
         }
 
@@ -85,16 +91,14 @@ class OxygenAppState(
         .stateIn(
             scope = coroutineScope,
             initialValue = false,
-            started = SharingStarted.WhileSubscribed(5.seconds.inWholeMilliseconds)
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5.seconds.inWholeMilliseconds)
         )
-
-    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.entries
 
     val currentTimeZone = timeZoneMonitor.currentTimeZone
         .stateIn(
             scope = coroutineScope,
             initialValue = TimeZone.currentSystemDefault(),
-            started = SharingStarted.WhileSubscribed(5.seconds.inWholeMilliseconds)
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5.seconds.inWholeMilliseconds)
         )
 
     fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestination) {
@@ -108,10 +112,13 @@ class OxygenAppState(
         }
 
         when (topLevelDestination) {
-            TopLevelDestination.TOOLS -> navController.navigateToTools(topLevelNavOptions)
-            TopLevelDestination.STAR -> navController.navigateToStar(topLevelNavOptions)
+            TopLevelDestination.ToolStore -> navController.navigateToToolStore(topLevelNavOptions)
+            TopLevelDestination.Tools -> navController.navigateToTools(topLevelNavOptions)
+            TopLevelDestination.Star -> navController.navigateToStar(topLevelNavOptions)
         }
     }
 
-    fun navigateToSearch() = navController.navigateToSearch()
+    fun navigateToLibraries() = navController.navigateToLibraries()
+
+    fun navigateToAbout() = navController.navigateToAbout()
 }

@@ -17,81 +17,82 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import top.fatweb.oxygen.toolbox.navigation.TopLevelDestination
+import top.fatweb.oxygen.toolbox.ui.theme.OxygenPreviews
 import top.fatweb.oxygen.toolbox.ui.theme.OxygenTheme
 
 @Composable
-fun RowScope.OxygenNavigationBarItem(
+fun RowScope.NavigationBarItem(
     modifier: Modifier = Modifier,
     selected: Boolean,
     label: @Composable (() -> Unit)? = null,
     icon: @Composable () -> Unit,
     selectedIcon: @Composable () -> Unit,
-    onClick: () -> Unit,
     enabled: Boolean = true,
-    alwaysShowLabel: Boolean = false
+    alwaysShowLabel: Boolean = false,
+    onClick: () -> Unit
 ) {
     NavigationBarItem(
         modifier = modifier,
         selected = selected,
         label = label,
         icon = if (selected) selectedIcon else icon,
-        onClick = onClick,
         enabled = enabled,
         alwaysShowLabel = alwaysShowLabel,
         colors = NavigationBarItemDefaults.colors(
-            selectedIconColor = OxygenNavigationDefaults.navigationSelectedItemColor(),
-            unselectedIconColor = OxygenNavigationDefaults.navigationContentColor(),
-            selectedTextColor = OxygenNavigationDefaults.navigationSelectedItemColor(),
-            unselectedTextColor = OxygenNavigationDefaults.navigationContentColor(),
-            indicatorColor = OxygenNavigationDefaults.navigationIndicatorColor()
-        )
+            selectedIconColor = NavigationDefaults.navigationSelectedItemColor(),
+            unselectedIconColor = NavigationDefaults.navigationContentColor(),
+            selectedTextColor = NavigationDefaults.navigationSelectedItemColor(),
+            unselectedTextColor = NavigationDefaults.navigationContentColor(),
+            indicatorColor = NavigationDefaults.navigationIndicatorColor()
+        ),
+        onClick = onClick
     )
 }
 
 @Composable
-fun OxygenNavigationBar(
+fun NavigationBar(
     modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit
 ) {
     NavigationBar(
         modifier = modifier,
-        contentColor = OxygenNavigationDefaults.navigationContentColor(),
+        contentColor = NavigationDefaults.navigationContentColor(),
         content = content,
         tonalElevation = 0.dp
     )
 }
 
 @Composable
-fun OxygenNavigationRailItem(
+fun NavigationRailItem(
     modifier: Modifier = Modifier,
     selected: Boolean,
     label: @Composable (() -> Unit)? = null,
     icon: @Composable () -> Unit,
     selectedIcon: @Composable () -> Unit,
-    onClick: () -> Unit,
     enabled: Boolean = true,
-    alwaysShowLabel: Boolean = true
+    alwaysShowLabel: Boolean = true,
+    onClick: () -> Unit
 ) {
     NavigationRailItem(
         modifier = modifier,
         selected = selected,
         label = label,
         icon = if (selected) selectedIcon else icon,
-        onClick = onClick,
         enabled = enabled,
         alwaysShowLabel = alwaysShowLabel,
         colors = NavigationRailItemDefaults.colors(
-            selectedIconColor = OxygenNavigationDefaults.navigationSelectedItemColor(),
-            unselectedIconColor = OxygenNavigationDefaults.navigationContentColor(),
-            selectedTextColor = OxygenNavigationDefaults.navigationSelectedItemColor(),
-            unselectedTextColor = OxygenNavigationDefaults.navigationContentColor(),
-            indicatorColor = OxygenNavigationDefaults.navigationIndicatorColor()
-        )
+            selectedIconColor = NavigationDefaults.navigationSelectedItemColor(),
+            unselectedIconColor = NavigationDefaults.navigationContentColor(),
+            selectedTextColor = NavigationDefaults.navigationSelectedItemColor(),
+            unselectedTextColor = NavigationDefaults.navigationContentColor(),
+            indicatorColor = NavigationDefaults.navigationIndicatorColor()
+        ),
+        onClick = onClick
     )
 }
 
 @Composable
-fun OxygenNavigationRail(
+fun NavigationRail(
     modifier: Modifier = Modifier,
     header: @Composable (ColumnScope.() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit
@@ -99,13 +100,13 @@ fun OxygenNavigationRail(
     NavigationRail(
         modifier = modifier,
         header = header,
-        contentColor = OxygenNavigationDefaults.navigationContentColor(),
+        contentColor = NavigationDefaults.navigationContentColor(),
         content = content,
         containerColor = Color.Transparent
     )
 }
 
-object OxygenNavigationDefaults {
+object NavigationDefaults {
     @Composable
     fun navigationSelectedItemColor() = MaterialTheme.colorScheme.onPrimaryContainer
 
@@ -116,27 +117,27 @@ object OxygenNavigationDefaults {
     fun navigationIndicatorColor() = MaterialTheme.colorScheme.primaryContainer
 }
 
-@ThemePreviews
+@OxygenPreviews
 @Composable
-fun OxygenNavigationBarPreview() {
+private fun NavigationBarPreview() {
     val items = TopLevelDestination.entries
 
     OxygenTheme {
-        OxygenNavigationBar {
+        top.fatweb.oxygen.toolbox.ui.component.NavigationBar {
             items.forEachIndexed { index, item ->
-                OxygenNavigationBarItem(
+                NavigationBarItem(
                     selected = index == 0,
                     label = { Text(stringResource(item.titleTextId)) },
                     icon = {
                         Icon(
                             imageVector = item.unselectedIcon,
-                            contentDescription = stringResource(item.titleTextId)
+                            contentDescription = stringResource(item.iconTextId)
                         )
                     },
                     selectedIcon = {
                         Icon(
                             imageVector = item.selectedIcon, contentDescription = stringResource(
-                                item.titleTextId
+                                item.iconTextId
                             )
                         )
                     },
@@ -147,27 +148,27 @@ fun OxygenNavigationBarPreview() {
     }
 }
 
-@ThemePreviews
+@OxygenPreviews
 @Composable
-fun OxygenNavigationRailPreview() {
+private fun NavigationRailPreview() {
     val items = TopLevelDestination.entries
 
     OxygenTheme {
-        OxygenNavigationRail {
+        top.fatweb.oxygen.toolbox.ui.component.NavigationRail {
             items.forEachIndexed { index, item ->
-                OxygenNavigationRailItem(
+                NavigationRailItem(
                     selected = index == 0,
                     label = { Text(stringResource(item.titleTextId)) },
                     icon = {
                         Icon(
                             imageVector = item.unselectedIcon,
-                            contentDescription = stringResource(item.titleTextId)
+                            contentDescription = stringResource(item.iconTextId)
                         )
                     },
                     selectedIcon = {
                         Icon(
                             imageVector = item.selectedIcon, contentDescription = stringResource(
-                                item.titleTextId
+                                item.iconTextId
                             )
                         )
                     },

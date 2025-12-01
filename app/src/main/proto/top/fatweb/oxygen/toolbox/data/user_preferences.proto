@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+import "top/fatweb/oxygen/toolbox/data/language_config.proto";
+import "top/fatweb/oxygen/toolbox/data/launch_page_config.proto";
+import "top/fatweb/oxygen/toolbox/data/theme_brand_config.proto";
+import "top/fatweb/oxygen/toolbox/data/theme_mode_config.proto";
+
+option java_package = "top.fatweb.oxygen.toolbox.data";
+option java_multiple_files = true;
+
+message UserPreferences {
+  LanguageConfigProto language_config = 1;
+  LaunchPageConfigProto launch_page_config = 2;
+  ThemeBrandConfigProto theme_brand_config = 3;
+  ThemeModeConfigProto theme_mode_config = 4;
+  bool use_dynamic_color = 5;
+  bool is_not_first_launch = 6;
+}
