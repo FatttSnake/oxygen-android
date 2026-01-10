@@ -10,9 +10,8 @@ import androidx.navigation.navArgument
 import top.fatweb.oxygen.toolbox.ui.view.ToolViewRoute
 import java.net.URLDecoder
 import java.net.URLEncoder
-import kotlin.text.Charsets.UTF_8
 
-private val URL_CHARACTER_ENCODING = UTF_8.name()
+private val URL_CHARACTER_ENCODING = Charsets.UTF_8.name()
 
 internal const val USER_NAME_ARG = "username"
 internal const val TOOL_ID_ARG = "toolId"
@@ -26,15 +25,15 @@ internal class ToolViewArgs(
 ) {
     constructor(savedStateHandle: SavedStateHandle) :
             this(
-                URLDecoder.decode(
+                username = URLDecoder.decode(
                     checkNotNull(savedStateHandle[USER_NAME_ARG]),
                     URL_CHARACTER_ENCODING
                 ),
-                URLDecoder.decode(
+                toolId = URLDecoder.decode(
                     checkNotNull(savedStateHandle[TOOL_ID_ARG]),
                     URL_CHARACTER_ENCODING
                 ),
-                checkNotNull(savedStateHandle[PREVIEW_ARG])
+                preview = checkNotNull(savedStateHandle[PREVIEW_ARG])
             )
 }
 
