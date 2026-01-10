@@ -237,7 +237,6 @@ internal fun ToolStoreScreen(
         state.DraggableScrollbar(
             modifier = Modifier
                 .fillMaxHeight()
-                .windowInsetsPadding(WindowInsets.systemBars)
                 .padding(horizontal = 2.dp)
                 .align(Alignment.CenterEnd),
             state = scrollbarState,
