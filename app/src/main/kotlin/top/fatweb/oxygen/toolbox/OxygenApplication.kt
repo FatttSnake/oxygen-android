@@ -15,6 +15,6 @@ class OxygenApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        Timber.plant(if (BuildConfig.DEBUG) Timber.DebugTree() else LogTree(this))
+        Timber.plant(LogTree(this))
     }
 }
