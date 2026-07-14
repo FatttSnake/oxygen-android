@@ -27,7 +27,7 @@ data class ToolWithDistVo(
 
     val categories: List<ToolCategoryVo>,
 
-    val dist: ToolDataVo,
+    val dist: ToolDistVo,
 
     val entryPoint: String,
 
@@ -49,7 +49,7 @@ fun ToolWithDistVo.asExternalModel() = ToolWithDistEntity(
     ver = ver,
     keywords = keywords,
     categories = categories.map { it.name },
-    dist = dist.data,
+    dist = dist.fileContent,
     entryPoint = entryPoint,
     publish = publish
 )
