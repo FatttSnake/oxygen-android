@@ -23,7 +23,7 @@ interface ToolBaseDao {
     @Query(
         """
             SELECT * FROM tool_base
-            WHERE id = :id and version = :version
+            WHERE baseId = :id and version = :version
         """
     )
     fun selectByIdAndVersion(id: Long, version: Long): Flow<ToolBaseWithDistEntity?>

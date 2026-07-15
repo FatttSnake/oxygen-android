@@ -17,7 +17,8 @@ data class ToolBaseWithDistVo(
 )
 
 fun ToolBaseWithDistVo.asExternalModel() = ToolBaseWithDistEntity(
-    id = id,
+    id = "${id}_${version}",
+    baseId = id,
     name = name,
     dist = dist.fileContent,
     platform = platform,

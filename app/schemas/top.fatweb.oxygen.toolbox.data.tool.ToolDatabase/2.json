@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "2d2e0014ca274e33041c62fc19510134",
+    "identityHash": "773455e8f1123da5b322cc0e85020682",
     "entities": [
       {
         "tableName": "tool",
@@ -131,11 +131,17 @@
       },
       {
         "tableName": "tool_base",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `dist` TEXT NOT NULL, `platform` TEXT NOT NULL, `version` INTEGER NOT NULL, `isCache` INTEGER NOT NULL DEFAULT 1, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `baseId` INTEGER NOT NULL, `name` TEXT NOT NULL, `dist` TEXT NOT NULL, `platform` TEXT NOT NULL, `version` INTEGER NOT NULL, `isCache` INTEGER NOT NULL DEFAULT 1, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "baseId",
+            "columnName": "baseId",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -181,7 +187,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2d2e0014ca274e33041c62fc19510134')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '773455e8f1123da5b322cc0e85020682')"
     ]
   }
 }

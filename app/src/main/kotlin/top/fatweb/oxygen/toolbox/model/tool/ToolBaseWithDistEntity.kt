@@ -11,7 +11,9 @@ import top.fatweb.oxygen.toolbox.network.model.Platform
 @TypeConverters(Converters::class)
 data class ToolBaseWithDistEntity(
     @PrimaryKey
-    val id: Long,
+    val id: String,
+
+    val baseId: Long,
 
     val name: String,
 
