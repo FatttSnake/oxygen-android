@@ -43,4 +43,20 @@ interface ToolBaseDao {
         """
     )
     suspend fun clearCache()
+
+    @Query(
+        """
+            SELECT COUNT(*) FROM tool_base
+            WHERE dist = :hash
+        """
+    )
+    suspend fun countByDistHash(hash: String): Long
+
+    @Query(
+        """
+            SELECT dist FROM tool_base
+            WHERE isCache = 1
+        """
+    )
+    suspend fun selectCachedDistHashes(): List<String>
 }

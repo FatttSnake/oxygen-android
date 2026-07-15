@@ -1,6 +1,5 @@
 package top.fatweb.oxygen.toolbox.repository.tool.impl
 
-import kotlin.text.Charsets.UTF_8
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -54,7 +53,9 @@ class OfflineToolRepository @Inject constructor(
     }
 
     override suspend fun removeTool(toolWithDistEntity: ToolWithDistEntity) {
+        val tool = toolDao.selectById(toolWithDistEntity.id).first() ?: return
         toolDao.deleteTool(toolWithDistEntity)
+        tryDeleteDist(tool.dist)
         tryMarkToolBaseAsCache(
             baseId = toolWithDistEntity.baseId,
             baseVersion = toolWithDistEntity.baseVersion
@@ -62,11 +63,13 @@ class OfflineToolRepository @Inject constructor(
     }
 
     override suspend fun removeTool(username: String, toolId: String) {
-        val tool = toolDao.selectByUsernameAndToolId(username, toolId).first()
+        val tool = toolDao.selectByUsernameAndToolId(username, toolId).first() ?: return
         toolDao.deleteTool(username = username, toolId = toolId)
-        if (tool != null) {
-            tryMarkToolBaseAsCache(baseId = tool.baseId, baseVersion = tool.baseVersion)
-        }
+        tryDeleteDist(tool.dist)
+        tryMarkToolBaseAsCache(
+            baseId = tool.baseId,
+            baseVersion = tool.baseVersion
+        )
     }
 
     override fun getToolBaseByIdAndVersion(id: Long, version: Long): Flow<ToolBaseWithDistEntity?> =
@@ -95,8 +98,24 @@ class OfflineToolRepository @Inject constructor(
         }
     }
 
-    override suspend fun clearToolBaseCache() =
+    override suspend fun clearToolBaseCache() {
+        val cachedHashes = toolBaseDao.selectCachedDistHashes()
         toolBaseDao.clearCache()
+        cachedHashes.forEach { tryDeleteDist(it) }
+    }
+
+    /**
+     * Delete a dist file from CAS storage if no remaining entity references it.
+     *
+     * Since CAS is content-addressed (SHA-256), multiple tools or tool bases may share
+     * the same hash. We only delete the file when both the [ToolDao] and [ToolBaseDao]
+     * report zero references.
+     */
+    private suspend fun tryDeleteDist(hash: String) {
+        if (toolDao.countByDistHash(hash) == 0L && toolBaseDao.countByDistHash(hash) == 0L) {
+            casRepository.delete(hash)
+        }
+    }
 
     /**
      * Resolve the actual dist content from file storage.
@@ -108,7 +127,7 @@ class OfflineToolRepository @Inject constructor(
      * `dist` column.
      */
     private fun ToolWithDistEntity.resolveDist(): ToolWithDistEntity {
-        val content = casRepository.load(dist)?.toString(UTF_8)
+        val content = casRepository.load(dist)?.toString(Charsets.UTF_8)
         return if (content != null) copy(dist = content) else this
     }
 
@@ -118,7 +137,7 @@ class OfflineToolRepository @Inject constructor(
      * Same pattern as [ToolWithDistEntity.resolveDist] for tool base entities.
      */
     private fun ToolBaseWithDistEntity.resolveDist(): ToolBaseWithDistEntity {
-        val content = casRepository.load(dist)?.toString(UTF_8)
+        val content = casRepository.load(dist)?.toString(Charsets.UTF_8)
         return if (content != null) copy(dist = content) else this
     }
 }

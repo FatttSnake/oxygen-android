@@ -78,4 +78,12 @@ interface ToolDao {
         """
     )
     suspend fun countByBaseIdAndVersion(baseId: Long, baseVersion: Long): Long
+
+    @Query(
+        """
+            SELECT COUNT(*) FROM tool
+            WHERE dist = :hash
+        """
+    )
+    suspend fun countByDistHash(hash: String): Long
 }
