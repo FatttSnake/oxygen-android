@@ -2,6 +2,7 @@ package top.fatweb.oxygen.toolbox.repository.tool.impl
 
 import kotlin.text.Charsets.UTF_8
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import top.fatweb.oxygen.toolbox.data.tool.ToolDataSource
 import top.fatweb.oxygen.toolbox.data.tool.dao.ToolBaseDao
@@ -52,11 +53,21 @@ class OfflineToolRepository @Inject constructor(
         toolDao.update(toolWithDistEntity.copy(dist = hash))
     }
 
-    override suspend fun removeTool(toolWithDistEntity: ToolWithDistEntity) =
+    override suspend fun removeTool(toolWithDistEntity: ToolWithDistEntity) {
         toolDao.deleteTool(toolWithDistEntity)
+        tryMarkToolBaseAsCache(
+            baseId = toolWithDistEntity.baseId,
+            baseVersion = toolWithDistEntity.baseVersion
+        )
+    }
 
-    override suspend fun removeTool(username: String, toolId: String) =
+    override suspend fun removeTool(username: String, toolId: String) {
+        val tool = toolDao.selectByUsernameAndToolId(username, toolId).first()
         toolDao.deleteTool(username = username, toolId = toolId)
+        if (tool != null) {
+            tryMarkToolBaseAsCache(baseId = tool.baseId, baseVersion = tool.baseVersion)
+        }
+    }
 
     override fun getToolBaseByIdAndVersion(id: Long, version: Long): Flow<ToolBaseWithDistEntity?> =
         toolBaseDao.selectByIdAndVersion(id = id, version = version).map { it?.resolveDist() }
@@ -73,6 +84,16 @@ class OfflineToolRepository @Inject constructor(
 
     override suspend fun removeToolBase(toolBaseWithDistEntity: ToolBaseWithDistEntity) =
         toolBaseDao.delete(toolBaseWithDistEntity)
+
+    /**
+     * If no installed tool references this toolBase, mark it as cache so it can
+     * be cleaned up the next time [clearToolBaseCache] is called.
+     */
+    private suspend fun tryMarkToolBaseAsCache(baseId: Long, baseVersion: Long) {
+        if (toolDao.countByBaseIdAndVersion(baseId = baseId, baseVersion = baseVersion) == 0L) {
+            toolBaseDao.markAsCache(id = baseId, version = baseVersion)
+        }
+    }
 
     override suspend fun clearToolBaseCache() =
         toolBaseDao.clearCache()

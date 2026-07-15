@@ -70,4 +70,12 @@ interface ToolDao {
         """
     )
     fun selectByUsernameAndToolId(username: String, toolId: String): Flow<ToolWithDistEntity?>
+
+    @Query(
+        """
+            SELECT COUNT(*) FROM tool
+            WHERE baseId = :baseId AND baseVersion = :baseVersion
+        """
+    )
+    suspend fun countByBaseIdAndVersion(baseId: Long, baseVersion: Long): Long
 }
