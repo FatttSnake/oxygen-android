@@ -38,6 +38,14 @@ interface ToolBaseDao {
 
     @Query(
         """
+            UPDATE tool_base SET isCache = 0
+            WHERE baseId = :id AND version = :version
+        """
+    )
+    suspend fun markAsNotCache(id: Long, version: Long)
+
+    @Query(
+        """
             DELETE FROM tool_base
             WHERE isCache = 1
         """

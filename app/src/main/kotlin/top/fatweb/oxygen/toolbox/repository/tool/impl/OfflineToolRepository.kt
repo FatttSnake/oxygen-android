@@ -45,6 +45,7 @@ class OfflineToolRepository @Inject constructor(
     override suspend fun saveTool(toolWithDistEntity: ToolWithDistEntity) {
         val hash = casRepository.save(toolWithDistEntity.dist)
         toolDao.insert(toolWithDistEntity.copy(dist = hash))
+        toolBaseDao.markAsNotCache(id = toolWithDistEntity.baseId, version = toolWithDistEntity.baseVersion)
     }
 
     override suspend fun updateTool(toolWithDistEntity: ToolWithDistEntity) {
