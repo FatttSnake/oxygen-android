@@ -9,7 +9,7 @@ data class ToolBaseWithDistVo(
 
     val name: String,
 
-    val dist: ToolDataVo,
+    val dist: ToolDistVo,
 
     val platform: Platform,
 
@@ -17,9 +17,10 @@ data class ToolBaseWithDistVo(
 )
 
 fun ToolBaseWithDistVo.asExternalModel() = ToolBaseWithDistEntity(
-    id = id,
+    id = "${id}_${version}",
+    baseId = id,
     name = name,
-    dist = dist.data,
+    dist = dist.fileContent,
     platform = platform,
     version = version
 )

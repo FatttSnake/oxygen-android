@@ -10,6 +10,8 @@ import top.fatweb.oxygen.toolbox.monitor.TimeZoneBroadcastMonitor
 import top.fatweb.oxygen.toolbox.monitor.TimeZoneMonitor
 import top.fatweb.oxygen.toolbox.repository.lib.DepRepository
 import top.fatweb.oxygen.toolbox.repository.lib.impl.LocalDepRepository
+import top.fatweb.oxygen.toolbox.repository.storage.CASRepository
+import top.fatweb.oxygen.toolbox.repository.storage.impl.LocalCASRepository
 import top.fatweb.oxygen.toolbox.repository.tool.ToolRepository
 import top.fatweb.oxygen.toolbox.repository.tool.ToolStoreRepository
 import top.fatweb.oxygen.toolbox.repository.tool.impl.NetworkToolStoreRepository
@@ -25,6 +27,9 @@ abstract class DataModule {
 
     @Binds
     internal abstract fun bindsTimeZoneMonitor(timeZoneMonitor: TimeZoneBroadcastMonitor): TimeZoneMonitor
+
+    @Binds
+    internal abstract fun bindsCASRepository(casRepository: LocalCASRepository): CASRepository
 
     @Binds
     internal abstract fun bindsUserDataRepository(userDataRepository: LocalUserDataRepository): UserDataRepository
