@@ -23,10 +23,26 @@ interface ToolBaseDao {
     @Query(
         """
             SELECT * FROM tool_base
-            WHERE id = :id and version = :version
+            WHERE baseId = :id and version = :version
         """
     )
     fun selectByIdAndVersion(id: Long, version: Long): Flow<ToolBaseWithDistEntity?>
+
+    @Query(
+        """
+            UPDATE tool_base SET isCache = 1
+            WHERE baseId = :id AND version = :version
+        """
+    )
+    suspend fun markAsCache(id: Long, version: Long)
+
+    @Query(
+        """
+            UPDATE tool_base SET isCache = 0
+            WHERE baseId = :id AND version = :version
+        """
+    )
+    suspend fun markAsNotCache(id: Long, version: Long)
 
     @Query(
         """
@@ -35,4 +51,20 @@ interface ToolBaseDao {
         """
     )
     suspend fun clearCache()
+
+    @Query(
+        """
+            SELECT COUNT(*) FROM tool_base
+            WHERE dist = :hash
+        """
+    )
+    suspend fun countByDistHash(hash: String): Long
+
+    @Query(
+        """
+            SELECT dist FROM tool_base
+            WHERE isCache = 1
+        """
+    )
+    suspend fun selectCachedDistHashes(): List<String>
 }

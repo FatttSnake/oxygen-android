@@ -66,7 +66,7 @@ fun TopAppBar(
     val topInset by animateIntAsState(
         targetValue = if (scrollBehavior != null && -scrollBehavior.state.heightOffset >= with(
                 LocalDensity.current
-            ) { expandedHeight.toPx() }
+            ) { expandedHeight.toPx() } - 4
         ) 0
         else TopAppBarDefaults.windowInsets.getTop(LocalDensity.current),
         label = ""

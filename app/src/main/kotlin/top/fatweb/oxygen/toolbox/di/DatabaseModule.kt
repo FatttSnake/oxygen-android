@@ -14,10 +14,10 @@ import top.fatweb.oxygen.toolbox.data.tool.dao.ToolDao
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
     @Provides
-    fun provideToolDao(@ApplicationContext context: Context): ToolDao =
+    fun providesToolDao(@ApplicationContext context: Context): ToolDao =
         ToolDatabase.getInstance(context).toolDao()
 
     @Provides
-    fun provideToolBaseDao(@ApplicationContext context: Context): ToolBaseDao =
+    fun providesToolBaseDao(@ApplicationContext context: Context): ToolBaseDao =
         ToolDatabase.getInstance(context).toolBaseDao()
 }

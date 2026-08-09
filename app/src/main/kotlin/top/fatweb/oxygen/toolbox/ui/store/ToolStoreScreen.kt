@@ -15,10 +15,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridScope
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -237,7 +235,6 @@ internal fun ToolStoreScreen(
         state.DraggableScrollbar(
             modifier = Modifier
                 .fillMaxHeight()
-                .windowInsetsPadding(WindowInsets.systemBars)
                 .padding(horizontal = 2.dp)
                 .align(Alignment.CenterEnd),
             state = scrollbarState,
@@ -402,8 +399,6 @@ private fun InstallAlertDialog(
                                     }
                                 )
                             )
-
-                        else -> Unit
                     }
                 }
             },

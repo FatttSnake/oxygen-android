@@ -1,3 +1,4 @@
+import com.android.build.api.dsl.ApplicationExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import java.io.FileInputStream
@@ -8,8 +9,8 @@ import java.util.Properties
 
 object VersionConfig {
     private val localDateTime: LocalDateTime = LocalDateTime.now(ZoneOffset.UTC)
-    private val baseVersionCode = 1
-    private val baseVersionName = "0.0.1"
+    private val baseVersionCode = 2
+    private val baseVersionName = "0.0.2"
 
     val namespace = "top.fatweb.oxygen.toolbox"
     val applicationId = namespace
@@ -37,7 +38,6 @@ val keystoreProperties = rootProject.file("keystore.properties").run {
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
@@ -49,7 +49,7 @@ plugins {
     alias(libs.plugins.aboutlibraries)
 }
 
-android {
+configure<ApplicationExtension> {
     namespace = VersionConfig.namespace
     compileSdk = VersionConfig.targetSdk
 
@@ -90,32 +90,32 @@ android {
     }
 
     compileOptions {
-        // Flag to enable support for the new language APIs
         isCoreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.VERSION_25
+        targetCompatibility = JavaVersion.VERSION_25
+    }
 
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
-            languageVersion.set(KotlinVersion.KOTLIN_2_2)
-        }
-    }
     buildFeatures {
         compose = true
         buildConfig = true
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+}
 
-    setProperty(
-        "archivesBaseName",
-        "${VersionConfig.applicationId}-v${VersionConfig.versionName}_${VersionConfig.versionCode}"
-    )
+base {
+    archivesName.set("${VersionConfig.applicationId}-v${VersionConfig.versionName}_${VersionConfig.versionCode}")
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_25)
+        languageVersion.set(KotlinVersion.KOTLIN_2_4)
+    }
 }
 
 protobuf {
@@ -136,14 +136,6 @@ protobuf {
     }
 }
 
-androidComponents.beforeVariants {
-    android.sourceSets.getByName(it.name) {
-        val buildDir = layout.buildDirectory.get().asFile
-        java.srcDir(buildDir.resolve("generated/source/proto/${it.name}/java"))
-        kotlin.srcDir(buildDir.resolve("generated/source/proto/${it.name}/kotlin"))
-    }
-}
-
 aboutLibraries {
     android {
         registerAndroidTasks = false
@@ -157,9 +149,9 @@ aboutLibraries {
 }
 
 afterEvaluate {
-    tasks.findByName("preBuild")?.dependsOn(tasks.findByName("exportLibraryDefinitions"))
-    tasks.findByName("kspDebugKotlin")?.dependsOn(tasks.findByName("generateDebugProto"))
-    tasks.findByName("kspReleaseKotlin")?.dependsOn(tasks.findByName("generateReleaseProto"))
+    tasks.findByName("preBuild")?.dependsOn(tasks.findByName("exportLibraryDefinitions")!!)
+    tasks.findByName("kspDebugKotlin")?.dependsOn(tasks.findByName("generateDebugProto")!!)
+    tasks.findByName("kspReleaseKotlin")?.dependsOn(tasks.findByName("generateReleaseProto")!!)
 }
 
 secrets {

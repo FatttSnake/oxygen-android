@@ -34,6 +34,8 @@ class LogTree(
 
     @SuppressLint("LogNotTimber")
     override fun log(@Level priority: Int, tag: String?, message: String, t: Throwable?) {
+        super.log(priority, tag, message, t)
+
         checkFile()
         try {
             if (logFile.length() >= maxFileSize) {

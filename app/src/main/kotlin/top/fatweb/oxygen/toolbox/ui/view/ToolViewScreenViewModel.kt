@@ -35,9 +35,7 @@ import top.fatweb.oxygen.toolbox.repository.tool.ToolRepository
 import top.fatweb.oxygen.toolbox.repository.tool.ToolStoreRepository
 import top.fatweb.oxygen.toolbox.repository.userdata.UserDataRepository
 import top.fatweb.oxygen.toolbox.ui.util.ResourcesHelper
-import top.fatweb.oxygen.toolbox.util.decodeToStringWithZip
 import javax.inject.Inject
-import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.time.Duration.Companion.seconds
 
@@ -221,11 +219,14 @@ private suspend fun handleToolViewData(
     toolViewDataCache: MutableStateFlow<ToolViewDataCache?>,
     collector: FlowCollector<ToolViewUiState>
 ) {
-    if (toolWithDist != null && toolBaseWithDist != null) {
+    val effectiveToolWithDist = toolWithDist?.takeIf { it.dist.isNotBlank() }
+    val effectiveToolBaseWithDist = toolBaseWithDist?.takeIf { it.dist.isNotBlank() }
+
+    if (effectiveToolWithDist != null && effectiveToolBaseWithDist != null) {
         handleNormalMode(
             savedStateHandle = savedStateHandle,
-            toolWithDist = toolWithDist,
-            toolBaseWithDist = toolBaseWithDist,
+            toolWithDist = effectiveToolWithDist,
+            toolBaseWithDist = effectiveToolBaseWithDist,
             toolViewTemplate = toolViewTemplate,
             globalJsVariables = globalJsVariables,
             globalCssVariables = globalCssVariables,
@@ -410,8 +411,8 @@ private fun createSuccessState(
         toolViewTemplate = toolViewTemplate,
         globalJsVariables = globalJsVariables,
         globalCssVariables = globalCssVariables,
-        distBase64 = toolWithDist.dist,
-        baseBase64 = toolBaseWithDist.dist
+        toolDist = toolWithDist.dist,
+        baseDist = toolBaseWithDist.dist
     )
 )
 
@@ -444,18 +445,14 @@ private fun processHtml(
     toolViewTemplate: String,
     globalJsVariables: String,
     globalCssVariables: String,
-    distBase64: String,
-    baseBase64: String
-): String {
-    val dist = Base64.decodeToStringWithZip(distBase64)
-    val base = Base64.decodeToStringWithZip(baseBase64)
-
-    return toolViewTemplate
+    toolDist: String,
+    baseDist: String
+): String =
+    toolViewTemplate
         .replace(oldValue = "{{replace_global_js_variables}}", newValue = globalJsVariables)
         .replace(oldValue = "{{replace_global_css_variables}}", newValue = globalCssVariables)
-        .replace(oldValue = "{{replace_dict_code}}", newValue = dist)
-        .replace(oldValue = "{{replace_base_code}}", newValue = base)
-}
+        .replace(oldValue = "{{replace_dict_code}}", newValue = toolDist)
+        .replace(oldValue = "{{replace_base_code}}", newValue = baseDist)
 
 private data class ToolViewDataCache(
     val toolWithDistResult: Result<ToolWithDistEntity>,
